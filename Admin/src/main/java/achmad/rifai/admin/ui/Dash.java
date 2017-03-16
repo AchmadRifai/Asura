@@ -5,6 +5,8 @@
  */
 package achmad.rifai.admin.ui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,7 +14,7 @@ import javax.swing.JOptionPane;
  * @author ai
  */
 public class Dash extends javax.swing.JFrame {
-public String id;
+public String id,mode;
     /**
      * Creates new form Dash
      */
@@ -29,17 +31,25 @@ public String id;
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblData = new javax.swing.JTable();
         menu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
+        jMenuItem9 = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
         jMenu9 = new javax.swing.JMenu();
         jMenu10 = new javax.swing.JMenu();
@@ -48,6 +58,8 @@ public String id;
         jMenu13 = new javax.swing.JMenu();
         jMenu14 = new javax.swing.JMenu();
         jMenu15 = new javax.swing.JMenu();
+        jMenu16 = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dashboard admin");
@@ -60,6 +72,16 @@ public String id;
                 formWindowClosing(evt);
             }
         });
+
+        tblData.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblData);
 
         jMenu1.setText("File");
 
@@ -88,21 +110,75 @@ public String id;
         menu.add(jMenu1);
 
         jMenu2.setText("Karyawan");
+
+        jMenuItem4.setText("LIHAT DATA");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
         menu.add(jMenu2);
 
         jMenu3.setText("Jabatan");
+
+        jMenuItem5.setText("LIHAT DATA");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem5);
+
         menu.add(jMenu3);
 
         jMenu4.setText("Absen");
+
+        jMenuItem6.setText("LIHAT DATA");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem6);
+
         menu.add(jMenu4);
 
         jMenu5.setText("Barang");
+
+        jMenuItem7.setText("LIHAT DATA");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem7);
+
         menu.add(jMenu5);
 
         jMenu6.setText("Expenses");
+
+        jMenuItem8.setText("LIHAT DATA");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem8);
+
         menu.add(jMenu6);
 
         jMenu7.setText("Ledger");
+
+        jMenuItem9.setText("LIHAT DATA");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem9);
+
         menu.add(jMenu7);
 
         jMenu8.setText("Pelanggan");
@@ -129,17 +205,35 @@ public String id;
         jMenu15.setText("Tugas");
         menu.add(jMenu15);
 
+        jMenu16.setText("Jejak");
+
+        jMenuItem10.setText("Lihat Data");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu16.add(jMenuItem10);
+
+        menu.add(jMenu16);
+
         setJMenuBar(menu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1032, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1148, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 476, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -160,7 +254,18 @@ public String id;
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin keluar?", "KELUAR?", JOptionPane.YES_NO_OPTION);
+    if(x==JOptionPane.YES_OPTION)try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Karyawan a=new achmad.rifai.erp1.entity.Karyawan(d.getD(), id),b
+                =new achmad.rifai.erp1.entity.Karyawan(d.getD(), id);
+        b.setMasuk(false);
+        new achmad.rifai.erp1.entity.dao.DAOKaryawan(d.getD()).update(a, b);d.close();
+        new Login().setVisible(true);
+        this.setVisible(false);
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -169,8 +274,85 @@ public String id;
             public void run() {
                 validator();
             }
-        }).start();
+        }).start();mode="";
     }//GEN-LAST:event_formWindowOpened
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        this.setCursor(java.awt.Cursor.WAIT_CURSOR);
+        menu.setEnabled(false);try {
+        achmad.rifai.admin.util.Work.readKaryawan(tblData,id);
+        mode="karyawan";
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }this.setCursor(java.awt.Cursor.DEFAULT_CURSOR);
+    menu.setEnabled(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        this.setCursor(java.awt.Cursor.WAIT_CURSOR);
+        menu.setEnabled(false);try {
+        achmad.rifai.admin.util.Work.readJabatan(tblData,id);
+        mode="jabatan";
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }menu.setEnabled(true);
+        this.setCursor(java.awt.Cursor.DEFAULT_CURSOR);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        this.setCursor(java.awt.Cursor.WAIT_CURSOR);
+        menu.setEnabled(false);try {
+        achmad.rifai.admin.util.Work.readAbsen(tblData,id);
+        mode="absen";
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }menu.setEnabled(true);
+        this.setCursor(java.awt.Cursor.DEFAULT_CURSOR);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        this.setCursor(java.awt.Cursor.WAIT_CURSOR);
+        menu.setEnabled(false);try {
+        achmad.rifai.admin.util.Work.readBarang(tblData,id);
+        mode="barang";
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }menu.setEnabled(true);
+        this.setCursor(java.awt.Cursor.DEFAULT_CURSOR);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        this.setCursor(java.awt.Cursor.WAIT_CURSOR);
+        menu.setEnabled(false);try {
+        achmad.rifai.admin.util.Work.readKeluar(tblData,id);
+        mode="expenses";
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }menu.setEnabled(true);
+    this.setCursor(java.awt.Cursor.DEFAULT_CURSOR);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        menu.setEnabled(false);try {
+        achmad.rifai.admin.util.Work.readLedger(tblData,id);
+        mode="ledger";
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }menu.setEnabled(true);
+    this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        menu.setEnabled(false);try {
+        achmad.rifai.admin.util.Work.readJejak(tblData,id);
+        mode="jejak";
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }menu.setEnabled(true);
+    this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
@@ -180,6 +362,7 @@ public String id;
     private javax.swing.JMenu jMenu13;
     private javax.swing.JMenu jMenu14;
     private javax.swing.JMenu jMenu15;
+    private javax.swing.JMenu jMenu16;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -189,12 +372,31 @@ public String id;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuBar menu;
+    private javax.swing.JTable tblData;
     // End of variables declaration//GEN-END:variables
 
     private void validator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    while(isVisible())try {
+        Thread.sleep(5000);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Karyawan k=new achmad.rifai.erp1.entity.Karyawan(d.getD(), id);
+        if(k.isBlocked()||!k.isMasuk()||k.isDeleted()||!"admin".equals(k.getJabatan())){
+            new Login().setVisible(true);
+            this.setVisible(false);
+        }d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
     }
 }

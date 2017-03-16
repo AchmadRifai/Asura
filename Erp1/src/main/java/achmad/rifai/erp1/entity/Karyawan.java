@@ -146,18 +146,18 @@ public class Karyawan{
         org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(s1);
         id=""+o.get("id");
         nama=""+o.get("nama");
-        jabatan=""+o.get("jabatan");
-        email=""+o.get("email");
+        jabatan=""+o.get("jab");
+        email=""+o.get("mail");
         pass=""+o.get("pass");
     }
 
     private void parsing2(String s2) throws ParseException {
         org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
         org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(s2);
-        blocked=Boolean.parseBoolean(""+o.get("blocked"));
-        deleted=Boolean.parseBoolean(""+o.get("deleted"));
+        blocked=Boolean.parseBoolean(""+o.get("block"));
+        deleted=Boolean.parseBoolean(""+o.get("del"));
         masuk=Boolean.parseBoolean(""+o.get("masuk"));
-        hiredate=org.joda.time.DateTime.parse(""+o.get("hiredate"));
+        hiredate=org.joda.time.DateTime.parse(""+o.get("hire"));
         telp=""+o.get("telp");
     }
 

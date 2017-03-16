@@ -172,9 +172,8 @@ public class Login extends javax.swing.JFrame {
                 }else JOptionPane.showMessageDialog(rootPane, "Karyawan tidak terdaftar!");
             }else JOptionPane.showMessageDialog(rootPane, "Karyawan tidak terdaftar!");d.close();
         } catch (Exception ex) {
-            enableAll();
             achmad.rifai.erp1.util.Db.hindar(ex);
-        }
+        }enableAll();
     }
 
     private void disableAll() {
@@ -188,7 +187,7 @@ public class Login extends javax.swing.JFrame {
         user.setText("");
         user.setEnabled(true);
         pass.setText("");
-        pass.setEnabled(false);
+        pass.setEnabled(true);
         refresh();
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }
@@ -236,6 +235,7 @@ public class Login extends javax.swing.JFrame {
     private void halau(Karyawan k) throws Exception {
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         Karyawan b=new Karyawan(d.getD(),k.getId());
+        b.setMasuk(true);
         new achmad.rifai.erp1.entity.dao.DAOKaryawan(d.getD()).update(k, b);
         d.close();
     }

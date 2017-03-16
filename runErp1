@@ -1,0 +1,5 @@
+#!/bin/bash
+cd Erp1
+mvn clean install
+cd ..
+exit

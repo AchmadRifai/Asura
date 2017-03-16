@@ -1,0 +1,5 @@
+#!/bin/bash
+cd Acounting
+mvn clean install exec:java
+cd ..
+exit

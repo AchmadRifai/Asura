@@ -70,18 +70,18 @@ public class DAOKaryawan implements DAO<Karyawan>{
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put("id", v.getId());
         o.put("nama", v.getNama());
-        o.put("jabatan", v.getJabatan());
-        o.put("email", v.getEmail());
+        o.put("jab", v.getJabatan());
+        o.put("mail", v.getEmail());
         o.put("pass", v.getPass());
         return o.toJSONString();
     }
 
     private String s2(Karyawan v) {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
-        o.put("blocked", v.isBlocked());
-        o.put("deleted", v.isDeleted());
+        o.put("block", v.isBlocked());
+        o.put("del", v.isDeleted());
         o.put("masuk", v.isMasuk());
-        o.put("hiredate", v.getHiredate());
+        o.put("hire", v.getHiredate());
         o.put("telp", v.getTelp());
         return o.toJSONString();
     }
