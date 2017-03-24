@@ -5,14 +5,30 @@
  */
 package achmad.rifai.erp1.entity;
 
+import achmad.rifai.erp1.util.Db;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+
 /**
  *
  * @author ai
  */
 public class Jabatan {
+    public static Jabatan of(Db d, String nama) throws Exception{
+        Jabatan v=null;
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("jabatan")
+        .where(QueryBuilder.eq("berkas", nama)));
+        for(com.datastax.driver.core.Row ro:rs){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            v=new Jabatan(json);
+        }return v;
+    }
+
     private String nama;
     private org.joda.money.Money gaji;
     private int kapasitas;
+    private boolean deleted;
 
     public String getNama() {
         return nama;
@@ -30,15 +46,6 @@ public class Jabatan {
         this.gaji = gaji;
     }
 
-    public Jabatan(String k,com.mongodb.DB d)throws Exception{
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
-        w.put(achmad.rifai.erp1.util.Work.MD5("nama"), r.encrypt(k));
-        com.mongodb.DBCursor c=d.getCollection("jabatan").find(w);
-        for(com.mongodb.DBObject o:c.toArray(1))
-            parsing(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("data"))));
-    }
-
     public Jabatan(String json) throws Exception{
         parsing(json);
     }
@@ -51,14 +58,16 @@ public class Jabatan {
         nama=""+o.get("nama");
         gaji=org.joda.money.Money.parse(""+o.get("gaji"));
         kapasitas=Integer.parseInt(""+o.get("kap"));
+        deleted=Boolean.parseBoolean(""+o.get("deleted"));
     }
 
     @Override
     public String toString() {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put("nama", nama);
-        o.put("gaji", gaji);
-        o.put("kap", kapasitas);
+        o.put("gaji", ""+gaji);
+        o.put("kap", ""+kapasitas);
+        o.put("deleted", ""+deleted);
         return o.toJSONString();
     }
 
@@ -68,5 +77,13 @@ public class Jabatan {
 
     public void setKapasitas(int kapasitas) {
         this.kapasitas = kapasitas;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

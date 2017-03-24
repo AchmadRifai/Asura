@@ -6,6 +6,7 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Suplier;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.List;
 
 /**
@@ -13,71 +14,50 @@ import java.util.List;
  * @author ai
  */
 public class DAOSuplier implements DAO<Suplier>{
-    private com.mongodb.DB d;
+    private achmad.rifai.erp1.util.Db d;
 
-    public DAOSuplier(com.mongodb.DB db){
+    public DAOSuplier(achmad.rifai.erp1.util.Db db){
         d=db;
     }
 
     @Override
     public void insert(Suplier v) throws Exception {
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(v.getKode()));
-        o.put(achmad.rifai.erp1.util.Work.MD5("data"), r.encrypt(s1(v)));
-        o.put(achmad.rifai.erp1.util.Work.MD5("item"), r.encrypt(s2(v)));
-        o.put(achmad.rifai.erp1.util.Work.MD5("telp"), r.encrypt(s3(v)));
-        d.getCollection("suplier").insert(o);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getKode(), v);
+        d.getS().execute(QueryBuilder.insertInto("suplier").value("berkas", f.getKode()).value("bin", f.getData()));
     }
 
     @Override
     public void delete(Suplier w) throws Exception {
-        Suplier s=new Suplier(s1(w),s2(w),s3(w));
+        Suplier s=Suplier.of(d,w.getKode());
         s.setDeleted(true);
         update(w,s);
     }
 
     @Override
     public void update(Suplier a, Suplier b) throws Exception {
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject(),w=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("data"), r.encrypt(s1(b)));
-        o.put(achmad.rifai.erp1.util.Work.MD5("item"), r.encrypt(s2(b)));
-        o.put(achmad.rifai.erp1.util.Work.MD5("telp"), r.encrypt(s3(b)));
-        w.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(a.getKode()));
-        d.getCollection("suplier").update(w, o);
+        trueDelete(a);
+        insert(b);
     }
 
     @Override
     public List<Suplier> all() throws Exception {
         List<Suplier>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.mongodb.DBCursor c=d.getCollection("suplier").find();
-        for(com.mongodb.DBObject o:c.toArray()){
-            Suplier s=new Suplier(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("data"))),
-            r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("item"))),
-            r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("telp"))));
-            if(!s.isDeleted())l.add(s);
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("suplier"));
+        for(com.datastax.driver.core.Row ro:rs){
+            String st="";
+            for(String s:ro.getList("bin", String.class))st+=r.decrypt(s);
+            Suplier su=new Suplier(st);
+            if(!su.isDeleted())l.add(su);
         }return l;
     }
 
-    private String s1(Suplier v) {
-        org.json.simple.JSONObject o=new org.json.simple.JSONObject();
-        o.put("deleted", v.isDeleted());
-        o.put("kode", v.getKode());
-        o.put("nama", v.getNama());
-        return o.toJSONString();
+    public void trueDelete(Suplier v)throws Exception{
+        d.getS().execute(QueryBuilder.delete().from("suplier").where(QueryBuilder.eq("berkas", v.getKode())));
     }
 
-    private String s2(Suplier v) {
-        org.json.simple.JSONArray a=new org.json.simple.JSONArray();
-        for(String s:v.getAlamat())a.add(s);
-        return a.toJSONString();
-    }
-
-    private String s3(Suplier v) {
-        org.json.simple.JSONArray a=new org.json.simple.JSONArray();
-        for(String s:v.getTelp())a.add(s);
-        return a.toJSONString();
+    @Override
+    public void createTable() throws Exception {
+        d.getRS("create table if not exists suplier(berkas text primary key,bin list<text>);");
     }
 }

@@ -5,6 +5,8 @@
  */
 package achmad.rifai.erp1.entity;
 
+import achmad.rifai.erp1.util.Db;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.time.LocalDate;
 import org.json.simple.parser.ParseException;
 
@@ -13,6 +15,19 @@ import org.json.simple.parser.ParseException;
  * @author ai
  */
 public class Tugas {
+    public static Tugas of(Db d, String kode) throws Exception {
+        Tugas t=null;
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("tugas").
+                where(QueryBuilder.eq("berkas", kode)));
+        for(com.datastax.driver.core.Row ro:rs){
+            String enc="";
+            java.util.List<String>ls=ro.getList("bin", String.class);
+            for(String s:ls)enc+=r.decrypt(s);
+            t=new Tugas(enc);
+        }return t;
+    }
+
     private String ket,kode;
     private java.sql.Date tgl;
     private int no;
@@ -28,12 +43,6 @@ public class Tugas {
         deleted=false;
         pending=false;
         kode=ket+tgl+no;
-    }
-
-    public Tugas(String j1, String j2, String j3) throws ParseException {
-        parsing1(j1);
-        parsing2(j2);
-        parsing3(j3);
     }
 
     public String getKet() {
@@ -100,47 +109,58 @@ public class Tugas {
         this.pending = pending;
     }
 
-    public Tugas(String k,com.mongodb.DB d) throws Exception{
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
-        w.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(k));
-        com.mongodb.DBCursor c=d.getCollection("tugas").find(w);
-        for(com.mongodb.DBObject o:c.toArray(1)){
-            parsing1(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("data"))));
-            parsing2(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("petugas"))));
-            parsing3(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("pilihan"))));
-        }
+    public Tugas(String json) throws ParseException {
+        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
+        org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(json);
+        petugasObject(o.get("l"));
+        this.tgl=java.sql.Date.valueOf(""+o.get("tgl"));
+        this.no=Integer.parseInt(""+o.get("no"));
+        this.pending=Boolean.parseBoolean(""+o.get("pending"));
+        this.batal=Boolean.parseBoolean(""+o.get("batal"));
+        this.deleted=Boolean.parseBoolean("deleted");
+        this.kode=""+o.get("kode");
+        this.ket=""+o.get("ket");
     }
 
-    private void parsing1(String j1) throws ParseException {
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(j1);
-        kode=""+o.get("kode");
-        ket=""+o.get("ket");
-        no=Integer.parseInt(""+o.get("no"));
-        tgl=java.sql.Date.valueOf(""+o.get("tgl"));
+    @Override
+    public String toString() {
+        org.json.simple.JSONObject o=new org.json.simple.JSONObject();
+        o.put("l", petugasJSON());
+        o.put("tgl", ""+tgl);
+        o.put("no", ""+no);
+        o.put("pending", ""+pending);
+        o.put("batal", ""+batal);
+        o.put("deleted", ""+deleted);
+        o.put("kode", kode);
+        o.put("ket", ket);
+        return o.toJSONString();
     }
 
-    private void parsing2(String j2) throws ParseException {
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(j2);
+    private void petugasObject(Object get) {
         l=new java.util.LinkedList<>();
+        org.json.simple.JSONArray a=(org.json.simple.JSONArray) get;
         for(int x=0;x<a.size();x++){
-            Petugas pe=new Petugas();
             org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
-            pe.setDiambil(Boolean.parseBoolean(""+o.get("diambil")));
-            pe.setKaryawan(""+o.get("karyawan"));
-            pe.setSedang(Boolean.parseBoolean(""+o.get("sedang")));
-            pe.setTerlaksana(Boolean.parseBoolean(""+o.get("terlaksana")));
-            l.add(pe);
+            Petugas p=new Petugas();
+            p.setDiambil(Boolean.parseBoolean("diambil"));
+            p.setKaryawan(""+o.get("karyawan"));
+            p.setSedang(Boolean.parseBoolean(""+o.get("sedang")));
+            p.setTerlaksana(Boolean.parseBoolean(""+o.get("terlaksana")));
+            l.add(p);
         }
     }
 
-    private void parsing3(String j3) throws ParseException {
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(j3);
-        batal=Boolean.parseBoolean(""+o.get("batal"));
-        deleted=Boolean.parseBoolean(""+o.get("deleted"));
-        pending=Boolean.parseBoolean(""+o.get("pending"));
+    private Object petugasJSON(){
+        org.json.simple.JSONArray a=new org.json.simple.JSONArray();
+        l.stream().map((p) -> {
+            org.json.simple.JSONObject o=new org.json.simple.JSONObject();
+            o.put("diambil", ""+p.isDiambil());
+            o.put("karyawan", p.getKaryawan());
+            o.put("sedang", ""+p.isSedang());
+            o.put("terlaksana", ""+p.isTerlaksana());
+            return o;
+        }).forEachOrdered((o) -> {
+            a.add(o);
+        });return a;
     }
 }

@@ -5,6 +5,8 @@
  */
 package achmad.rifai.erp1.entity;
 
+import achmad.rifai.erp1.util.Db;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.sql.Date;
 import org.joda.money.Money;
 import org.json.simple.parser.ParseException;
@@ -14,6 +16,17 @@ import org.json.simple.parser.ParseException;
  * @author ai
  */
 public class Jurnal {
+    public static Jurnal of(Db d, String kode)throws Exception{
+        Jurnal v=null;
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("jurnal")
+        .where(QueryBuilder.eq("berkas", kode)))){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            v=new Jurnal(json);
+        }return v;
+    }
+
     private String kode,ket;
     private int no;
     private Date tgl;
@@ -68,15 +81,6 @@ public class Jurnal {
         this.kredit = kredit;
     }
 
-    public Jurnal(String k,com.mongodb.DB d) throws Exception{
-        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        w.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(k));
-        com.mongodb.DBCursor c=d.getCollection("jurnal").find(w);
-        for(com.mongodb.DBObject o:c.toArray(1))
-            parsing(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("datane"))));
-    }
-
     public Jurnal(String json) throws ParseException {
         parsing(json);
     }
@@ -98,11 +102,11 @@ public class Jurnal {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put("kode", kode);
         o.put("ket", ket);
-        o.put("no", no);
-        o.put("tgl", tgl);
-        o.put("debit", debit);
-        o.put("kredit", kredit);
-        o.put("deleted", deleted);
+        o.put("no", ""+no);
+        o.put("tgl", ""+tgl);
+        o.put("debit", ""+debit);
+        o.put("kredit", ""+kredit);
+        o.put("deleted", ""+deleted);
         return o.toJSONString();
     }
 

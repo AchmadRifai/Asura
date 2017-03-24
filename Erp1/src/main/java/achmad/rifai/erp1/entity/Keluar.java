@@ -5,6 +5,8 @@
  */
 package achmad.rifai.erp1.entity;
 
+import achmad.rifai.erp1.util.Db;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -12,21 +14,27 @@ import org.json.simple.parser.ParseException;
  * @author ai
  */
 public class Keluar {
+    public static Keluar of(Db d, String kode)throws Exception{
+        Keluar v=null;
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("keluar")
+        .where(QueryBuilder.eq("berkas", kode)))){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            v=new Keluar(json);
+        }return v;
+    }
+
     private String kode,jurnal;
     private org.joda.time.DateTime tgl;
     private org.joda.money.Money uang;
-
-    public Keluar(String k,com.mongodb.DB d)throws Exception{
-        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        w.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(k));
-        com.mongodb.DBCursor c=d.getCollection("keluar").find(w);
-        for(com.mongodb.DBObject o:c.toArray(1))
-            parsing(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("datane"))));
-    }
+    private boolean deleted;
 
     public Keluar(String json) throws ParseException{
         parsing(json);
+    }
+
+    public Keluar() {
     }
 
     private void parsing(String json) throws ParseException {
@@ -36,6 +44,7 @@ public class Keluar {
         jurnal=""+o.get("jurnal");
         tgl=org.joda.time.DateTime.parse(""+o.get("tgl"));
         uang=org.joda.money.Money.parse(""+o.get("uang"));
+        deleted=Boolean.parseBoolean(""+o.get("deleted"));
     }
 
     @Override
@@ -43,8 +52,9 @@ public class Keluar {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put("kode", kode);
         o.put("jurnal", jurnal);
-        o.put("tgl", tgl);
-        o.put("uang", uang);
+        o.put("tgl", ""+tgl);
+        o.put("uang", ""+uang);
+        o.put("deleted", ""+deleted);
         return o.toJSONString();
     }
 
@@ -78,5 +88,13 @@ public class Keluar {
 
     public void setUang(org.joda.money.Money uang) {
         this.uang = uang;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

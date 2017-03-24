@@ -5,6 +5,8 @@
  */
 package achmad.rifai.erp1.entity;
 
+import achmad.rifai.erp1.util.Db;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -12,6 +14,18 @@ import org.json.simple.parser.ParseException;
  * @author ai
  */
 public class Barang {
+    public static Barang of(Db d, String kode) throws Exception{
+        Barang v=null;
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("barang").
+                where(QueryBuilder.eq("berkas", kode)));
+        for(com.datastax.driver.core.Row ro:rs){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            v=new Barang(json);
+        }return v;
+    }
+
     private String kode,nama,satuan;
     private org.joda.money.Money harga;
     private int stok;
@@ -80,19 +94,11 @@ public class Barang {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put("kode", kode);
         o.put("nama", nama);
-        o.put("harga", harga.toString());
-        o.put("stok", stok);
-        o.put("deleted", deleted);
+        o.put("harga", ""+harga);
+        o.put("stok", ""+stok);
+        o.put("deleted", ""+deleted);
         o.put("satuan", satuan);
         return o.toJSONString();
-    }
-
-    public Barang(String k,com.mongodb.DB d)throws Exception{
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(k));
-        com.mongodb.DBCursor c=d.getCollection("barang").find(o);
-        for(com.mongodb.DBObject o1:c.toArray(1))parsing(r.decrypt(""+o1.get(achmad.rifai.erp1.util.Work.MD5("datane"))));
     }
 
     public String getSatuan() {

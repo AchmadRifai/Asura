@@ -20,10 +20,13 @@ public class Work {
         d.close();
     }
 
-    private static void jejak(String id, String aksi) throws Exception {
+    public static void jejak(String id, String aksi) throws Exception {
         Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.Jejak j=new achmad.rifai.erp1.entity.Jejak(aksi, id);
-        new achmad.rifai.erp1.entity.dao.DAOJejak(d.getD()).insert(j);
+        achmad.rifai.erp1.entity.dao.DAOTracks dao=new achmad.rifai.erp1.entity.dao.DAOTracks(d);
+        achmad.rifai.erp1.entity.Tracks t1=dao.current(id),t2=dao.current(id);
+        java.util.List<achmad.rifai.erp1.entity.Jejak>l=t1.getL();
+        l.add(new achmad.rifai.erp1.entity.Jejak(aksi, id));
+        dao.update(t1, t2);
         d.close();
     }
 
@@ -36,7 +39,7 @@ public class Work {
                 return false;
             }};
         tblData.setModel(m);
-        achmad.rifai.erp1.entity.dao.DAOKaryawan dao=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d.getD());
+        achmad.rifai.erp1.entity.dao.DAOKaryawan dao=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d);
         for(achmad.rifai.erp1.entity.Karyawan k:dao.all()){
             m.addRow(new Object[]{k.getId(),k.getNama(),k.getPass(),k.getHiredate(),k.getJabatan(),k.getEmail(),k.getTelp(),k.isBlocked(),
             k.isMasuk()});
@@ -52,22 +55,8 @@ public class Work {
             }
         };tblData.setModel(m);
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.dao.DAOJabatan dao=new achmad.rifai.erp1.entity.dao.DAOJabatan(d.getD());
+        achmad.rifai.erp1.entity.dao.DAOJabatan dao=new achmad.rifai.erp1.entity.dao.DAOJabatan(d);
         for(achmad.rifai.erp1.entity.Jabatan j:dao.all())m.addRow(new Object[]{j.getNama(),j.getGaji(),j.getKapasitas()});
-        d.close();
-    }
-
-    public static void readAbsen(JTable tblData, String id) throws Exception {
-        jejak(id,"Melihat Data Absen");
-        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"KARYAWAN","TANGGAL","KET"}, 0){
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };tblData.setModel(m);
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.dao.DAOAbsen dao=new achmad.rifai.erp1.entity.dao.DAOAbsen(d.getD());
-        for(achmad.rifai.erp1.entity.Absen a:dao.all())m.addRow(new Object[]{a.getS(),a.getTgl(),a.getL()});
         d.close();
     }
 
@@ -80,7 +69,7 @@ public class Work {
             }
         };tblData.setModel(m);
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.dao.DAOBarang dao=new achmad.rifai.erp1.entity.dao.DAOBarang(d.getD());
+        achmad.rifai.erp1.entity.dao.DAOBarang dao=new achmad.rifai.erp1.entity.dao.DAOBarang(d);
         for(achmad.rifai.erp1.entity.Barang b:dao.all())m.addRow(new Object[]{b.getKode(),b.getNama(),b.getHarga(),""+b.getStok()+" "+
         b.getSatuan()});d.close();
     }
@@ -94,7 +83,7 @@ public class Work {
             }
         };tblData.setModel(m);
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.dao.DAOKeluar dao=new achmad.rifai.erp1.entity.dao.DAOKeluar(d.getD());
+        achmad.rifai.erp1.entity.dao.DAOKeluar dao=new achmad.rifai.erp1.entity.dao.DAOKeluar(d);
         for(achmad.rifai.erp1.entity.Keluar k:dao.all())m.addRow(new Object[]{k.getKode(),k.getJurnal(),k.getTgl(),k.getUang()});
         d.close();
     }
@@ -109,22 +98,31 @@ public class Work {
             }
         };tblData.setModel(m);
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.dao.DAOLedger dao=new achmad.rifai.erp1.entity.dao.DAOLedger(d.getD());
+        achmad.rifai.erp1.entity.dao.DAOLedger dao=new achmad.rifai.erp1.entity.dao.DAOLedger(d);
         for(achmad.rifai.erp1.entity.Ledger l:dao.all())m.addRow(new Object[]{l.getKode(),l.getTgl(),l.getKet(),l.getNo(),l.getDebit(),
         l.getKredit()});d.close();
     }
 
-    public static void readJejak(JTable tblData, String id) throws Exception {
-        jejak(id,"Melihat Data Jejak");
-        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Pelaku","Aksi","Waktu"}, 0){
+    public static void readPelanggan(JTable tblData, String id) throws Exception {
+        jejak(id,"Melihat Data Pelanggan");
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Kode","Nama","Dicekal"}, 0){
+            private Class[]c=new Class[]{String.class,String.class,Boolean.class};
+            @Override
+            public Class<?> getColumnClass(int x) {
+                return c[x];
+            }
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };tblData.setModel(m);
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.dao.DAOJejak dao=new achmad.rifai.erp1.entity.dao.DAOJejak(d.getD());
-        for(achmad.rifai.erp1.entity.Jejak j:dao.all())m.addColumn(new Object[]{j.getPelaku(),j.getAksi(),j.getWaktu()});
+        achmad.rifai.erp1.entity.dao.DAOPelanggan dao=new achmad.rifai.erp1.entity.dao.DAOPelanggan(d);
+        for(achmad.rifai.erp1.entity.Pelanggan p:dao.all())m.addRow(new Object[]{p.getKode(),p.getNama(),p.isBlocked()});
         d.close();
+    }
+
+    public static void readPembelian(JTable tblData, String id) throws Exception {
+        jejak(id,"Melihat Data Pembelian");
     }
 }

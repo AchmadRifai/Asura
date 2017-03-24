@@ -201,7 +201,7 @@ private Thread t1,t2;
             @Override
             public void run() {
                 try {
-                    achmad.rifai.erp1.util.Work.initDb(host.getText(),name.getText(),Integer.parseInt(port.getText()));
+                    achmad.rifai.erp1.util.Work.initDb(host.getText(),name.getText());
                     Conn.this.setVisible(false);
                 } catch (Exception ex) {
                     achmad.rifai.erp1.util.Db.hindar(ex);
@@ -219,7 +219,6 @@ private Thread t1,t2;
                     achmad.rifai.erp1.beans.DBSetting dbs=new achmad.rifai.erp1.beans.DBSetting();
                     dbs.setHost(host.getText());
                     dbs.setName(name.getText());
-                    dbs.setPort(Integer.parseInt(port.getText()));
                     achmad.rifai.erp1.util.Work.saveDbs(dbs);
                 } catch (GeneralSecurityException | IOException | ClassNotFoundException ex) {
                     achmad.rifai.erp1.util.Db.hindar(ex);

@@ -17,12 +17,14 @@ public class Jejak {
     private String aksi,pelaku;
     private org.joda.time.DateTime waktu;
     private java.sql.Date tgl;
+    private boolean deleted;
 
     public Jejak(String aksi, String pelaku) {
         this.aksi = aksi;
         this.pelaku = pelaku;
         waktu=org.joda.time.DateTime.now();
         tgl=java.sql.Date.valueOf(LocalDate.now());
+        deleted=false;
     }
 
     public Jejak() {}
@@ -62,6 +64,7 @@ public class Jejak {
         aksi=""+o.get("aksi");
         waktu=org.joda.time.DateTime.parse(""+o.get("waktu"));
         tgl=java.sql.Date.valueOf(""+o.get("tgl"));
+        deleted=Boolean.parseBoolean(""+o.get("deleted"));
     }
 
     @Override
@@ -69,8 +72,9 @@ public class Jejak {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put("pelaku", pelaku);
         o.put("aksi", aksi);
-        o.put("waktu", waktu.toString());
-        o.put("tgl", tgl);
+        o.put("waktu", ""+waktu);
+        o.put("tgl", ""+tgl);
+        o.put("deleted", ""+deleted);
         return o.toJSONString();
     }
 
@@ -80,5 +84,13 @@ public class Jejak {
 
     public void setTgl(java.sql.Date tgl) {
         this.tgl = tgl;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

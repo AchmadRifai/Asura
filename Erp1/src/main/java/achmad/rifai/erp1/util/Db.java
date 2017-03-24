@@ -5,9 +5,9 @@
  */
 package achmad.rifai.erp1.util;
 
-import com.mongodb.DB;
 import java.io.FileNotFoundException;
 import java.security.GeneralSecurityException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,15 +29,13 @@ public class Db {
         }
     }
 
-    private com.mongodb.MongoClient mc;
-    private DB d;
+    private com.datastax.driver.core.Cluster c;
+    private com.datastax.driver.core.Session s;
     private String host,name;
-    private int port;
 
-    public Db(String host, String name, int port) throws Exception {
+    public Db(String host, String name) throws Exception{
         this.host = host;
         this.name = name;
-        this.port = port;
         start();
     }
 
@@ -61,30 +59,25 @@ public class Db {
         start();
     }
 
-    public int getPort() {
-        return port;
+    private void start() throws InstantiationException, IllegalAccessException, SQLException {
+        c=com.datastax.driver.core.Cluster.builder().addContactPoint(host).build();
+        s=c.connect(name);
     }
 
-    public void setPort(int port) throws Exception {
-        close();
-        this.port = port;
-        start();
+    public void close() throws Exception {
+        s.close();
+        c.close();
     }
 
-    private void start() {
-        mc=new com.mongodb.MongoClient(host, port);
-        d=mc.getDB(name);
+    public com.datastax.driver.core.PreparedStatement getPS(String cql)throws Exception{
+        return s.prepare(cql);
     }
 
-    public void close() {
-        mc.close();
+    public com.datastax.driver.core.ResultSet getRS(String cql)throws Exception{
+        return s.execute(cql);
     }
 
-    public DB getD() {
-        return d;
-    }
-
-    public com.mongodb.MongoClient getMc() {
-        return mc;
+    public com.datastax.driver.core.Session getS() {
+        return s;
     }
 }

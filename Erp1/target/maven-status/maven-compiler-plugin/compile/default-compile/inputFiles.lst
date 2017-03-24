@@ -1,5 +1,6 @@
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOJabatan.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAO.java
+/home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/beans/Form1.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/util/Db.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOPenjualan.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/ui/Splash.java
@@ -18,6 +19,7 @@
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Tugas.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Pelanggan.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Ledger.java
+/home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/beans/Form.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOPesan.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOTerima.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Karyawan.java
@@ -31,11 +33,10 @@
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Petugas.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Penerima.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Pembelian.java
-/home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOJejak.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Absen.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Bonusan.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/Terima.java
-/home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOAbsen.java
+/home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/beans/Form3.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOPelanggan.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOBarang.java
 /home/ai/NetBeansProjects/Asura/Erp1/src/main/java/achmad/rifai/erp1/entity/dao/DAOTugas.java

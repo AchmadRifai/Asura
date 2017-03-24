@@ -15,6 +15,7 @@ public class Absen {
     private String s;
     private java.sql.Date tgl;
     private Jenise l;
+    private boolean deleted;
 
     public String getS() {
         return s;
@@ -46,6 +47,15 @@ public class Absen {
         s=""+o.get("s");
         tgl=java.sql.Date.valueOf(""+o.get("tgl"));
         l=Jenise.valueOf(""+o.get("l"));
+        deleted=Boolean.parseBoolean(""+o.get("deleted"));
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public enum Jenise {
@@ -56,8 +66,9 @@ public class Absen {
     public String toString() {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put("s", s);
-        o.put("tgl", tgl);
-        o.put("jenis", l);
+        o.put("tgl", ""+tgl);
+        o.put("jenis", ""+l);
+        o.put("deleted", ""+deleted);
         return o.toJSONString();
     }
 

@@ -5,6 +5,8 @@
  */
 package achmad.rifai.erp1.entity;
 
+import achmad.rifai.erp1.util.Db;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -12,15 +14,20 @@ import org.json.simple.parser.ParseException;
  * @author ai
  */
 public class Rekening {
-    private String kode,ket,golongan,posisi;
-
-    public Rekening(String k,com.mongodb.DB d)throws Exception{
+    public static Rekening of(Db d, String kode) throws Exception{
+        Rekening v=null;
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        o.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(k));
-        com.mongodb.DBCursor c=d.getCollection("rekening").find(o);
-        for(com.mongodb.DBObject o1:c.toArray(1))parsing(r.decrypt(""+o1.get(achmad.rifai.erp1.util.Work.MD5("datane"))));
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(
+                QueryBuilder.select("bin").from("rekening").where(QueryBuilder.eq("berkas", kode)));
+        for(com.datastax.driver.core.Row ro:rs){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            v=new Rekening(json);
+        }return v;
     }
+
+    private String kode,ket,golongan,posisi;
+    private boolean deleted;
 
     public String getKode() {
         return kode;
@@ -65,6 +72,7 @@ public class Rekening {
         ket=""+o.get("ket");
         golongan=""+o.get("golongan");
         posisi=""+o.get("posisi");
+        deleted=Boolean.parseBoolean(""+o.get("deleted"));
     }
 
     @Override
@@ -74,9 +82,18 @@ public class Rekening {
         o.put("ket", ket);
         o.put("golongan", golongan);
         o.put("posisi", posisi);
+        o.put("deleted", ""+deleted);
         return o.toJSONString();
     }
 
     public Rekening() {
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

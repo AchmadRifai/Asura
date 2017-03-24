@@ -6,6 +6,7 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Barang;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.List;
 
 /**
@@ -13,45 +14,50 @@ import java.util.List;
  * @author ai
  */
 public class DAOBarang implements DAO<Barang>{
-    private com.mongodb.DB d;
+    private achmad.rifai.erp1.util.Db d;
 
-    public DAOBarang(com.mongodb.DB db){
+    public DAOBarang(achmad.rifai.erp1.util.Db db){
         d=db;
     }
 
     @Override
     public void insert(Barang v) throws Exception {
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(v.getKode()));
-        o.put(achmad.rifai.erp1.util.Work.MD5("datane"), r.encrypt(v.toString()));
-        d.getCollection("barang").insert(o);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getKode(), v);
+        d.getS().execute(QueryBuilder.insertInto("barang").value("berkas", f.getKode()).value("bin", f.getData()));
     }
 
     @Override
     public void delete(Barang w) throws Exception {
-        Barang t=new Barang(w.toString());
+        Barang t=Barang.of(d,w.getKode());
         t.setDeleted(true);
         update(w,t);
     }
 
     @Override
     public void update(Barang a, Barang b) throws Exception {
-        com.mongodb.DBObject w=new com.mongodb.BasicDBObject(),o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        w.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(a.getKode()));
-        o.put(achmad.rifai.erp1.util.Work.MD5("datane"), r.encrypt(b.toString()));
-        d.getCollection("barang").update(w, o);
+        trueDelete(a);
+        insert(b);
     }
 
     @Override
     public List<Barang> all() throws Exception {
         List<Barang>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.mongodb.DBCursor c=d.getCollection("barang").find();
-        for(com.mongodb.DBObject o:c.toArray()){
-            Barang b=new Barang(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("datane"))));
-            if(!b.isDeleted())l.add(b);
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("barang"));
+        for(com.datastax.driver.core.Row ro:rs){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            Barang v=new Barang(json);
+            if(!v.isDeleted())l.add(v);
         }return l;
+    }
+
+    public void trueDelete(Barang v) throws Exception{
+        d.getS().execute(QueryBuilder.delete().from("barang").where(QueryBuilder.eq("berkas", v.getKode())));
+    }
+
+    @Override
+    public void createTable() throws Exception {
+        d.getRS("create table if not exists barang(berkas text primary key,bin list<text>);");
     }
 }

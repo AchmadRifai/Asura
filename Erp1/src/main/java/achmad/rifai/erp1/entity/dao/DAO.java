@@ -11,6 +11,7 @@ package achmad.rifai.erp1.entity.dao;
  */
 public interface DAO<T>{
     void insert(T v)throws Exception;
+    void createTable()throws Exception;
     void delete(T w)throws Exception;
     void update(T a,T b)throws Exception;
     java.util.List<T>all()throws Exception;

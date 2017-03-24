@@ -6,6 +6,7 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Jabatan;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.List;
 
 /**
@@ -13,48 +14,50 @@ import java.util.List;
  * @author ai
  */
 public class DAOJabatan implements DAO<Jabatan>{
-    private com.mongodb.DB d;
+    private achmad.rifai.erp1.util.Db d;
 
-    public DAOJabatan(com.mongodb.DB d){
-        this.d=d;
+    public DAOJabatan(achmad.rifai.erp1.util.Db db){
+        d=db;
     }
 
     @Override
     public void insert(Jabatan v) throws Exception {
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("nama"), r.encrypt(v.getNama()));
-        o.put(achmad.rifai.erp1.util.Work.MD5("data"), r.encrypt(v.toString()));
-        d.getCollection("jabatan").insert(o);
+        achmad.rifai.erp1.beans.Form1 fo=new achmad.rifai.erp1.beans.Form1(v.getNama(), v);
+        d.getS().execute(QueryBuilder.insertInto("jabatan").value("berkas", fo.getKode()).value("bin", fo.getData()));
     }
 
     @Override
     public void delete(Jabatan w) throws Exception {
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("data"), r.encrypt(w.toString()));
-        d.getCollection("jabatan").remove(o);
+        Jabatan j=Jabatan.of(d,w.getNama());
+        j.setDeleted(true);
+        update(w,j);
     }
 
     @Override
     public void update(Jabatan a, Jabatan b) throws Exception {
-        com.mongodb.DBObject o1=new com.mongodb.BasicDBObject(),o2=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o1.put(achmad.rifai.erp1.util.Work.MD5("nama"), r.encrypt(a.getNama()));
-        o2.put(achmad.rifai.erp1.util.Work.MD5("data"), r.encrypt(b.toString()));
-        d.getCollection("jabatan").update(o1, o2);
+        trueDelete(a);
+        insert(b);
     }
 
     @Override
     public List<Jabatan> all() throws Exception {
         List<Jabatan>l=new java.util.LinkedList<>();
-        com.mongodb.DBCursor c=d.getCollection("jabatan").find();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        for(com.mongodb.DBObject o:c.toArray()){
-            Jabatan j=new Jabatan(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("data"))));
-            l.add(j);
-        }c.close();
-        return l;
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("jabatan"));
+        for(com.datastax.driver.core.Row ro:rs){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            Jabatan v=new Jabatan(json);
+            if(!v.isDeleted())l.add(v);
+        }return l;
     }
-    
+
+    public void trueDelete(Jabatan a)throws Exception{
+        d.getS().execute(QueryBuilder.delete().from("jabatan").where(QueryBuilder.eq("berkas", a.getNama())));
+    }
+
+    @Override
+    public void createTable() throws Exception {
+        d.getRS("create table if not exists jabatan(berkas text primary key,bin list<text>);");
+    }
 }

@@ -11,7 +11,6 @@ package achmad.rifai.erp1.beans;
  */
 public class DBSetting {
     private String host,name;
-    private int port;
 
     public String getHost() {
         return host;
@@ -27,13 +26,5 @@ public class DBSetting {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 }

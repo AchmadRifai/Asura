@@ -7,7 +7,6 @@ package achmad.rifai.admin.ui;
 
 import achmad.rifai.erp1.entity.Absen;
 import achmad.rifai.erp1.entity.Karyawan;
-import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
 /**
@@ -162,7 +161,7 @@ public class Login extends javax.swing.JFrame {
     private void jalan() {
         try {
             achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.entity.Karyawan k=new achmad.rifai.erp1.entity.Karyawan(d.getD(), user.getText());
+            achmad.rifai.erp1.entity.Karyawan k=achmad.rifai.erp1.entity.Karyawan.of(d, user.getText());
             if(null!=k.getId()){
                 if(!k.isDeleted()&&!k.isBlocked()){
                     if("admin".equals(k.getJabatan())){
@@ -195,7 +194,7 @@ public class Login extends javax.swing.JFrame {
     private void init() {
         try {
             achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.util.Work.initDb(d.getHost(), d.getName(), d.getPort());
+            achmad.rifai.erp1.util.Work.initDb(d.getHost(), d.getName());
             d.close();
         } catch (Exception ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
@@ -217,26 +216,50 @@ public class Login extends javax.swing.JFrame {
 
     private void absen(Karyawan k) throws Exception {
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        Absen a=new Absen();
-        a.setTgl(java.sql.Date.valueOf(LocalDate.now()));
-        a.setL(Absen.Jenise.MASUK);
-        a.setS(k.getId());
-        new achmad.rifai.erp1.entity.dao.DAOAbsen(d.getD()).insert(a);
+        achmad.rifai.erp1.entity.dao.DAOBukuAbsen dao=new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d);
+        achmad.rifai.erp1.entity.BukuAbsen a=dao.current(),b=dao.current();
+        if(wesAbsen(k)){
+            achmad.rifai.erp1.entity.Absen abs=null;
+            java.util.List<Absen>l=b.getL();
+            for(Absen x:a.getL())if(k.getId() == null ? x.getS() == null : k.getId().equals(x.getS())){
+                abs=x;
+                l.remove(x);
+                break;
+            }abs.setL(Absen.Jenise.MASUK);
+            l.add(abs);
+        }else{
+            java.util.List<Absen>l=b.getL();
+            Absen abs=new Absen();
+            abs.setDeleted(false);
+            abs.setL(Absen.Jenise.MASUK);
+            abs.setS(k.getId());
+            abs.setTgl(java.sql.Date.valueOf(java.time.LocalDate.now()));
+            l.add(abs);
+        }dao.update(a, b);
         d.close();
     }
 
     private void jejak(Karyawan k) throws Exception {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.Jejak j=new achmad.rifai.erp1.entity.Jejak("Masuk kerja", k.getId());
-        new achmad.rifai.erp1.entity.dao.DAOJejak(d.getD()).insert(j);
-        d.close();
+        achmad.rifai.admin.util.Work.jejak(k.getId(), "login aplikasi");
     }
 
     private void halau(Karyawan k) throws Exception {
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        Karyawan b=new Karyawan(d.getD(),k.getId());
+        Karyawan b=Karyawan.of(d,k.getId());
         b.setMasuk(true);
-        new achmad.rifai.erp1.entity.dao.DAOKaryawan(d.getD()).update(k, b);
+        new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).update(k, b);
         d.close();
+    }
+
+    private boolean wesAbsen(Karyawan k) throws Exception {
+        boolean b=false;
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOBukuAbsen dao=new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d);
+        achmad.rifai.erp1.entity.BukuAbsen a=dao.current();
+        for(achmad.rifai.erp1.entity.Absen abs:a.getL())if(k.getId() == null ? abs.getS() == null : k.getId().equals(abs.getS())){
+            b=true;
+            break;
+        }d.close();
+        return b;
     }
 }

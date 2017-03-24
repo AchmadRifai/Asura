@@ -5,6 +5,8 @@
  */
 package achmad.rifai.erp1.entity;
 
+import achmad.rifai.erp1.util.Db;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.List;
 import org.json.simple.parser.ParseException;
 
@@ -13,6 +15,17 @@ import org.json.simple.parser.ParseException;
  * @author ai
  */
 public class Suplier {
+    public static Suplier of(Db d, String kode) throws Exception{
+        Suplier v=null;
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("suplier").where(QueryBuilder.eq("berkas", kode)));
+        for(com.datastax.driver.core.Row ro:rs){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            v=new Suplier(json);
+        }return v;
+    }
+
     private String kode,nama;
     private List<String>alamat,telp;
     private boolean deleted;
@@ -28,10 +41,49 @@ public class Suplier {
         deleted=false;
     }
 
-    public Suplier(String j1, String j2, String j3) throws ParseException {
-        parsing1(j1);
-        parsing2(j2);
-        parsing3(j3);
+    public Suplier(String st) throws ParseException {
+        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
+        org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(st);
+        deleted=Boolean.parseBoolean(""+o.get("deleted"));
+        kode=""+o.get("kode");
+        nama=""+o.get("nama");
+        alamatObject(o.get("alamat"));
+        telpObject(o.get("telp"));
+    }
+
+    @Override
+    public String toString() {
+        org.json.simple.JSONObject o=new org.json.simple.JSONObject();
+        o.put("deleted", ""+deleted);
+        o.put("kode", kode);
+        o.put("nama", nama);
+        o.put("alamat", alamatJSON());
+        o.put("telp", telpJSON());
+        return o.toJSONString();
+    }
+
+    private Object alamatJSON(){
+        org.json.simple.JSONArray a=new org.json.simple.JSONArray();
+        for(String s:alamat)a.add(s);
+        return a;
+    }
+
+    private Object telpJSON(){
+        org.json.simple.JSONArray a=new org.json.simple.JSONArray();
+        for(String s:telp)a.add(s);
+        return a;
+    }
+
+    private void telpObject(Object get){
+        telp=new java.util.LinkedList<>();
+        org.json.simple.JSONArray a=(org.json.simple.JSONArray) get;
+        for(int x=0;x<a.size();x++)telp.add(""+a.get(x));
+    }
+
+    private void alamatObject(Object get){
+        alamat=new java.util.LinkedList<>();
+        org.json.simple.JSONArray a=(org.json.simple.JSONArray) get;
+        for(int x=0;x<a.size();x++)alamat.add(""+a.get(x));
     }
 
     public String getKode() {
@@ -72,41 +124,5 @@ public class Suplier {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-    }
-
-    public Suplier(String k,com.mongodb.DB d)throws Exception{
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(k));
-        com.mongodb.DBCursor c=d.getCollection("suplier").find(o);
-        for(com.mongodb.DBObject o1:c.toArray(1)){
-            parsing1(r.decrypt(""+o1.get(achmad.rifai.erp1.util.Work.MD5("data"))));
-            parsing2(r.decrypt(""+o1.get(achmad.rifai.erp1.util.Work.MD5("item"))));
-            parsing3(r.decrypt(""+o1.get(achmad.rifai.erp1.util.Work.MD5("telp"))));
-        }
-    }
-
-    private void parsing1(String j1) throws ParseException {
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(j1);
-        deleted=Boolean.parseBoolean(""+o.get("deleted"));
-        kode=""+o.get("kode");
-        nama=""+o.get("nama");
-    }
-
-    private void parsing2(String j2) throws ParseException {
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(j2);
-        alamat=new java.util.LinkedList<>();
-        for(int x=0;x<a.size();x++)
-            alamat.add(""+a.get(x));
-    }
-
-    private void parsing3(String j3) throws ParseException {
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(j3);
-        telp=new java.util.LinkedList<>();
-        for(int x=0;x<a.size();x++)
-            telp.add(""+a.get(x));
     }
 }

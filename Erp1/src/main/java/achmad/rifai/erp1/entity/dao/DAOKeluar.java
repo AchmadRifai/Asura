@@ -6,6 +6,7 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Keluar;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -13,60 +14,61 @@ import java.util.List;
  *
  * @author ai
  */
-public class DAOKeluar implements DAO<achmad.rifai.erp1.entity.Keluar>{
-    private com.mongodb.DB d;
+public class DAOKeluar implements DAO<Keluar>{
+    private achmad.rifai.erp1.util.Db d;
 
-    public DAOKeluar(com.mongodb.DB db){
+    public DAOKeluar(achmad.rifai.erp1.util.Db db){
         d=db;
     }
 
     @Override
     public void insert(Keluar v) throws Exception {
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(v.getKode()));
-        o.put(achmad.rifai.erp1.util.Work.MD5("datane"), r.encrypt(v.toString()));
-        d.getCollection("keluar").insert(o);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getKode(), v);
+        d.getS().execute(QueryBuilder.insertInto("keluar").value("berkas", f.getKode()).value("bin", f.getData()));
     }
 
     @Override
     public void delete(Keluar w) throws Exception {
-        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        o.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(w.getKode()));
-        d.getCollection("keluar").remove(o);
+        Keluar k=Keluar.of(d,w.getKode());
+        k.setDeleted(true);
+        update(w,k);
     }
 
     @Override
     public void update(Keluar a, Keluar b) throws Exception {
-        com.mongodb.DBObject w=new com.mongodb.BasicDBObject(),o=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        w.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(a.getKode()));
-        o.put(achmad.rifai.erp1.util.Work.MD5("datane"), r.encrypt(b.toString()));
-        d.getCollection("keluar").update(w, o);
+        trueDelete(a);
+        insert(b);
     }
 
     @Override
     public List<Keluar> all() throws Exception {
         List<Keluar>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.mongodb.DBCursor c=d.getCollection("keluar").find();
-        for(com.mongodb.DBObject o:c.toArray()){
-            l.add(new Keluar(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("datane")))));
+        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("keluar"))){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            Keluar v=new Keluar(json);
+            if(!v.isDeleted())l.add(v);
         }l.sort(sortir());
         return l;
     }
 
     private Comparator<? super Keluar> sortir() {
-        return new Comparator<Keluar>() {
-            @Override
-            public int compare(Keluar o1, Keluar o2) {
-                int x;
-                if(o1.getTgl().isAfter(o2.getTgl()))x=-1;
-                else if(o1.getTgl().isBefore(o2.getTgl()))x=1;
-                else x=0;
-                return x;
-            }
+        return (Keluar o1, Keluar o2) -> {
+            int x;
+            if(o1.getTgl().isAfter(o2.getTgl()))x=-1;
+            else if(o1.getTgl().isBefore(o2.getTgl()))x=1;
+            else x=0;
+            return x;
         };
+    }
+
+    public void trueDelete(Keluar a) throws Exception{
+        d.getS().execute(QueryBuilder.delete().from("keluar").where(QueryBuilder.eq("berkas", a.getKode())));
+    }
+
+    @Override
+    public void createTable() throws Exception {
+        d.getRS("create table if not exists keluar(berkas text primary key,bin list<text>);");
     }
 }

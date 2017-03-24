@@ -5,6 +5,8 @@
  */
 package achmad.rifai.erp1.entity;
 
+import achmad.rifai.erp1.util.Db;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -12,19 +14,66 @@ import org.json.simple.parser.ParseException;
  * @author ai
  */
 public class Pesan {
+    public static Pesan of(Db d, String kode)throws Exception{
+        Pesan v=null;
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        for(com.datastax.driver.core.Row ro:d.getS().execute(
+                QueryBuilder.select("bin").from("pesan").where(QueryBuilder.eq("berkas", kode)))){
+            String json="";
+            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            v=new Pesan(json);
+        }return v;
+    }
+
     private String pengirim,pesan,kode;
     private org.joda.time.DateTime waktu;
     private boolean deleted;
     private java.util.List<Penerima>ke;
 
-    public Pesan(String k,com.mongodb.DB d) throws Exception{
-        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        w.put(achmad.rifai.erp1.util.Work.MD5("kode"), r.encrypt(k));
-        com.mongodb.DBCursor c=d.getCollection("pesan").find(w);
-        for(com.mongodb.DBObject o:c.toArray(1)){
-            parsing1(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("data"))));
-            parsing2(r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("penerima"))));
+    @Override
+    public String toString() {
+        org.json.simple.JSONObject o=new org.json.simple.JSONObject();
+        o.put("pengirim", pengirim);
+        o.put("pesan", pesan);
+        o.put("kode", kode);
+        o.put("waktu", ""+waktu);
+        o.put("deleted", ""+deleted);
+        o.put("ke", keJSON());
+        return o.toJSONString();
+    }
+
+    public Pesan(String json) throws ParseException{
+        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
+        org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(json);
+        pengirim=""+o.get("pengirim");
+        pesan=""+o.get("pesan");
+        kode=""+o.get("kode");
+        waktu=org.joda.time.DateTime.parse(""+o.get("waktu"));
+        deleted=Boolean.parseBoolean(""+o.get("deleted"));
+        keObject(o.get("ke"));
+    }
+
+    private Object keJSON(){
+        org.json.simple.JSONArray a=new org.json.simple.JSONArray();
+        ke.stream().map((p) -> {
+            org.json.simple.JSONObject o=new org.json.simple.JSONObject();
+            o.put("terbaca", ""+p.isTerbaca());
+            o.put("akun", p.getAkun());
+            return o;
+        }).forEachOrdered((o) -> {
+            a.add(o);
+        });return a;
+    }
+
+    private void keObject(Object get){
+        org.json.simple.JSONArray a=(org.json.simple.JSONArray) get;
+        ke=new java.util.LinkedList<>();
+        for(int x=0;x<a.size();x++){
+            org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
+            Penerima p=new Penerima();
+            p.setAkun(""+o.get("akun"));
+            p.setTerbaca(Boolean.parseBoolean(""+o.get("terbaca")));
+            ke.add(p);
         }
     }
 
@@ -39,7 +88,8 @@ public class Pesan {
         this.pengirim=pengirim;
         this.pesan=pesan;
         deleted=false;
-        kode=pengirim+waktu;
+        kode=pengirim+waktu.getDayOfMonth()+waktu.getMonthOfYear()+waktu.getYear()+waktu.getHourOfDay()+waktu.getMinuteOfHour()+
+                waktu.getSecondOfMinute()+waktu.getZone()+waktu.getMillis();
     }
 
     public String getPengirim() {
