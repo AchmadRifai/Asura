@@ -30,6 +30,10 @@ public class Pesan {
     private boolean deleted;
     private java.util.List<Penerima>ke;
 
+    public Pesan() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
     public String toString() {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();

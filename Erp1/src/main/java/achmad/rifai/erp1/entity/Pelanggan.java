@@ -49,6 +49,10 @@ public class Pelanggan {
         telpObject(o.get("telp"));
     }
 
+    public Pelanggan() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public String getKode() {
         return kode;
     }

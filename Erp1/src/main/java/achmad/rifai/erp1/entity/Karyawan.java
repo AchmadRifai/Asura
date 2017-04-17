@@ -7,10 +7,7 @@ package achmad.rifai.erp1.entity;
 
 import achmad.rifai.erp1.util.Db;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import java.time.Month;
-import java.time.Year;
 import java.util.List;
-import org.joda.time.DateTime;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -32,8 +29,7 @@ public class Karyawan{
     private String id,nama,pass,telp,email,jabatan;
     private boolean masuk,deleted,blocked;
     private List<String> alamat;
-    private DateTime hiredate;
-    private List<Bonusan>bonus;
+    private java.sql.Date hiredate;
 
     public Karyawan(String s) throws ParseException {
         org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
@@ -47,9 +43,8 @@ public class Karyawan{
         deleted=Boolean.parseBoolean(""+o.get("deleted"));
         blocked=Boolean.parseBoolean(""+o.get("blocked"));
         masuk=Boolean.parseBoolean(""+o.get("masuk"));
-        hiredate=org.joda.time.DateTime.parse(""+o.get("hiredate"));
+        hiredate=java.sql.Date.valueOf(""+o.get("hiredate"));
         alamatObject(o.get("alamat"));
-        bonusObject(o.get("bonus"));
     }
 
     @Override
@@ -66,7 +61,6 @@ public class Karyawan{
         o.put("blocked", ""+blocked);
         o.put("hiredate", ""+hiredate);
         o.put("alamat", alamatJSON());
-        o.put("bonus", bonusJSON());
         return o.toJSONString();
     }
 
@@ -76,51 +70,17 @@ public class Karyawan{
         for(int x=0;x<a.size();x++)alamat.add(""+a.get(x));
     }
 
-    private void bonusObject(Object g){
-        bonus=new java.util.LinkedList<>();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) g;
-        for(int x=0;x<a.size();x++){
-            org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
-            Bonusan b=new Bonusan();
-            b.setBulan(Month.valueOf(""+o.get("bulan")));
-            b.setJumlah(org.joda.money.Money.parse(""+o.get("jumlah")));
-            b.setNomer(Integer.parseInt(""+o.get("nomer")));
-            b.setTahun(Year.parse(""+o.get("tahun")));
-            bonus.add(b);
-        }
-    }
-
     private Object alamatJSON(){
         org.json.simple.JSONArray a=new org.json.simple.JSONArray();
-        for(String s:alamat)a.add(s);
+        alamat.forEach((s) -> {a.add(s);});
         return a;
     }
 
-    private Object bonusJSON(){
-        org.json.simple.JSONArray a=new org.json.simple.JSONArray();
-        for(Bonusan b:bonus){
-            org.json.simple.JSONObject o=new org.json.simple.JSONObject();
-            o.put("bulan", ""+b.getBulan());
-            o.put("jumlah", ""+b.getJumlah());
-            o.put("nomer", ""+b.getNomer());
-            o.put("tahun", ""+b.getTahun());
-            a.add(o);
-        }return a;
-    }
-
-    public List<Bonusan> getBonus() {
-        return bonus;
-    }
-
-    public void setBonus(List<Bonusan> bonus) {
-        this.bonus = bonus;
-    }
-
-    public DateTime getHiredate() {
+    public java.sql.Date getHiredate() {
         return hiredate;
     }
 
-    public void setHiredate(DateTime hiredate) {
+    public void setHiredate(java.sql.Date hiredate) {
         this.hiredate = hiredate;
     }
 

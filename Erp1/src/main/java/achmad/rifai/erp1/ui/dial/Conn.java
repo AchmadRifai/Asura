@@ -5,7 +5,6 @@
  */
 package achmad.rifai.erp1.ui.dial;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -34,10 +33,8 @@ private Thread t1,t2;
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         name = new javax.swing.JTextField();
-        port = new javax.swing.JFormattedTextField();
         host = new javax.swing.JTextField();
         s = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -53,21 +50,11 @@ private Thread t1,t2;
 
         jLabel2.setText("Host");
 
-        jLabel3.setText("Port");
-
         jLabel4.setText("DB Name");
 
         name.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 nameKeyReleased(evt);
-            }
-        });
-
-        port.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        port.setText("27017");
-        port.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                portKeyReleased(evt);
             }
         });
 
@@ -103,12 +90,10 @@ private Thread t1,t2;
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(name)
-                            .addComponent(port)
                             .addComponent(host)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1)
@@ -125,11 +110,7 @@ private Thread t1,t2;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(host, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -154,13 +135,6 @@ private Thread t1,t2;
         refresh();
     }//GEN-LAST:event_hostKeyReleased
 
-    private void portKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_portKeyReleased
-        if(port.isValid()&&!port.getText().isEmpty()){
-            if(0<Integer.parseInt(port.getText()))port.setForeground(Color.BLACK);
-            else port.setForeground(Color.red);
-        }refresh();
-    }//GEN-LAST:event_portKeyReleased
-
     private void nameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameKeyReleased
         refresh();
     }//GEN-LAST:event_nameKeyReleased
@@ -176,54 +150,44 @@ private Thread t1,t2;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField name;
-    private javax.swing.JFormattedTextField port;
     private javax.swing.JButton s;
     // End of variables declaration//GEN-END:variables
 
     private void refresh() {
-        s.setEnabled(!host.getText().isEmpty()&&!name.getText().isEmpty()&&port.isValid()&&!port.getText().isEmpty()&&
-        Color.BLACK==port.getForeground());
+        s.setEnabled(!host.getText().isEmpty()&&!name.getText().isEmpty());
     }
 
     private void disableAll() {
         jButton1.setEnabled(false);
         s.setEnabled(false);
         host.setEnabled(false);
-        port.setEnabled(false);
         name.setEnabled(false);
     }
 
     private void dbne() {
-        t1=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    achmad.rifai.erp1.util.Work.initDb(host.getText(),name.getText());
-                    Conn.this.setVisible(false);
-                } catch (Exception ex) {
-                    achmad.rifai.erp1.util.Db.hindar(ex);
-                    enableAll(1);
-                }
+        t1=new Thread(() -> {
+            try {
+                achmad.rifai.erp1.util.Work.initDb(host.getText(),name.getText());
+                Conn.this.setVisible(false);
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+                enableAll(1);
             }
         });t1.start();
     }
 
     private void filene() {
-        t2=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    achmad.rifai.erp1.beans.DBSetting dbs=new achmad.rifai.erp1.beans.DBSetting();
-                    dbs.setHost(host.getText());
-                    dbs.setName(name.getText());
-                    achmad.rifai.erp1.util.Work.saveDbs(dbs);
-                } catch (GeneralSecurityException | IOException | ClassNotFoundException ex) {
-                    achmad.rifai.erp1.util.Db.hindar(ex);
-                    enableAll(2);
-                }
+        t2=new Thread(() -> {
+            try {
+                achmad.rifai.erp1.beans.DBSetting dbs=new achmad.rifai.erp1.beans.DBSetting();
+                dbs.setHost(host.getText());
+                dbs.setName(name.getText());
+                achmad.rifai.erp1.util.Work.saveDbs(dbs);
+            } catch (GeneralSecurityException | IOException | ClassNotFoundException ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+                enableAll(2);
             }
         });t2.start();
     }
@@ -232,8 +196,6 @@ private Thread t1,t2;
         jButton1.setEnabled(true);
         host.setText("");
         host.setEnabled(true);
-        port.setText("27017");
-        port.setEnabled(true);
         name.setText("");
         name.setEnabled(true);
         refresh();

@@ -45,6 +45,10 @@ public class Tugas {
         kode=ket+tgl+no;
     }
 
+    public Tugas() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public String getKet() {
         return ket;
     }

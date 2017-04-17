@@ -57,8 +57,8 @@ public class DAOTerima implements DAO<Terima>{
     private Comparator<? super Terima> sorter() {
         return (Terima o1, Terima o2) -> {
             int x;
-            if(o1.getTgl().isAfter(o2.getTgl()))x=1;
-            else if(o1.getTgl().isBefore(o2.getTgl()))x=-1;
+            if(o1.getTgl().isAfter(o2.getTgl()))x=-1;
+            else if(o1.getTgl().isBefore(o2.getTgl()))x=1;
             else x=0;
             return x;
         };

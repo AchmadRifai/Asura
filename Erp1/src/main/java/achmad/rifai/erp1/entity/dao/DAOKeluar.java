@@ -56,8 +56,8 @@ public class DAOKeluar implements DAO<Keluar>{
     private Comparator<? super Keluar> sortir() {
         return (Keluar o1, Keluar o2) -> {
             int x;
-            if(o1.getTgl().isAfter(o2.getTgl()))x=-1;
-            else if(o1.getTgl().isBefore(o2.getTgl()))x=1;
+            if(o1.getTgl().isAfter(o2.getTgl()))x=1;
+            else if(o1.getTgl().isBefore(o2.getTgl()))x=-1;
             else x=0;
             return x;
         };

@@ -57,8 +57,8 @@ public class DAOPesan implements DAO<Pesan>{
     private Comparator<? super Pesan> sorter() {
         return (Pesan o1, Pesan o2) -> {
             int x;
-            if(o1.getWaktu().isAfter(o2.getWaktu()))x=1;
-            else if(o1.getWaktu().isBefore(o2.getWaktu()))x=-1;
+            if(o1.getWaktu().isAfter(o2.getWaktu()))x=-1;
+            else if(o1.getWaktu().isBefore(o2.getWaktu()))x=1;
             else x=0;
             return x;
         };

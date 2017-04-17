@@ -5,6 +5,10 @@
  */
 package achmad.rifai.admin.util;
 
+import achmad.rifai.erp1.entity.Barang;
+import achmad.rifai.erp1.entity.Jabatan;
+import achmad.rifai.erp1.entity.Karyawan;
+import achmad.rifai.erp1.entity.Pelanggan;
 import achmad.rifai.erp1.util.Db;
 import javax.swing.JTable;
 
@@ -15,7 +19,6 @@ import javax.swing.JTable;
 public class Work {
     public static void readKaryawan(JTable tblData, String id) throws Exception {
         Db d=achmad.rifai.erp1.util.Work.loadDB();
-        jejak(id,"Melihat Data Karyawan");
         dataKaryawan(d,tblData);
         d.close();
     }
@@ -26,6 +29,7 @@ public class Work {
         achmad.rifai.erp1.entity.Tracks t1=dao.current(id),t2=dao.current(id);
         java.util.List<achmad.rifai.erp1.entity.Jejak>l=t1.getL();
         l.add(new achmad.rifai.erp1.entity.Jejak(aksi, id));
+        t2.setL(l);
         dao.update(t1, t2);
         d.close();
     }
@@ -47,7 +51,6 @@ public class Work {
     }
 
     public static void readJabatan(JTable tblData, String id) throws Exception {
-        jejak(id,"Melihat Data Jabatan");
         javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"NAMA","GAJI","KAPASITAS"}, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -61,7 +64,6 @@ public class Work {
     }
 
     public static void readBarang(JTable tblData, String id) throws Exception {
-        jejak(id,"Melihat Data Barang");
         javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"KODE","NAMA","HARGA","STOK"}, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -75,7 +77,6 @@ public class Work {
     }
 
     public static void readKeluar(JTable tblData, String id) throws Exception {
-        jejak(id,"Melihat Data Pengeluaran");
         javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"KODE","JURNAL","TANGGAL","UANG"}, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -89,7 +90,6 @@ public class Work {
     }
 
     public static void readLedger(JTable tblData, String id) throws Exception {
-        jejak(id,"Melihat Data Buku Besar");
         javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Kode","Tanggal","Ket","No","Debit",
         "Kredit"}, 0){
             @Override
@@ -104,7 +104,6 @@ public class Work {
     }
 
     public static void readPelanggan(JTable tblData, String id) throws Exception {
-        jejak(id,"Melihat Data Pelanggan");
         javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Kode","Nama","Dicekal"}, 0){
             private Class[]c=new Class[]{String.class,String.class,Boolean.class};
             @Override
@@ -123,6 +122,208 @@ public class Work {
     }
 
     public static void readPembelian(JTable tblData, String id) throws Exception {
-        jejak(id,"Melihat Data Pembelian");
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"STRUK","SUPLIER","TANGGAL",
+        "UANG YANG DIKELUARKAN"},0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOPembelian dao=new achmad.rifai.erp1.entity.dao.DAOPembelian(d);
+        for(achmad.rifai.erp1.entity.Pembelian p:dao.all())m.addRow(new Object[]{p.getStruk(),p.getSuplier(),p.getTgl(),p.getHarga()});
+        d.close();
+    }
+
+    public static void readPenjualan(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Nota","Pelanggan","Tanggal","Total",
+        "UANG YANG DIBAYAR","Keterangan"},0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOPenjualan dao=new achmad.rifai.erp1.entity.dao.DAOPenjualan(d);
+        for(achmad.rifai.erp1.entity.Penjualan p:dao.all())m.addRow(new Object[]{p.getNota(),p.getPelanggan(),p.getTgl(),p.getTotal(),
+        p.getTerbayar(),p.getKet()});
+        d.close();
+    }
+
+    public static void readPesan(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Kode","Isi Pesan","Pengirim",
+        "Waktu"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOPesan dao=new achmad.rifai.erp1.entity.dao.DAOPesan(d);
+        for(achmad.rifai.erp1.entity.Pesan p:dao.all())m.addColumn(new Object[]{p.getKode(),p.getPesan(),p.getPengirim(),p.getWaktu()});
+        d.close();
+    }
+
+    public static void readAset(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Kode","Golongan","Posisi","Keterangan"
+        }, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAORekening dao=new achmad.rifai.erp1.entity.dao.DAORekening(d);
+        for(achmad.rifai.erp1.entity.Rekening r:dao.all())m.addRow(new Object[]{r.getKode(),r.getGolongan(),r.getPosisi(),r.getKet()});
+        d.close();
+    }
+
+    public static void readSuplier(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Kode","Nama"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOSuplier dao=new achmad.rifai.erp1.entity.dao.DAOSuplier(d);
+        for(achmad.rifai.erp1.entity.Suplier s:dao.all())m.addRow(new Object[]{s.getKode(),s.getNama()});
+        d.close();
+    }
+
+    public static void readIncome(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"KODE","Tanggal","Jurnal","Jumlah"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOTerima dao=new achmad.rifai.erp1.entity.dao.DAOTerima(d);
+        for(achmad.rifai.erp1.entity.Terima t:dao.all())m.addRow(new Object[]{t.getKode(),t.getTgl(),t.getJurnal(),t.getUang()});
+        d.close();
+    }
+
+    public static void readTugas(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"KODE","URUTAN","TANGGAL","Keterangan",
+        "Dibatalkan","Dihentikan"}, 0){
+            private Class[]c=new Class[]{String.class,String.class,java.sql.Date.class,String.class,Boolean.class,Boolean.class};
+            @Override
+            public Class<?> getColumnClass(int x) {
+                return c[x];
+            }
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOTugas dao=new achmad.rifai.erp1.entity.dao.DAOTugas(d);
+        for(achmad.rifai.erp1.entity.Tugas t:dao.all())
+            m.addRow(new Object[]{t.getKode(),t.getNo(),t.getTgl(),t.getKet(),t.isBatal(),t.isPending()});
+        d.close();
+    }
+
+    public static void readBukuAbsen(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Tanggal"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOBukuAbsen dao=new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d);
+        for(achmad.rifai.erp1.entity.BukuAbsen b:dao.all())m.addRow(new Object[]{b.getTgl()});
+        d.close();
+    }
+
+    public static void readBukuJejak(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Kode","Pelaku","Bulan","Tahun"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOTracks dao=new achmad.rifai.erp1.entity.dao.DAOTracks(d);
+        for(achmad.rifai.erp1.entity.Tracks t:dao.all())m.addRow(new Object[]{t.getKode(),t.getId(),t.getBln(),t.getTahun()});
+        d.close();
+    }
+
+    public static void hapusKaryawanWithJabatan(Jabatan j, Db d) throws Exception {
+        achmad.rifai.erp1.entity.dao.DAOKaryawan dao=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d);
+        for(achmad.rifai.erp1.entity.Karyawan k:dao.all())if(j.getNama() == null ? k.getJabatan() == null : j.getNama().equals(k.getJabatan()))
+            dao.delete(k);
+    }
+
+    private static void penjualan(Barang b, Db d) throws Exception {
+        achmad.rifai.erp1.entity.dao.DAOPenjualan dao=new achmad.rifai.erp1.entity.dao.DAOPenjualan(d);
+        for(achmad.rifai.erp1.entity.Penjualan p:dao.all()){
+            for(achmad.rifai.erp1.entity.ItemJual i:p.getItems())
+                if(b.getKode() == null ? i.getBarang() == null : b.getKode().equals(i.getBarang())){
+                dao.delete(p);
+                break;
+            }
+        }
+    }
+
+    public static void hapusKaryawan(Karyawan k) {
+        try {
+            Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.entity.dao.DAOPesan dao=new achmad.rifai.erp1.entity.dao.DAOPesan(d);
+            for(achmad.rifai.erp1.entity.Pesan p:dao.all()){
+                for(achmad.rifai.erp1.entity.Penerima pe:p.getKe())
+                    if(pe.getAkun() == null ? k.getId() == null : pe.getAkun().equals(k.getId())){
+                    dao.delete(p);
+                    break;
+                }
+            }d.close();
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }
+
+    public static void hapusBarange(Barang b) {
+        try {
+            Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.entity.dao.DAOPembelian dao=new achmad.rifai.erp1.entity.dao.DAOPembelian(d);
+            for(achmad.rifai.erp1.entity.Pembelian p:dao.all()){
+                for(achmad.rifai.erp1.entity.ItemBeli i:p.getItems())
+                    if(i.getBarang() == null ? b.getKode() == null : i.getBarang().equals(b.getKode())){
+                    dao.delete(p);
+                    break;
+                }
+            }penjualan(b,d);
+            d.close();
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }
+
+    public static void readJurnal(JTable tblData, String id) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new String[]{"Kode","No","Tanggal","Keterangan",
+        "Debit","Kredit"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };tblData.setModel(m);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOJurnal dao=new achmad.rifai.erp1.entity.dao.DAOJurnal(d);
+        for(achmad.rifai.erp1.entity.Jurnal j:dao.all())m.addRow(new Object[]{j.getKode(),j.getNo(),j.getTgl(),j.getKet(),j.getDebit(),
+            j.getKredit()});
+        d.close();
+    }
+
+    public static void hapusPelanggan(Pelanggan p) {
+        try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.entity.dao.DAOPenjualan dao=new achmad.rifai.erp1.entity.dao.DAOPenjualan(d);
+            for(achmad.rifai.erp1.entity.Penjualan pe:dao.all())
+                if(p.getKode() == null ? pe.getPelanggan() == null : p.getKode().equals(pe.getPelanggan()))dao.delete(pe);
+            d.close();
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
     }
 }

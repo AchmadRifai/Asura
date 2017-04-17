@@ -9,6 +9,7 @@ import achmad.rifai.erp1.entity.Karyawan;
 import achmad.rifai.erp1.util.RSA;
 import achmad.rifai.erp1.util.Work;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -47,7 +48,8 @@ public class DAOKaryawan implements DAO<Karyawan>{
             for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
             Karyawan v=new Karyawan(json);
             if(!v.isDeleted())l.add(v);
-        }return l;
+        }l.sort(sorter());
+        return l;
     }
 
     @Override
@@ -60,5 +62,15 @@ public class DAOKaryawan implements DAO<Karyawan>{
     @Override
     public void createTable() throws Exception {
         d.getRS("create table if not exists karyawan(berkas text primary key,bin list<text>);");
+    }
+
+    private Comparator<? super Karyawan> sorter() {
+        return (Karyawan o1, Karyawan o2) -> {
+            int x;
+            if(o1.getHiredate().after(o2.getHiredate()))x=-1;
+            else if(o1.getHiredate().before(o2.getHiredate()))x=1;
+            else x=0;
+            return x;
+        };
     }
 }

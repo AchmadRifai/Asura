@@ -57,8 +57,8 @@ public class DAOPembelian implements DAO<Pembelian>{
     private Comparator<? super Pembelian> sorter() {
         return (Pembelian o1, Pembelian o2) -> {
             int x;
-            if(o1.getTgl().after(o2.getTgl()))x=1;
-            else if(o1.getTgl().before(o2.getTgl()))x=-1;
+            if(o1.getTgl().after(o2.getTgl()))x=-1;
+            else if(o1.getTgl().before(o2.getTgl()))x=1;
             else x=0;
             return x;
         };

@@ -7,6 +7,7 @@ package achmad.rifai.erp1.entity;
 
 import achmad.rifai.erp1.util.Db;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import java.util.Comparator;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -17,8 +18,8 @@ public class Tracks {
     public static Tracks of(Db d, String kode)throws Exception{
         Tracks v=null;
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("tracks").
-                where(QueryBuilder.eq("berkas", kode)))){
+        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("tracks").where(QueryBuilder.eq("berkas", kode)));
+        for(com.datastax.driver.core.Row ro:rs){
             String json="";
             for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
             v=new Tracks(json);
@@ -27,7 +28,7 @@ public class Tracks {
 
     private String kode,id;
     private java.time.Month bln;
-    private int tahun;
+    private java.time.Year tahun;
     private java.util.List<Jejak>l;
     private boolean deleted;
 
@@ -37,7 +38,7 @@ public class Tracks {
         kode=""+o.get("kode");
         id=""+o.get("id");
         bln=java.time.Month.valueOf(""+o.get("bln"));
-        tahun=Integer.parseInt(""+o.get("tahun"));
+        tahun=java.time.Year.parse(""+o.get("tahun"));
         deleted=Boolean.parseBoolean(""+o.get("deleted"));
         jejakObject(o.get("l"));
     }
@@ -64,12 +65,9 @@ public class Tracks {
             org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
             Jejak j=new Jejak();
             j.setAksi(""+o.get("aksi"));
-            j.setDeleted(Boolean.parseBoolean(""+o.get("deleted")));
-            j.setPelaku(""+o.get("pelaku"));
             j.setWaktu(org.joda.time.DateTime.parse(""+o.get("waktu")));
-            j.setTgl(java.sql.Date.valueOf(""+o.get("tgl")));
             l.add(j);
-        }
+        }l.sort(sorter());
     }
 
     private Object jejakJSON(){
@@ -77,10 +75,7 @@ public class Tracks {
         l.forEach((j)->{
             org.json.simple.JSONObject o=new org.json.simple.JSONObject();
             o.put("aksi", j.getAksi());
-            o.put("pelaku", j.getPelaku());
-            o.put("tgl", ""+j.getTgl());
             o.put("waktu", ""+j.getWaktu());
-            o.put("deleted", ""+j.isDeleted());
             a.add(o);
         });return a;
     }
@@ -109,14 +104,6 @@ public class Tracks {
         this.bln = bln;
     }
 
-    public int getTahun() {
-        return tahun;
-    }
-
-    public void setTahun(int tahun) {
-        this.tahun = tahun;
-    }
-
     public java.util.List<Jejak> getL() {
         return l;
     }
@@ -131,5 +118,23 @@ public class Tracks {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    private Comparator<? super Jejak> sorter() {
+        return (Jejak o1, Jejak o2) -> {
+            int x;
+            if(o1.getWaktu().isAfter(o2.getWaktu()))x=-1;
+            else if(o1.getWaktu().isBefore(o2.getWaktu()))x=1;
+            else x=0;
+            return x;
+        };
+    }
+
+    public java.time.Year getTahun() {
+        return tahun;
+    }
+
+    public void setTahun(java.time.Year tahun) {
+        this.tahun = tahun;
     }
 }

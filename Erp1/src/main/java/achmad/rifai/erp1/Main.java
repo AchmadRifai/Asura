@@ -125,17 +125,6 @@ public class Main {
         return l;
     }
 
-    private static List<Bonusan> genBonus() {
-        List<Bonusan>l=new java.util.LinkedList<>();
-        Bonusan b=new Bonusan();
-        b.setBulan(Month.JANUARY);
-        b.setTahun(Year.now());
-        b.setJumlah(org.joda.money.Money.of(CurrencyUnit.of("IDR"), 30000));
-        b.setNomer(1);
-        l.add(b);
-        return l;
-    }
-
     private static List<Petugas> genPetugas() {
         List<Petugas>l=new java.util.LinkedList<>();
         Petugas p1=new Petugas(),p2=new Petugas(),p3=new Petugas(),p4=new Petugas(),p5=new Petugas();

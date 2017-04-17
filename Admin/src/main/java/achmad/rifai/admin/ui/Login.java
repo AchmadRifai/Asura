@@ -211,6 +211,7 @@ public class Login extends javax.swing.JFrame {
             d.id=user.getText();
             d.setVisible(true);
             this.setVisible(false);
+            this.dispose();
         }else JOptionPane.showMessageDialog(rootPane, "Password salah!");
     }
 
@@ -230,10 +231,8 @@ public class Login extends javax.swing.JFrame {
         }else{
             java.util.List<Absen>l=b.getL();
             Absen abs=new Absen();
-            abs.setDeleted(false);
             abs.setL(Absen.Jenise.MASUK);
             abs.setS(k.getId());
-            abs.setTgl(java.sql.Date.valueOf(java.time.LocalDate.now()));
             l.add(abs);
         }dao.update(a, b);
         d.close();

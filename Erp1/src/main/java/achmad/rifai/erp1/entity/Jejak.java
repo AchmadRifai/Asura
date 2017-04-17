@@ -5,7 +5,6 @@
  */
 package achmad.rifai.erp1.entity;
 
-import java.time.LocalDate;
 import org.joda.time.DateTime;
 import org.json.simple.parser.ParseException;
 
@@ -14,17 +13,12 @@ import org.json.simple.parser.ParseException;
  * @author ai
  */
 public class Jejak {
-    private String aksi,pelaku;
+    private String aksi;
     private org.joda.time.DateTime waktu;
-    private java.sql.Date tgl;
-    private boolean deleted;
 
     public Jejak(String aksi, String pelaku) {
         this.aksi = aksi;
-        this.pelaku = pelaku;
         waktu=org.joda.time.DateTime.now();
-        tgl=java.sql.Date.valueOf(LocalDate.now());
-        deleted=false;
     }
 
     public Jejak() {}
@@ -41,14 +35,6 @@ public class Jejak {
         this.aksi = aksi;
     }
 
-    public String getPelaku() {
-        return pelaku;
-    }
-
-    public void setPelaku(String pelaku) {
-        this.pelaku = pelaku;
-    }
-
     public DateTime getWaktu() {
         return waktu;
     }
@@ -60,37 +46,15 @@ public class Jejak {
     private void parsing(String json) throws ParseException {
         org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
         org.json.simple.JSONObject o=(org.json.simple.JSONObject)p.parse(json);
-        pelaku=""+o.get("pelaku");
         aksi=""+o.get("aksi");
         waktu=org.joda.time.DateTime.parse(""+o.get("waktu"));
-        tgl=java.sql.Date.valueOf(""+o.get("tgl"));
-        deleted=Boolean.parseBoolean(""+o.get("deleted"));
     }
 
     @Override
     public String toString() {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
-        o.put("pelaku", pelaku);
         o.put("aksi", aksi);
         o.put("waktu", ""+waktu);
-        o.put("tgl", ""+tgl);
-        o.put("deleted", ""+deleted);
         return o.toJSONString();
-    }
-
-    public java.sql.Date getTgl() {
-        return tgl;
-    }
-
-    public void setTgl(java.sql.Date tgl) {
-        this.tgl = tgl;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 }

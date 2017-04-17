@@ -55,15 +55,12 @@ public class DAOLedger implements DAO<Ledger>{
     }
 
     private Comparator<? super Ledger> sorter() {
-        return new Comparator<Ledger>() {
-            @Override
-            public int compare(Ledger o1, Ledger o2) {
-                int x;
-                if(o1.getTgl().after(o2.getTgl()))x=1;
-                else if(o1.getTgl().before(o2.getTgl()))x=-1;
-                else x=0;
-                return x;
-            }
+        return (Ledger o1, Ledger o2) -> {
+            int x;
+            if(o1.getTgl().after(o2.getTgl()))x=-1;
+            else if(o1.getTgl().before(o2.getTgl()))x=1;
+            else x=0;
+            return x;
         };
     }
 

@@ -78,11 +78,11 @@ public class RSA {
 
     private String hex_string(byte[] b) {
         java.math.BigInteger bi=new java.math.BigInteger(b);
-        return bi.toString(46);
+        return bi.toString(36);
     }
 
     private byte[] hex_bit(String e) {
-        java.math.BigInteger bi=new java.math.BigInteger(e, 46);
+        java.math.BigInteger bi=new java.math.BigInteger(e, 36);
         return bi.toByteArray();
     }
 

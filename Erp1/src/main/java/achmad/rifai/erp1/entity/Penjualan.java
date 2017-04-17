@@ -146,7 +146,10 @@ public class Penjualan {
 
     public void setItems(java.util.List<ItemJual> items) {
         this.items = items;
-        for(ItemJual i:items)total=total.plus(i.getUang().multipliedBy(i.getJumlah()));
+        total=org.joda.money.Money.zero(CurrencyUnit.of("IDR"));
+        items.forEach((i) -> {
+            total=total.plus(i.getUang().multipliedBy(i.getJumlah()));
+        });
     }
 
     public boolean isDeleted() {

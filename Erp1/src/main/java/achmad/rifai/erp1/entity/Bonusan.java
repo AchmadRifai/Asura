@@ -10,26 +10,8 @@ package achmad.rifai.erp1.entity;
  * @author ai
  */
 public class Bonusan {
-    private java.time.Month bulan;
-    private java.time.Year tahun;
     private org.joda.money.Money jumlah;
     private int nomer;
-
-    public java.time.Month getBulan() {
-        return bulan;
-    }
-
-    public void setBulan(java.time.Month bulan) {
-        this.bulan = bulan;
-    }
-
-    public java.time.Year getTahun() {
-        return tahun;
-    }
-
-    public void setTahun(java.time.Year tahun) {
-        this.tahun = tahun;
-    }
 
     public org.joda.money.Money getJumlah() {
         return jumlah;

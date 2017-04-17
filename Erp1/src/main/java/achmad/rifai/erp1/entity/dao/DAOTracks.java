@@ -70,8 +70,8 @@ public class DAOTracks implements DAO<Tracks>{
                 if(o1.getBln().getValue()>o2.getBln().getValue())x=1;
                 else if(o1.getBln().getValue()<o2.getBln().getValue())x=-1;
                 else x=0;
-            }else if(o1.getTahun()>o2.getTahun())x=1;
-            else x=-1;
+            }else if(o1.getTahun().isAfter(o2.getTahun()))x=-1;
+            else x=1;
             return x;
         };
     }
@@ -86,7 +86,7 @@ public class DAOTracks implements DAO<Tracks>{
             v.setDeleted(false);
             v.setId(id);
             v.setKode(kode);
-            v.setTahun(tgl.getYear());
+            v.setTahun(java.time.Year.of(tgl.getYear()));
             v.setL(new java.util.LinkedList<>());
             insert(v);
         }return v;

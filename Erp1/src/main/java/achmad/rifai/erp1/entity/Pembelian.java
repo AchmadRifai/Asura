@@ -119,7 +119,7 @@ public class Pembelian {
     public void setItems(java.util.List<ItemBeli> items) {
         this.items = items;
         harga=org.joda.money.Money.zero(CurrencyUnit.of("IDR"));
-        for(ItemBeli i:items)harga=harga.plus(i.getHarga().multipliedBy(i.getJumlah()));
+        items.forEach((i) -> {harga=harga.plus(i.getHarga().multipliedBy(i.getJumlah()));});
     }
 
     public boolean isDeleted() {

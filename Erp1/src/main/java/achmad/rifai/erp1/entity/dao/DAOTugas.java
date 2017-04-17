@@ -56,18 +56,15 @@ public class DAOTugas implements DAO<Tugas>{
     }
 
     public Comparator<? super Tugas> sorter() {
-        return new Comparator<Tugas>() {
-            @Override
-            public int compare(Tugas o1, Tugas o2) {
-                int x;
-                if(o1.getTgl().equals(o2.getTgl())){
-                    if(o1.getNo()>o2.getNo())x=1;
-                    else if(o1.getNo()<o2.getNo())x=-1;
-                    else x=0;
-                }else if(o1.getTgl().after(o2.getTgl()))x=1;
-                else x=-1;
-                return x;
-            }
+        return (Tugas o1, Tugas o2) -> {
+            int x;
+            if(o1.getTgl().equals(o2.getTgl())){
+                if(o1.getNo()>o2.getNo())x=-1;
+                else if(o1.getNo()<o2.getNo())x=1;
+                else x=0;
+            }else if(o1.getTgl().after(o2.getTgl()))x=-1;
+            else x=1;
+            return x;
         };
     }
 

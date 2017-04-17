@@ -79,8 +79,8 @@ public class DAOBukuAbsen implements DAO<BukuAbsen>{
         return (BukuAbsen o1, BukuAbsen o2) -> {
             int x;
             java.sql.Date d1=java.sql.Date.valueOf(o1.getTgl()),d2=java.sql.Date.valueOf(o2.getTgl());
-            if(d1.after(d2))x=1;
-            else if(d1.before(d2))x=-1;
+            if(d1.after(d2))x=-1;
+            else if(d1.before(d2))x=1;
             else x=0;
             return x;
         };

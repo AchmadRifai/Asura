@@ -13,6 +13,7 @@ import achmad.rifai.erp1.entity.Jejak;
 import achmad.rifai.erp1.entity.Karyawan;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
 import java.util.List;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.joda.money.CurrencyUnit;
@@ -38,7 +39,7 @@ public class Work {
     public static String MD5(String toString) throws GeneralSecurityException{
         java.security.MessageDigest md=java.security.MessageDigest.getInstance("MD5");
         java.math.BigInteger bi=new java.math.BigInteger(md.digest(toString.getBytes()));
-        return bi.toString(46);
+        return bi.toString(36);
     }
 
     public static void saveDbs(DBSetting dbs) throws GeneralSecurityException, IOException, ClassNotFoundException {
@@ -89,6 +90,9 @@ public class Work {
     }
 
     private static void createDB(Db d) throws Exception {
+        new achmad.rifai.erp1.entity.dao.DAOTracks(d).createTable();
+        new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d).createTable();
+        new achmad.rifai.erp1.entity.dao.DAOBulanBonus(d).createTable();
         new achmad.rifai.erp1.entity.dao.DAOBarang(d).createTable();
         new achmad.rifai.erp1.entity.dao.DAOJabatan(d).createTable();
         new achmad.rifai.erp1.entity.dao.DAOJurnal(d).createTable();
@@ -148,10 +152,9 @@ public class Work {
         Karyawan k1=new Karyawan();
         k1.setAlamat(new java.util.LinkedList<>());
         k1.setBlocked(false);
-        k1.setBonus(new java.util.LinkedList<>());
         k1.setDeleted(false);
         k1.setEmail("achmad.rifai.jowo.asli@gmail.com");
-        k1.setHiredate(org.joda.time.DateTime.now());
+        k1.setHiredate(java.sql.Date.valueOf(LocalDate.now()));
         k1.setId("asura");
         k1.setJabatan("admin");
         k1.setMasuk(false);

@@ -52,10 +52,8 @@ public class BukuAbsen {
         for(int x=0;x<a.size();x++){
             org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
             Absen v=new Absen();
-            v.setDeleted(Boolean.parseBoolean(""+o.get("deleted")));
             v.setL(Absen.Jenise.valueOf(""+o.get("l")));
             v.setS(""+o.get("s"));
-            v.setTgl(java.sql.Date.valueOf(""+o.get("tgl")));
             l.add(v);
         }
     }
@@ -64,10 +62,8 @@ public class BukuAbsen {
         org.json.simple.JSONArray a=new org.json.simple.JSONArray();
         l.forEach((v)->{
             org.json.simple.JSONObject o=new org.json.simple.JSONObject();
-            o.put("deleted", ""+v.isDeleted());
             o.put("l", ""+v.getL());
             o.put("s", v.getS());
-            o.put("tgl", ""+v.getTgl());
             a.add(o);
         });return a;
     }
