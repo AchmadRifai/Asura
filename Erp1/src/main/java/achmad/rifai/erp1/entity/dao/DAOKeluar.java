@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Keluar;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class DAOKeluar implements DAO<Keluar>{
     @Override
     public void insert(Keluar v) throws Exception {
         achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getKode(), v);
-        d.getS().execute(QueryBuilder.insertInto("keluar").value("berkas", f.getKode()).value("bin", f.getData()));
+        d.getD().getCollectionFromString("keluar").insert(f.genComparasion());
     }
 
     @Override
@@ -36,19 +35,23 @@ public class DAOKeluar implements DAO<Keluar>{
 
     @Override
     public void update(Keluar a, Keluar b) throws Exception {
-        trueDelete(a);
-        insert(b);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(b.getKode(), b);
+        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
+        w.put("berkas", a.getKode());
+        d.getD().getCollectionFromString("keluar").update(w, f.genComparasion());
     }
 
     @Override
     public List<Keluar> all() throws Exception {
         List<Keluar>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("keluar"))){
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("keluar").find();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList li=(com.mongodb.BasicDBList) c.next().get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
-            Keluar v=new Keluar(json);
-            if(!v.isDeleted())l.add(v);
+            for(int x=0;x<li.size();x++)json+=r.decrypt(""+li.get(x));
+            Keluar k=new Keluar(json);
+            if(!k.isDeleted())l.add(k);
         }l.sort(sortir());
         return l;
     }
@@ -64,11 +67,13 @@ public class DAOKeluar implements DAO<Keluar>{
     }
 
     public void trueDelete(Keluar a) throws Exception{
-        d.getS().execute(QueryBuilder.delete().from("keluar").where(QueryBuilder.eq("berkas", a.getKode())));
+        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
+        o.put("berkas", a.getKode());
+        d.getD().getCollectionFromString("keluar").remove(o);
     }
 
     @Override
     public void createTable() throws Exception {
-        d.getRS("create table if not exists keluar(berkas text primary key,bin list<text>);");
+        //d.getRS("create table if not exists keluar(berkas text primary key,bin list<text>);");
     }
 }

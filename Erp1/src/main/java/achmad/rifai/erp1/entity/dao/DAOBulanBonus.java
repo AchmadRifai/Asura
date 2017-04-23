@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.BulanBonus;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,12 +23,12 @@ public class DAOBulanBonus implements DAO<BulanBonus>{
     @Override
     public void insert(BulanBonus v) throws Exception {
         achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getKode(), v);
-        d.getS().execute(QueryBuilder.insertInto("bonusKaryawan").value("berkas", f.getKode()).value("bin", f.getData()));
+        d.getD().getCollectionFromString("bulanbonus").insert(f.genComparasion());
     }
 
     @Override
     public void createTable() throws Exception {
-        d.getRS("create table if not exists bonusKaryawan(berkas text primary key,bin list<text>);");
+        //d.getRS("create table if not exists bonusKaryawan(berkas text primary key,bin list<text>);");
     }
 
     @Override
@@ -41,17 +40,21 @@ public class DAOBulanBonus implements DAO<BulanBonus>{
 
     @Override
     public void update(BulanBonus a, BulanBonus b) throws Exception {
-        trueDelete(a);
-        insert(b);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(b.getKode(), b);
+        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
+        w.put("berkas", a.getKode());
+        d.getD().getCollectionFromString("bulanbonus").update(w, f.genComparasion());
     }
 
     @Override
     public List<BulanBonus> all() throws Exception {
         List<BulanBonus>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("bonusKaryawan"))){
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("bulanbonus").find();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList li=(com.mongodb.BasicDBList) c.next().get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            for(int x=0;x<li.size();x++)json+=r.decrypt(""+li.get(x));
             BulanBonus b=new BulanBonus(json);
             if(!b.isDeleted())l.add(b);
         }l.sort(sorter());
@@ -59,7 +62,9 @@ public class DAOBulanBonus implements DAO<BulanBonus>{
     }
 
     public void trueDelete(BulanBonus a)throws Exception{
-        d.getS().execute(QueryBuilder.delete().from("bonusKaryawan").where(QueryBuilder.eq("berkas", a.getKode())));
+        com.mongodb.DBObject p=new com.mongodb.BasicDBObject();
+        p.put("berkas", a.getKode());
+        d.getD().getCollectionFromString("bulanbonus").remove(p);
     }
 
     private Comparator<? super BulanBonus> sorter() {

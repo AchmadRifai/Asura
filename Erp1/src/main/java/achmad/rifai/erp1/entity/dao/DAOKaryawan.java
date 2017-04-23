@@ -8,7 +8,6 @@ package achmad.rifai.erp1.entity.dao;
 import achmad.rifai.erp1.entity.Karyawan;
 import achmad.rifai.erp1.util.RSA;
 import achmad.rifai.erp1.util.Work;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,28 +25,34 @@ public class DAOKaryawan implements DAO<Karyawan>{
     @Override
     public void insert(Karyawan v) throws Exception {
         achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getId(), v);
-        d.getS().execute(QueryBuilder.insertInto("karyawan").value("berkas", f.getKode()).value("bin", f.getData()));
+        d.getD().getCollectionFromString("karyawan").insert(f.genComparasion());
     }
 
     public void truedelete(Karyawan w) throws Exception {
-        d.getS().execute(QueryBuilder.delete().from("karyawan").where(QueryBuilder.eq("berkas", w.getId())));
+        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
+        o.put("berkas", w.getId());
+        d.getD().getCollectionFromString("karyawan").remove(o);
     }
 
     @Override
     public void update(Karyawan a, Karyawan b) throws Exception {
-        truedelete(a);
-        insert(b);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(b.getId(), b);
+        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
+        w.put("berkas", a.getId());
+        d.getD().getCollectionFromString("karyawan").update(w, f.genComparasion());
     }
 
     @Override
     public List<Karyawan> all() throws Exception {
         List<Karyawan>l=new java.util.LinkedList<>();
         RSA r=Work.loadRSA();
-        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("karyawan"))){
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("karyawan").find();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList li=(com.mongodb.BasicDBList) c.next().get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
-            Karyawan v=new Karyawan(json);
-            if(!v.isDeleted())l.add(v);
+            for(int x=0;x<li.size();x++)json+=r.decrypt(""+li.get(x));
+            Karyawan k=new Karyawan(json);
+            if(!k.isDeleted())l.add(k);
         }l.sort(sorter());
         return l;
     }
@@ -61,7 +66,7 @@ public class DAOKaryawan implements DAO<Karyawan>{
 
     @Override
     public void createTable() throws Exception {
-        d.getRS("create table if not exists karyawan(berkas text primary key,bin list<text>);");
+        //d.getRS("create table if not exists karyawan(berkas text primary key,bin list<text>);");
     }
 
     private Comparator<? super Karyawan> sorter() {

@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Pembelian;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,8 +23,7 @@ public class DAOPembelian implements DAO<Pembelian>{
     @Override
     public void insert(Pembelian v) throws Exception {
         achmad.rifai.erp1.beans.Form3 f=new achmad.rifai.erp1.beans.Form3(v.getStruk(), v.getSuplier(), ""+v.getTgl(), v);
-        d.getS().execute(QueryBuilder.insertInto("pembelian").value("berkas1", f.getKode1()).value("berkas2", f.getKode2())
-        .value("berkas3", f.getKode3()).value("bin", f.getData()));
+        d.getD().getCollectionFromString("pembelian").insert(f.genComparator());
     }
 
     @Override
@@ -37,19 +35,26 @@ public class DAOPembelian implements DAO<Pembelian>{
 
     @Override
     public void update(Pembelian a, Pembelian b) throws Exception {
-        trueDelete(a);
-        insert(b);
+        achmad.rifai.erp1.beans.Form3 f=new achmad.rifai.erp1.beans.Form3(b.getStruk(), b.getSuplier(), ""+b.getTgl(), b);
+        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
+        w.put("berkas1", a.getStruk());
+        w.put("berkas2", a.getSuplier());
+        w.put("berkas3", ""+a.getTgl());
+        d.getD().getCollectionFromString("pembelian").update(w, f.genComparator());
     }
 
     @Override
     public List<Pembelian> all() throws Exception {
         List<Pembelian>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("pembelian"))){
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("pembelian").find();
+        while(c.hasNext()){
+            com.mongodb.DBObject o=c.next();
+            com.mongodb.BasicDBList li=(com.mongodb.BasicDBList) o.get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
-            Pembelian v=new Pembelian(json);
-            if(!v.isDeleted())l.add(v);
+            for(int x=0;x<li.size();x++)json+=r.decrypt(""+li.get(x));
+            Pembelian p=new Pembelian(json);
+            if(!p.isDeleted())l.add(p);
         }l.sort(sorter());
         return l;
     }
@@ -65,12 +70,15 @@ public class DAOPembelian implements DAO<Pembelian>{
     }
 
     public void trueDelete(Pembelian v)throws Exception{
-        d.getS().execute(QueryBuilder.delete().from("pembelian").where(QueryBuilder.eq("berkas1", v.getStruk()))
-        .and(QueryBuilder.eq("berkas2", v.getSuplier())).and(QueryBuilder.eq("berkas3", ""+v.getTgl())));
+        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
+        o.put("berkas1", v.getStruk());
+        o.put("berkas2", v.getSuplier());
+        o.put("berkas3", ""+v.getTgl());
+        d.getD().getCollectionFromString("pembelian").remove(o);
     }
 
     @Override
     public void createTable() throws Exception {
-        d.getRS("create table if not exists pembelian(berkas1 text,berkas2 text,berkas3 text,bin list<text>,primary key(berkas1,berkas2,berkas3));");
+        //d.getRS("create table if not exists pembelian(berkas1 text,berkas2 text,berkas3 text,bin list<text>,primary key(berkas1,berkas2,berkas3));");
     }
 }

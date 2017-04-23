@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity;
 
 import achmad.rifai.erp1.util.Db;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import org.json.simple.parser.ParseException;
 
@@ -17,18 +16,23 @@ import org.json.simple.parser.ParseException;
 public class Tracks {
     public static Tracks of(Db d, String kode)throws Exception{
         Tracks v=null;
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("tracks").where(QueryBuilder.eq("berkas", kode)));
-        for(com.datastax.driver.core.Row ro:rs){
+            achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        com.mongodb.DBObject p=new com.mongodb.BasicDBObject();
+        p.put("berkas", kode);
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("tracks").find(p);
+        while(c.hasNext()){
+            com.mongodb.DBObject o=c.next();
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) o.get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            for(int x=0;x<l.size();x++)json+=r.decrypt(""+l.get(x));
             v=new Tracks(json);
+            break;
         }return v;
     }
 
     private String kode,id;
     private java.time.Month bln;
-    private java.time.Year tahun;
+    private int tahun;
     private java.util.List<Jejak>l;
     private boolean deleted;
 
@@ -38,7 +42,7 @@ public class Tracks {
         kode=""+o.get("kode");
         id=""+o.get("id");
         bln=java.time.Month.valueOf(""+o.get("bln"));
-        tahun=java.time.Year.parse(""+o.get("tahun"));
+        tahun=Integer.parseInt(""+o.get("thn"));
         deleted=Boolean.parseBoolean(""+o.get("deleted"));
         jejakObject(o.get("l"));
     }
@@ -52,7 +56,7 @@ public class Tracks {
         o.put("kode", kode);
         o.put("id", id);
         o.put("bln", ""+bln);
-        o.put("tahun", ""+tahun);
+        o.put("thn", ""+tahun);
         o.put("deleted", ""+deleted);
         o.put("l", jejakJSON());
         return o.toJSONString();
@@ -130,11 +134,11 @@ public class Tracks {
         };
     }
 
-    public java.time.Year getTahun() {
+    public int getTahun() {
         return tahun;
     }
 
-    public void setTahun(java.time.Year tahun) {
+    public void setTahun(int tahun) {
         this.tahun = tahun;
     }
 }

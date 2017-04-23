@@ -6,6 +6,7 @@
 package achmad.rifai.erp1.beans;
 
 import achmad.rifai.erp1.util.Work;
+import com.mongodb.DBObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,9 +77,12 @@ public class Form1 {
         this.data = data;
     }
 
-    public achmad.rifai.erp1.entity.Jabatan toJabatan() throws Exception{
-        String s="";
-        for(String st:data)s+=st;
-        return new achmad.rifai.erp1.entity.Jabatan(s);
+    public DBObject genComparasion() {
+        DBObject o=new com.mongodb.BasicDBObject();
+        com.mongodb.BasicDBList l=new com.mongodb.BasicDBList();
+        data.forEach((s)->{l.add(s);});
+        o.put("berkas", kode);
+        o.put("bin", l);
+        return o;
     }
 }

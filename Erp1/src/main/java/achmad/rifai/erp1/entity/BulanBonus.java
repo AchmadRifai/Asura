@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity;
 
 import achmad.rifai.erp1.util.Db;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import org.json.simple.parser.ParseException;
 
@@ -17,13 +16,16 @@ import org.json.simple.parser.ParseException;
 public class BulanBonus {
     public static BulanBonus of(String kode, Db d)throws Exception{
         BulanBonus b=null;
-        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("bonusKaryawan").
-                where(QueryBuilder.eq("berkas", kode)));
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        for(com.datastax.driver.core.Row ro:rs){
+        com.mongodb.DBObject p=new com.mongodb.BasicDBObject();
+        p.put("berkas", kode);
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("bulanbonus").find(p);
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            for(int x=0;x<l.size();x++)json+=r.decrypt(""+l.get(x));
             b=new BulanBonus(json);
+            break;
         }return b;
     }
 

@@ -245,6 +245,11 @@ private java.awt.Frame f;
     }
 
     private void saving() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(p==null)p=new achmad.rifai.erp1.entity.Pesan();
+        p.setPesan(isi.getText());
+        p.setPengirim(pengirim.getItemAt(pengirim.getSelectedIndex()));
+        p.setKode(kode.getText());
+        p.setWaktu(waktu.getItemAt(waktu.getSelectedIndex()));
+        if(null==p.getKe())p.setKe(new java.util.LinkedList<>());
     }
 }

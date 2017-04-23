@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity;
 
 import achmad.rifai.erp1.util.Db;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.sql.Date;
 import org.joda.money.CurrencyUnit;
 import org.json.simple.parser.ParseException;
@@ -19,12 +18,17 @@ public class Pembelian {
     public static Pembelian of(Db d, String struk, String suplier, Date tgl)throws Exception{
         Pembelian v=null;
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        for(com.datastax.driver.core.Row ro:d.getS().execute(
-                QueryBuilder.select("bin").from("pembelian").where(
-                QueryBuilder.eq("berkas1", struk)).and(QueryBuilder.eq("berkas2", suplier)).and(QueryBuilder.eq("berkas3", ""+tgl)))){
+        com.mongodb.DBObject p=new com.mongodb.BasicDBObject();
+        p.put("berkas1", struk);
+        p.put("berkas2", suplier);
+        p.put("berkas3", ""+tgl);
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("pembelian").find(p);
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
+            for(int x=0;x<l.size();x++)json+=r.decrypt(""+l.get(x));
             v=new Pembelian(json);
+            break;
         }return v;
     }
 

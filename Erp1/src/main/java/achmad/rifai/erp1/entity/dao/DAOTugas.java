@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Tugas;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class DAOTugas implements DAO<Tugas>{
     @Override
     public void insert(Tugas v) throws Exception {
         achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getKode(), v);
-        d.getS().execute(QueryBuilder.insertInto("tugas").value("berkas", f.getKode()).value("bin", f.getData()));
+        d.getD().getCollectionFromString("tugas").insert(f.genComparasion());
     }
 
     @Override
@@ -36,20 +35,23 @@ public class DAOTugas implements DAO<Tugas>{
 
     @Override
     public void update(Tugas a, Tugas b) throws Exception {
-        trueDelete(a);
-        insert(b);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(b.getKode(), b);
+        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
+        w.put("berkas", a.getKode());
+        d.getD().getCollectionFromString("tugas").update(w, f.genComparasion());
     }
 
     @Override
     public List<Tugas> all() throws Exception {
         List<Tugas>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("tugas"));
-        for(com.datastax.driver.core.Row ro:rs){
-            List<String>ls=ro.getList("bin", String.class);
-            String s="";
-            for(String st:ls)s+=r.decrypt(st);
-            Tugas t=new Tugas(s);
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("tugas").find();
+        while(c.hasNext()){
+            com.mongodb.DBObject o=c.next();
+            com.mongodb.BasicDBList li=(com.mongodb.BasicDBList) o.get("bin");
+            String json="";
+            for(int x=0;x<li.size();x++)json+=r.decrypt(""+li.get(x));
+            Tugas t=new Tugas(json);
             if(!t.isDeleted())l.add(t);
         }l.sort(sorter());
         return l;
@@ -69,11 +71,13 @@ public class DAOTugas implements DAO<Tugas>{
     }
 
     public void trueDelete(Tugas v)throws Exception{
-        d.getS().execute(QueryBuilder.delete().from("tugas").where(QueryBuilder.eq("berkas", v.getKode())));
+        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
+        o.put("berkas", v.getKode());
+        d.getD().getCollectionFromString("tugas").remove(o);
     }
 
     @Override
     public void createTable() throws Exception {
-        d.getS().execute("create table if not exists tugas(berkas text primary key,bin list<text>);");
+        //d.getS().execute("create table if not exists tugas(berkas text primary key,bin list<text>);");
     }
 }

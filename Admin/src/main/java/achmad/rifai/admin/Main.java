@@ -14,7 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Main {
     public static void main(String[]args){
         //try {
-            try {
+        try {
             achmad.rifai.erp1.util.Work.styling();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);

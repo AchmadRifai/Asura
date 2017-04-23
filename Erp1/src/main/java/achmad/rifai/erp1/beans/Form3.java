@@ -5,6 +5,8 @@
  */
 package achmad.rifai.erp1.beans;
 
+import com.mongodb.DBObject;
+
 /**
  *
  * @author ai
@@ -63,5 +65,16 @@ public class Form3 {
 
     public void setData(java.util.List<String> data) {
         this.data = data;
+    }
+
+    public DBObject genComparator() {
+        DBObject o=new com.mongodb.BasicDBObject();
+        com.mongodb.BasicDBList l=new com.mongodb.BasicDBList();
+        data.forEach((s)->{l.add(s);});
+        o.put("bin", l);
+        o.put("berkas1", kode1);
+        o.put("berkas2", kode2);
+        o.put("berkas3", kode3);
+        return o;
     }
 }

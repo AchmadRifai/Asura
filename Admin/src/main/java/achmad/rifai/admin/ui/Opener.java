@@ -6,17 +6,8 @@
 package achmad.rifai.admin.ui;
 
 import achmad.rifai.erp1.entity.Absen;
-import achmad.rifai.erp1.entity.ItemBeli;
-import achmad.rifai.erp1.entity.ItemJual;
-import achmad.rifai.erp1.entity.Jejak;
-import achmad.rifai.erp1.entity.Penerima;
-import achmad.rifai.erp1.entity.Petugas;
 import java.time.Month;
-import java.time.Year;
-import java.util.Iterator;
 import java.util.List;
-import org.apache.poi.ss.usermodel.Row;
-import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -244,469 +235,403 @@ private java.io.File f;
 
     private void barang() {
     try {
-        java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
         org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("barang");
-        Iterator<Row>i1=s.iterator();achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         java.util.List<achmad.rifai.erp1.entity.Barang>l=new java.util.LinkedList<>();
-        boolean skip=true;while(i1.hasNext()){
-            if(skip){
-                skip=false;continue;
-            }achmad.rifai.erp1.entity.Barang b=new achmad.rifai.erp1.entity.Barang();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            b.setDeleted(Boolean.parseBoolean(r.getCell(5).getStringCellValue()));
-            b.setHarga(org.joda.money.Money.parse(r.getCell(2).getStringCellValue()));
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            org.apache.poi.xssf.usermodel.XSSFRow r=s.getRow(x);
+            achmad.rifai.erp1.entity.Barang b=new achmad.rifai.erp1.entity.Barang();
             b.setKode(r.getCell(0).getStringCellValue());
             b.setNama(r.getCell(1).getStringCellValue());
+            b.setHarga(org.joda.money.Money.parse(r.getCell(2).getStringCellValue()));
+            b.setStok(Integer.parseInt(r.getCell(3).getStringCellValue()));
             b.setSatuan(r.getCell(4).getStringCellValue());
-            b.setStok(Integer.parseInt(r.getCell(3).getStringCellValue()));l.add(b);
-        }for(int x=0;x<l.size();x++){
-            achmad.rifai.erp1.entity.Barang b=l.get(x);
-            new achmad.rifai.erp1.entity.dao.DAOBarang(d).insert(b);
-            progBarang.setValue((x*100)/l.size());
-        }i.close();d.close();
+            b.setDeleted(Boolean.parseBoolean(r.getCell(5).getStringCellValue()));
+            x++;st=s.getRow(x).getCell(0).getStringCellValue();l.add(b);
+        }progBarang.setValue(50);for(int c=0;c<l.size();x++){
+            new achmad.rifai.erp1.entity.dao.DAOBarang(d).insert(l.get(c));
+            progBarang.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progBarang.setValue(100);
     }
 
     private void absen() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
         org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("absen");
-        Iterator<Row>i1=s.iterator();java.util.List<achmad.rifai.erp1.entity.BukuAbsen>l=new java.util.LinkedList<>();
-        boolean skip=true;while(i1.hasNext()){
-            if(skip){
-                skip=false;continue;
-            }achmad.rifai.erp1.entity.BukuAbsen b=new achmad.rifai.erp1.entity.BukuAbsen();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            b.setDeleted(Boolean.parseBoolean(r.getCell(2).getStringCellValue()));
-            b.setTgl(r.getCell(0).getStringCellValue());
-            b.setL(genListAbsen(r.getCell(1).getStringCellValue()));
-            l.add(b);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d).insert(l.get(x));
-            progAbsen.setValue((x*100)/l.size());
-        }i.close();d.close();
+        java.util.List<achmad.rifai.erp1.entity.BukuAbsen>l=new java.util.LinkedList<>();
+        int x=2;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.BukuAbsen b=new achmad.rifai.erp1.entity.BukuAbsen();
+            int y=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y);boolean trus=true;
+            b.setTgl(r1.getCell(0).getStringCellValue());
+            b.setDeleted(Boolean.parseBoolean(r1.getCell(3).getStringCellValue()));
+            java.util.List<achmad.rifai.erp1.entity.Absen>l2=new java.util.LinkedList<>();
+            while(trus||null==r2.getCell(0)){
+                trus=false;
+                Absen a=new Absen();
+                a.setS(r2.getCell(1).getStringCellValue());
+                a.setL(Absen.Jenise.valueOf(r2.getCell(2).getStringCellValue()));
+                l2.add(a);y++;r2=s.getRow(y);
+            }b.setL(l2);l.add(b);x=y+1;st=s.getRow(x).getCell(0).getStringCellValue();
+        }progAbsen.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d).insert(l.get(c));
+            progAbsen.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
-    }
-
-    private List<Absen> genListAbsen(String s) throws ParseException {
-        List<Absen>l=new java.util.LinkedList<>();
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(s);
-        for(int x=0;x<a.size();x++){
-            Absen ab=new Absen();
-            org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
-            ab.setL(Absen.Jenise.valueOf(""+o.get("l")));
-            ab.setS(""+o.get("s"));
-            l.add(ab);
-        }return l;
+    }progAbsen.setValue(100);
     }
 
     private void jabatan() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
         org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("jabatan");
-        Iterator<Row>i1=s.iterator();java.util.List<achmad.rifai.erp1.entity.Jabatan>l=new java.util.LinkedList<>();
-        boolean skip=true;while(i1.hasNext()){
-            if(skip){
-                skip=false;continue;
-            }achmad.rifai.erp1.entity.Jabatan j=new achmad.rifai.erp1.entity.Jabatan();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            j.setDeleted(Boolean.parseBoolean(r.getCell(3).getStringCellValue()));
+        java.util.List<achmad.rifai.erp1.entity.Jabatan>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            org.apache.poi.xssf.usermodel.XSSFRow r=s.getRow(x);
+            achmad.rifai.erp1.entity.Jabatan j=new achmad.rifai.erp1.entity.Jabatan();
+            j.setNama(r.getCell(0).getStringCellValue());
             j.setGaji(org.joda.money.Money.parse(r.getCell(1).getStringCellValue()));
             j.setKapasitas(Integer.parseInt(r.getCell(2).getStringCellValue()));
-            j.setNama(r.getCell(0).getStringCellValue());l.add(j);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOJabatan(d).insert(l.get(x));
-            progJabatan.setValue((x*100)/l.size());
-        }i.close();d.close();
+            j.setDeleted(Boolean.parseBoolean(r.getCell(3).getStringCellValue()));
+            x++;st=s.getRow(x).getCell(0).getStringCellValue();l.add(j);
+        }progJabatan.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOJabatan(d).insert(l.get(c));
+            progJabatan.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progJabatan.setValue(100);
     }
 
     private void jurnal() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
         org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("jurnal");
-        Iterator<Row>i1=s.iterator();java.util.List<achmad.rifai.erp1.entity.Jurnal>l=new java.util.LinkedList<>();
-        boolean skip=true;while(i1.hasNext()){
-            if(skip){
-                skip=false;continue;
-            }achmad.rifai.erp1.entity.Jurnal j=new achmad.rifai.erp1.entity.Jurnal();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            j.setDebit(org.joda.money.Money.parse(r.getCell(6).getStringCellValue()));
+        java.util.List<achmad.rifai.erp1.entity.Jurnal>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            org.apache.poi.xssf.usermodel.XSSFRow r=s.getRow(x);
+            achmad.rifai.erp1.entity.Jurnal j=new achmad.rifai.erp1.entity.Jurnal();
+            j.setKode(r.getCell(0).getStringCellValue());j.setTgl(java.sql.Date.valueOf(r.getCell(1).getStringCellValue()));
+            j.setKet(r.getCell(2).getStringCellValue());j.setNo(Integer.parseInt(r.getCell(3).getStringCellValue()));
             j.setDeleted(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));
-            j.setKet(r.getCell(2).getStringCellValue());
-            j.setKode(r.getCell(0).getStringCellValue());
             j.setKredit(org.joda.money.Money.parse(r.getCell(5).getStringCellValue()));
-            j.setNo(Integer.parseInt(r.getCell(3).getStringCellValue()));
-            j.setTgl(java.sql.Date.valueOf(r.getCell(1).getStringCellValue()));l.add(j);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOJurnal(d).insert(l.get(x));
-            progJurnal.setValue((x*100)/l.size());
-        }i.close();d.close();
+            j.setDebit(org.joda.money.Money.parse(r.getCell(6).getStringCellValue()));x++;st=s.getRow(x).getCell(0).getStringCellValue();l.add(j);
+        }progJurnal.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOJurnal(d).insert(l.get(c));
+            progJurnal.setValue(50+((50*(1+c))/l.size()));
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progJurnal.setValue(100);
     }
 
     private void karyawan() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("karyawan");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Karyawan>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Karyawan k=new achmad.rifai.erp1.entity.Karyawan();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            k.setId(r.getCell(0).getStringCellValue());k.setNama(r.getCell(1).getStringCellValue());k.setPass(r.getCell(2).getStringCellValue());
-            k.setJabatan(r.getCell(3).getStringCellValue());k.setEmail(r.getCell(4).getStringCellValue());
-            k.setAlamat(generateAlamat(r.getCell(5).getStringCellValue()));k.setTelp(r.getCell(6).getStringCellValue());
-            k.setHiredate(java.sql.Date.valueOf(r.getCell(7).getStringCellValue()));
-            k.setBlocked(Boolean.parseBoolean(r.getCell(9).getStringCellValue()));
-            k.setMasuk(Boolean.parseBoolean(r.getCell(10).getStringCellValue()));
-            k.setDeleted(Boolean.parseBoolean(r.getCell(11).getStringCellValue()));l.add(k);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).insert(l.get(x));
-            progKaryawan.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("karyawan");
+        java.util.List<achmad.rifai.erp1.entity.Karyawan>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Karyawan k=new achmad.rifai.erp1.entity.Karyawan();
+            int y=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y);
+            k.setId(r1.getCell(0).getStringCellValue());k.setNama(r1.getCell(1).getStringCellValue());boolean trus=true;
+            List<String>l2=new java.util.LinkedList<>();while(trus||null==r2.getCell(0)){
+                l2.add(r2.getCell(2).getStringCellValue());y++;r2=s.getRow(y);trus=false;
+            }k.setAlamat(l2);k.setPass(r1.getCell(3).getStringCellValue());k.setEmail(r1.getCell(4).getStringCellValue());
+            k.setJabatan(r1.getCell(5).getStringCellValue());k.setHiredate(java.sql.Date.valueOf(r1.getCell(6).getStringCellValue()));
+            k.setTelp(r1.getCell(7).getStringCellValue());k.setMasuk(Boolean.parseBoolean(r1.getCell(8).getStringCellValue()));
+            k.setBlocked(Boolean.parseBoolean(r1.getCell(9).getStringCellValue()));
+            k.setDeleted(Boolean.parseBoolean(r1.getCell(10).getStringCellValue()));x=y+1;st=s.getRow(x).getCell(0).getStringCellValue();l.add(k);
+        }progKaryawan.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).insert(l.get(c));
+            progKaryawan.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
-    }
-
-    private List<String> generateAlamat(String s) throws ParseException {
-        List<String>l=new java.util.LinkedList<>();
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(s);
-        for(int x=0;x<a.size();x++)l.add(""+a.get(x));
-        return l;
+    }progKaryawan.setValue(100);
     }
 
     private void keluar() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("expenses");Iterator<Row>i1=s.iterator();
-        java.util.List<achmad.rifai.erp1.entity.Keluar>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Keluar k=new achmad.rifai.erp1.entity.Keluar();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            k.setKode(r.getCell(0).getStringCellValue());k.setTgl(org.joda.time.DateTime.parse(r.getCell(1).getStringCellValue()));
-            k.setJurnal(r.getCell(2).getStringCellValue());k.setUang(org.joda.money.Money.parse(r.getCell(3).getStringCellValue()));
-            k.setDeleted(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));l.add(k);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOKeluar(d).insert(l.get(x));
-            progKeluar.setValue((x*100)/l.size());
-        }d.close();i.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("expenses");
+        List<achmad.rifai.erp1.entity.Keluar>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Keluar k=new achmad.rifai.erp1.entity.Keluar();
+            org.apache.poi.xssf.usermodel.XSSFRow r=s.getRow(x);
+            k.setKode(r.getCell(0).getStringCellValue());
+            k.setTgl(org.joda.time.DateTime.parse(r.getCell(1).getStringCellValue()));
+            k.setJurnal(r.getCell(2).getStringCellValue());
+            k.setUang(org.joda.money.Money.parse(r.getCell(3).getStringCellValue()));
+            k.setDeleted(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));
+            x++;l.add(k);st=s.getRow(x).getCell(0).getStringCellValue();
+        }progKeluar.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOKeluar(d).insert(l.get(c));
+            progKeluar.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progKeluar.setValue(100);
     }
 
     private void ledger() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("ledger");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Ledger>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Ledger le=new achmad.rifai.erp1.entity.Ledger();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            le.setKode(r.getCell(0).getStringCellValue());le.setTgl(java.sql.Date.valueOf(r.getCell(1).getStringCellValue()));
-            le.setKet(r.getCell(2).getStringCellValue());le.setNo(Integer.parseInt(r.getCell(3).getStringCellValue()));
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("ledger");
+        List<achmad.rifai.erp1.entity.Ledger>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Ledger le=new achmad.rifai.erp1.entity.Ledger();
+            org.apache.poi.xssf.usermodel.XSSFRow r=s.getRow(x);
+            le.setKode(r.getCell(0).getStringCellValue());
+            le.setTgl(java.sql.Date.valueOf(r.getCell(1).getStringCellValue()));
+            le.setKet(r.getCell(2).getStringCellValue());
+            le.setNo(Integer.parseInt(r.getCell(3).getStringCellValue()));
             le.setDebit(org.joda.money.Money.parse(r.getCell(4).getStringCellValue()));
             le.setKredit(org.joda.money.Money.parse(r.getCell(5).getStringCellValue()));
-            le.setDeleted(Boolean.parseBoolean(r.getCell(6).getStringCellValue()));l.add(le);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOLedger(d).insert(l.get(x));
-            progLedger.setValue((x*100)/l.size());
-        }i.close();d.close();
+            le.setDeleted(Boolean.parseBoolean(r.getCell(6).getStringCellValue()));x++;st=s.getRow(x).getCell(0).getStringCellValue();l.add(le);
+        }progLedger.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOLedger(d).insert(l.get(c));
+            progLedger.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progLedger.setValue(100);
     }
 
     private void pelanggan() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("pelanggan");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Pelanggan>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Pelanggan p=new achmad.rifai.erp1.entity.Pelanggan();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            p.setKode(r.getCell(0).getStringCellValue());p.setNama(r.getCell(1).getStringCellValue());
-            p.setAlamat(generateAlamat(r.getCell(2).getStringCellValue()));p.setTelp(generateAlamat(r.getCell(3).getStringCellValue()));
-            p.setBlocked(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));
-            p.setDeleted(Boolean.parseBoolean(r.getCell(5).getStringCellValue()));l.add(p);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOPelanggan(d).insert(l.get(x));
-            progPelanggan.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("pelanggan");
+        List<achmad.rifai.erp1.entity.Pelanggan>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Pelanggan p=new achmad.rifai.erp1.entity.Pelanggan();boolean trus=true;
+            int y=x,c,z=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y),r3=s.getRow(z);
+            List<String>ls1=new java.util.LinkedList<>(),ls2=new java.util.LinkedList<>();
+            while(trus||(null==r2.getCell(0)&&!r2.getCell(2).getStringCellValue().isEmpty())){
+                ls1.add(r2.getCell(2).getStringCellValue());trus=false;y++;r2=s.getRow(y);
+            }p.setAlamat(ls1);trus=true;while(trus||(null==r3.getCell(0)&&!r3.getCell(3).getStringCellValue().isEmpty())){
+                ls2.add(r3.getCell(3).getStringCellValue());trus=false;z++;r3=s.getRow(z);
+            }p.setTelp(ls2);if(y<z)c=z; else c=y;p.setKode(r1.getCell(0).getStringCellValue());p.setNama(r1.getCell(1).getStringCellValue());
+            p.setBlocked(Boolean.parseBoolean(r1.getCell(4).getStringCellValue()));
+            p.setDeleted(Boolean.parseBoolean(r1.getCell(5).getStringCellValue()));l.add(p);x=c+1;st=s.getRow(x).getCell(0).getStringCellValue();
+        }progPelanggan.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOPelanggan(d).insert(l.get(c));
+            progPelanggan.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progPelanggan.setValue(100);
     }
 
     private void pembelian() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("pembelian");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Pembelian>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Pembelian p=new achmad.rifai.erp1.entity.Pembelian();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            p.setStruk(r.getCell(0).getStringCellValue());p.setSuplier(r.getCell(1).getStringCellValue());
-            p.setTgl(java.sql.Date.valueOf(r.getCell(2).getStringCellValue()));p.setItems(genBeli(r.getCell(4).getStringCellValue()));
-            p.setHarga(org.joda.money.Money.parse(r.getCell(3).getStringCellValue()));
-            p.setDeleted(Boolean.parseBoolean(r.getCell(5).getStringCellValue()));l.add(p);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOPembelian(d).insert(l.get(x));
-            progPembelian.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("pembelian");
+        List<achmad.rifai.erp1.entity.Pembelian>l=new java.util.LinkedList<>();
+        int x=2;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Pembelian p=new achmad.rifai.erp1.entity.Pembelian();
+            int y=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y);
+            List<achmad.rifai.erp1.entity.ItemBeli>l1=new java.util.LinkedList<>();
+            boolean trus=true;while(trus||r2.getCell(0)==null){
+                achmad.rifai.erp1.entity.ItemBeli i=new achmad.rifai.erp1.entity.ItemBeli();
+                i.setBarang(r2.getCell(3).getStringCellValue());i.setJumlah(Integer.parseInt(r2.getCell(4).getStringCellValue()));
+                i.setSatuan(r2.getCell(5).getStringCellValue());i.setHarga(org.joda.money.Money.parse(r2.getCell(6).getStringCellValue()));
+                trus=false;y++;l1.add(i);r2=s.getRow(y);
+            }p.setItems(l1);p.setStruk(r1.getCell(0).getStringCellValue());p.setSuplier(r1.getCell(1).getStringCellValue());
+            p.setTgl(java.sql.Date.valueOf(r1.getCell(2).getStringCellValue()));
+            p.setHarga(org.joda.money.Money.parse(r1.getCell(7).getStringCellValue()));
+            p.setDeleted(Boolean.parseBoolean(r1.getCell(8).getStringCellValue()));l.add(p);x=y+1;st=s.getRow(x).getCell(0).getStringCellValue();
+        }progPembelian.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOPembelian(d).insert(l.get(c));
+            progPembelian.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
-    }
-
-    private List<ItemBeli> genBeli(String s) throws ParseException {
-        List<ItemBeli>l=new java.util.LinkedList<>();
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(s);
-        for(int x=0;x<a.size();x++){
-            ItemBeli i=new ItemBeli();
-            org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
-            i.setBarang(""+o.get("barang"));
-            i.setSatuan(""+o.get("satuan"));
-            i.setJumlah(Integer.parseInt(""+o.get("jumlah")));
-            i.setHarga(org.joda.money.Money.parse(""+o.get("harga")));l.add(i);
-        }return l;
+    }progPembelian.setValue(100);
     }
 
     private void penjualan() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("penjualan");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Penjualan>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Penjualan p=new achmad.rifai.erp1.entity.Penjualan();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            p.setNota(r.getCell(0).getStringCellValue());p.setPelanggan(r.getCell(1).getStringCellValue());
-            p.setItems(genJual(r.getCell(2).getStringCellValue()));p.setTgl(java.sql.Date.valueOf(r.getCell(3).getStringCellValue()));
-            p.setTerbayar(org.joda.money.Money.parse(r.getCell(4).getStringCellValue()));p.setKet(r.getCell(6).getStringCellValue());
-            p.setTotal(org.joda.money.Money.parse(r.getCell(5).getStringCellValue()));
-            p.setDeleted(Boolean.parseBoolean(r.getCell(7).getStringCellValue()));l.add(p);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOPenjualan(d).insert(l.get(x));
-            progPenjualan.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("penjualan");
+        List<achmad.rifai.erp1.entity.Penjualan>l=new java.util.LinkedList<>();
+        int x=2;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Penjualan p=new achmad.rifai.erp1.entity.Penjualan();
+            int y=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y);
+            List<achmad.rifai.erp1.entity.ItemJual>l1=new java.util.LinkedList<>();boolean trus=true;while(trus||null==r2.getCell(0)){
+                achmad.rifai.erp1.entity.ItemJual i=new achmad.rifai.erp1.entity.ItemJual();i.setBarang(r2.getCell(3).getStringCellValue());
+                i.setJumlah(Integer.parseInt(r2.getCell(4).getStringCellValue()));
+                i.setUang(org.joda.money.Money.parse(r2.getCell(5).getStringCellValue()));trus=false;l1.add(i);y++;r2=s.getRow(y);
+            }p.setItems(l1);p.setNota(r1.getCell(0).getStringCellValue());p.setPelanggan(r1.getCell(1).getStringCellValue());
+            p.setTgl(java.sql.Date.valueOf(r1.getCell(2).getStringCellValue()));
+            p.setTotal(org.joda.money.Money.parse(r1.getCell(6).getStringCellValue()));
+            p.setTerbayar(org.joda.money.Money.parse(r1.getCell(7).getStringCellValue()));p.setKet(r1.getCell(8).getStringCellValue());
+            p.setDeleted(Boolean.parseBoolean(r1.getCell(9).getStringCellValue()));x=y+1;st=s.getRow(x).getCell(0).getStringCellValue();l.add(p);
+        }progPenjualan.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOPenjualan(d).insert(l.get(c));
+            progPenjualan.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
-    }
-
-    private List<ItemJual> genJual(String s) throws ParseException {
-        List<ItemJual>l=new java.util.LinkedList<>();
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(s);
-        for(int x=0;x<a.size();x++){
-            ItemJual i=new ItemJual();
-            org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
-            i.setBarang(""+o.get("barang"));
-            i.setJumlah(Integer.parseInt(""+o.get("jumlah")));
-            i.setUang(org.joda.money.Money.parse(""+o.get("uang")));l.add(i);
-        }return l;
+    }progPenjualan.setValue(100);
     }
 
     private void pesan() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("pesan");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Pesan>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Pesan p=new achmad.rifai.erp1.entity.Pesan();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            p.setKode(r.getCell(0).getStringCellValue());p.setPengirim(r.getCell(1).getStringCellValue());
-            p.setPesan(r.getCell(2).getStringCellValue());p.setWaktu(org.joda.time.DateTime.parse(r.getCell(3).getStringCellValue()));
-            p.setKe(genPenerima(r.getCell(4).getStringCellValue()));p.setDeleted(Boolean.parseBoolean(r.getCell(5).getStringCellValue()));l.add(p);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOPesan(d).insert(l.get(x));
-            progPesan.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("pesan");
+        List<achmad.rifai.erp1.entity.Pesan>l=new java.util.LinkedList<>();
+        int x=2;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Pesan p=new achmad.rifai.erp1.entity.Pesan();
+            int y=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y);
+            List<achmad.rifai.erp1.entity.Penerima>l1=new java.util.LinkedList<>();boolean trus=true;while(trus||null==r2.getCell(0)){
+                achmad.rifai.erp1.entity.Penerima pe=new achmad.rifai.erp1.entity.Penerima();pe.setAkun(r2.getCell(3).getStringCellValue());
+                pe.setTerbaca(Boolean.parseBoolean(r2.getCell(4).getStringCellValue()));trus=false;y++;r2=s.getRow(y);l1.add(pe);
+            }p.setKe(l1);p.setKode(r1.getCell(0).getStringCellValue());p.setPengirim(r1.getCell(1).getStringCellValue());
+            p.setWaktu(org.joda.time.DateTime.parse(r1.getCell(2).getStringCellValue()));p.setPesan(r1.getCell(5).getStringCellValue());
+            p.setDeleted(Boolean.parseBoolean(r1.getCell(6).getStringCellValue()));x=y+1;st=s.getRow(x).getCell(0).getStringCellValue();l.add(p);
+        }progPesan.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOPesan(d).insert(l.get(c));
+            progPesan.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
-    }
-
-    private List<Penerima> genPenerima(String s) throws ParseException {
-        List<Penerima>l=new java.util.LinkedList<>();
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(s);
-        for(int x=0;x<a.size();x++){
-            org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
-            Penerima pe=new Penerima();
-            pe.setAkun(""+o.get("akun"));
-            pe.setTerbaca(Boolean.parseBoolean(""+o.get("terbaca")));
-            l.add(pe);
-        }return l;
+    }progPesan.setValue(100);
     }
 
     private void rekening() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("aset");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Rekening>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Rekening re=new achmad.rifai.erp1.entity.Rekening();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            re.setKode(r.getCell(0).getStringCellValue());re.setPosisi(r.getCell(1).getStringCellValue());
-            re.setGolongan(r.getCell(2).getStringCellValue());re.setKet(r.getCell(3).getStringCellValue());
-            re.setDeleted(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));l.add(re);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAORekening(d).insert(l.get(x));
-            progRekening.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("Rekening");
+        List<achmad.rifai.erp1.entity.Rekening>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Rekening r=new achmad.rifai.erp1.entity.Rekening();
+            org.apache.poi.xssf.usermodel.XSSFRow ro=s.getRow(x);r.setKode(ro.getCell(0).getStringCellValue());
+            r.setGolongan(ro.getCell(1).getStringCellValue());r.setPosisi(ro.getCell(2).getStringCellValue());
+            r.setKet(ro.getCell(3).getStringCellValue());r.setDeleted(Boolean.parseBoolean(ro.getCell(4).getStringCellValue()));
+            x++;st=s.getRow(x).getCell(0).getStringCellValue();l.add(r);
+        }progRekening.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAORekening(d).insert(l.get(c));
+            progRekening.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progRekening.setValue(100);
     }
 
     private void suplier() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("suplier");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Suplier>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Suplier su=new achmad.rifai.erp1.entity.Suplier();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            su.setKode(r.getCell(0).getStringCellValue());su.setNama(r.getCell(1).getStringCellValue());
-            su.setAlamat(generateAlamat(r.getCell(2).getStringCellValue()));su.setTelp(generateAlamat(r.getCell(3).getStringCellValue()));
-            su.setDeleted(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));l.add(su);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOSuplier(d).insert(l.get(x));
-            progSuplier.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("Pemasok");
+        List<achmad.rifai.erp1.entity.Suplier>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Suplier su=new achmad.rifai.erp1.entity.Suplier();
+            int y=x,c,z=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y),r3=s.getRow(z);
+            List<String>l1=new java.util.LinkedList<>(),l2=new java.util.LinkedList<>();boolean trus=true;
+            while(trus||(null==r2.getCell(0)&&!r2.getCell(2).getStringCellValue().isEmpty())){
+                trus=false;l1.add(r2.getCell(2).getStringCellValue());y++;r2=s.getRow(y);
+            }su.setAlamat(l1);trus=true;while(trus||(null==r3.getCell(0)&&!r3.getCell(3).getStringCellValue().isEmpty())){
+                trus=false;l2.add(r3.getCell(3).getStringCellValue());z++;r3=s.getRow(z);
+            }su.setTelp(l2);if(y>z)c=y; else c=z;su.setKode(r1.getCell(0).getStringCellValue());su.setNama(r1.getCell(1).getStringCellValue());
+            su.setDeleted(Boolean.parseBoolean(r1.getCell(4).getStringCellValue()));l.add(su);x=c+1;st=s.getRow(x).getCell(0).getStringCellValue();
+        }progSuplier.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOSuplier(d).insert(l.get(c));
+            progSuplier.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progSuplier.setValue(100);
     }
 
     private void income() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("income");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Terima>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Terima t=new achmad.rifai.erp1.entity.Terima();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            t.setKode(r.getCell(0).getStringCellValue());t.setTgl(org.joda.time.DateTime.parse(r.getCell(1).getStringCellValue()));
-            t.setJurnal(r.getCell(2).getStringCellValue());t.setUang(org.joda.money.Money.parse(r.getCell(3).getStringCellValue()));
-            t.setDeleted(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));l.add(t);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOTerima(d).insert(l.get(x));
-            progIncome.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("Pemasukan");
+        List<achmad.rifai.erp1.entity.Terima>l=new java.util.LinkedList<>();
+        int x=1;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Terima t=new achmad.rifai.erp1.entity.Terima();
+            org.apache.poi.xssf.usermodel.XSSFRow r=s.getRow(x);
+            t.setKode(r.getCell(0).getStringCellValue());t.setJurnal(r.getCell(1).getStringCellValue());
+            t.setTgl(org.joda.time.DateTime.parse(r.getCell(2).getStringCellValue()));
+            t.setUang(org.joda.money.Money.parse(r.getCell(3).getStringCellValue()));
+            t.setDeleted(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));
+            x++;st=s.getRow(x).getCell(0).getStringCellValue();l.add(t);
+        }progIncome.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOTerima(d).insert(l.get(c));
+            progIncome.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progIncome.setValue(100);
     }
 
     private void tracks() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet(id);Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Tracks>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Tracks t=new achmad.rifai.erp1.entity.Tracks();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            t.setKode(r.getCell(0).getStringCellValue());t.setId(r.getCell(1).getStringCellValue());
-            t.setBln(Month.valueOf(r.getCell(2).getStringCellValue()));t.setTahun(Year.parse(r.getCell(3).getStringCellValue()));
-            t.setL(genJejak(r.getCell(4).getStringCellValue()));t.setDeleted(Boolean.parseBoolean(r.getCell(5).getStringCellValue()));l.add(t);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOTracks(d).insert(l.get(x));
-            progTrack.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("Buku Perilaku");
+        List<achmad.rifai.erp1.entity.Tracks>l=new java.util.LinkedList<>();
+        int x=2;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Tracks t=new achmad.rifai.erp1.entity.Tracks();
+            int y=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y);
+            List<achmad.rifai.erp1.entity.Jejak>l1=new java.util.LinkedList<>();boolean trus=true;while(trus||null==r2.getCell(0)){
+                achmad.rifai.erp1.entity.Jejak j=new achmad.rifai.erp1.entity.Jejak();
+                j.setAksi(r2.getCell(2).getStringCellValue());
+                j.setWaktu(org.joda.time.DateTime.parse(r2.getCell(3).getStringCellValue()));
+                l1.add(j);trus=false;y++;r2=s.getRow(y);
+            }t.setL(l1);t.setKode(r1.getCell(0).getStringCellValue());t.setId(r1.getCell(1).getStringCellValue());
+            t.setBln(Month.valueOf(r1.getCell(4).getStringCellValue()));t.setTahun(Integer.parseInt(r1.getCell(5).getStringCellValue()));
+            t.setDeleted(Boolean.parseBoolean(r1.getCell(6).getStringCellValue()));l.add(t);x=y+1;st=s.getRow(x).getCell(0).getStringCellValue();
+        }progTrack.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOTracks(d).insert(l.get(c));
+            progTrack.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
-    }
-
-    private List<Jejak> genJejak(String s) throws ParseException {
-        List<Jejak>l=new java.util.LinkedList<>();
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(s);
-        for(int x=0;x<a.size();x++){
-            org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
-            Jejak j=new Jejak();
-            j.setAksi(""+o.get("aksi"));
-            j.setWaktu(org.joda.time.DateTime.parse(""+o.get("waktu")));
-            l.add(j);
-        }return l;
+    }progTrack.setValue(100);
     }
 
     private void tugas() {
     try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();java.io.FileInputStream i=new java.io.FileInputStream(f);
-        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(i);
-        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("tugas");Iterator<Row>i1=s.iterator();
-        List<achmad.rifai.erp1.entity.Tugas>l=new java.util.LinkedList<>();boolean sk=true;while(i1.hasNext()){
-            if(sk){
-                sk=false;continue;
-            }achmad.rifai.erp1.entity.Tugas t=new achmad.rifai.erp1.entity.Tugas();
-            org.apache.poi.xssf.usermodel.XSSFRow r=(org.apache.poi.xssf.usermodel.XSSFRow) i1.next();
-            t.setKode(r.getCell(0).getStringCellValue());t.setNo(Integer.parseInt(r.getCell(1).getStringCellValue()));
-            t.setTgl(java.sql.Date.valueOf(r.getCell(2).getStringCellValue()));t.setL(genPetugas(r.getCell(3).getStringCellValue()));
-            t.setPending(Boolean.parseBoolean(r.getCell(4).getStringCellValue()));t.setBatal(Boolean.parseBoolean(r.getCell(5).getStringCellValue()));
-            t.setKet(r.getCell(6).getStringCellValue());t.setDeleted(Boolean.parseBoolean(r.getCell(7).getStringCellValue()));l.add(t);
-        }for(int x=0;x<l.size();x++){
-            new achmad.rifai.erp1.entity.dao.DAOTugas(d).insert(l.get(x));
-            progTugas.setValue((x*100)/l.size());
-        }i.close();d.close();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
+        org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("Tugas");
+        List<achmad.rifai.erp1.entity.Tugas>l=new java.util.LinkedList<>();
+        int x=2;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.Tugas t=new achmad.rifai.erp1.entity.Tugas();
+            int y=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y);
+            List<achmad.rifai.erp1.entity.Petugas>l1=new java.util.LinkedList<>();boolean trus=true;while(trus||null==r2.getCell(0)){
+                achmad.rifai.erp1.entity.Petugas p=new achmad.rifai.erp1.entity.Petugas();p.setKaryawan(r2.getCell(3).getStringCellValue());
+                p.setDiambil(Boolean.parseBoolean(r2.getCell(4).getStringCellValue()));
+                p.setSedang(Boolean.parseBoolean(r2.getCell(5).getStringCellValue()));
+                p.setTerlaksana(Boolean.parseBoolean(r2.getCell(6).getStringCellValue()));l1.add(p);y++;r2=s.getRow(y);trus=false;
+            }t.setL(l1);t.setKode(r1.getCell(0).getStringCellValue());t.setNo(Integer.parseInt(r1.getCell(1).getStringCellValue()));
+            t.setTgl(java.sql.Date.valueOf(r1.getCell(2).getStringCellValue()));t.setKet(r1.getCell(7).getStringCellValue());
+            t.setBatal(Boolean.parseBoolean(r1.getCell(8).getStringCellValue()));t.setPending(Boolean.parseBoolean(r1.getCell(9).getStringCellValue()));
+            t.setDeleted(Boolean.parseBoolean(r1.getCell(10).getStringCellValue()));x=y+1;l.add(t);st=s.getRow(x).getCell(0).getStringCellValue();
+        }progTugas.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOTugas(d).insert(l.get(c));
+            progTugas.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
-    }
-
-    private List<Petugas> genPetugas(String s) throws ParseException {
-        List<Petugas>l=new java.util.LinkedList<>();
-        org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
-        org.json.simple.JSONArray a=(org.json.simple.JSONArray) p.parse(s);
-        for(int x=0;x<a.size();x++){
-            org.json.simple.JSONObject o=(org.json.simple.JSONObject) a.get(x);
-            Petugas pe=new Petugas();
-            pe.setKaryawan(""+o.get("karyawan"));
-            pe.setDiambil(Boolean.parseBoolean(""+o.get("diambil")));
-            pe.setSedang(Boolean.parseBoolean(""+o.get("sedang")));
-            pe.setTerlaksana(Boolean.parseBoolean(""+o.get("terlaksana")));
-            l.add(pe);
-        }return l;
+    }progTugas.setValue(100);
     }
 
     private void bonus() {
@@ -714,8 +639,23 @@ private java.io.File f;
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         org.apache.poi.xssf.usermodel.XSSFWorkbook w=new org.apache.poi.xssf.usermodel.XSSFWorkbook(f);
         org.apache.poi.xssf.usermodel.XSSFSheet s=w.getSheet("bonus");
+        List<achmad.rifai.erp1.entity.BulanBonus>l=new java.util.LinkedList<>();
+        int x=2;String st=s.getRow(x).getCell(0).getStringCellValue();while(!st.isEmpty()){
+            achmad.rifai.erp1.entity.BulanBonus b=new achmad.rifai.erp1.entity.BulanBonus();
+            int y=x;org.apache.poi.xssf.usermodel.XSSFRow r1=s.getRow(x),r2=s.getRow(y);
+            List<achmad.rifai.erp1.entity.Bonusan>l1=new java.util.LinkedList<>();boolean trus=true;while(trus||null==r2.getCell(0)){
+                achmad.rifai.erp1.entity.Bonusan bo=new achmad.rifai.erp1.entity.Bonusan();
+                bo.setNomer(Integer.parseInt(r2.getCell(2).getStringCellValue()));
+                bo.setJumlah(org.joda.money.Money.parse(r2.getCell(3).getStringCellValue()));l1.add(bo);y++;r2=s.getRow(y);trus=false;
+            }b.setL(l1);b.setKode(r1.getCell(0).getStringCellValue());b.setPeg(r1.getCell(1).getStringCellValue());
+            b.setBln(Month.valueOf(r1.getCell(4).getStringCellValue()));b.setThn(java.time.Year.parse(r1.getCell(5).getStringCellValue()));
+            b.setDeleted(Boolean.parseBoolean(r1.getCell(6).getStringCellValue()));l.add(b);x=y+1;st=s.getRow(x).getCell(0).getStringCellValue();
+        }progBonus.setValue(50);for(int c=0;c<l.size();c++){
+            new achmad.rifai.erp1.entity.dao.DAOBulanBonus(d).insert(l.get(c));
+            progBonus.setValue((((1+c)*50)/l.size())+50);
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }
+    }progBonus.setValue(100);
     }
 }

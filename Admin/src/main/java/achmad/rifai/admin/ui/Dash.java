@@ -1147,6 +1147,8 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
     }//GEN-LAST:event_dtlPesanActionPerformed
 
     private void jMenuItem27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem27ActionPerformed
+        if(sPesan!=null)new achmad.rifai.admin.ui.pesan.Add(this, true, id, sPesan).setVisible(true);
+        else new achmad.rifai.admin.ui.pesan.Add(this, true, id).setVisible(true);
         cleanPesan();
     }//GEN-LAST:event_jMenuItem27ActionPerformed
 
@@ -1156,6 +1158,7 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
     }//GEN-LAST:event_jMenuItem28ActionPerformed
 
     private void jMenuItem29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem29ActionPerformed
+        new Saver(this,true,id).setVisible(true);
         clean();
     }//GEN-LAST:event_jMenuItem29ActionPerformed
 

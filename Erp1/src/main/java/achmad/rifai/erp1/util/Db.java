@@ -7,7 +7,6 @@ package achmad.rifai.erp1.util;
 
 import java.io.FileNotFoundException;
 import java.security.GeneralSecurityException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,8 +28,8 @@ public class Db {
         }
     }
 
-    private com.datastax.driver.core.Cluster c;
-    private com.datastax.driver.core.Session s;
+    private com.mongodb.MongoClient c;
+    private com.mongodb.DB d;
     private String host,name;
 
     public Db(String host, String name) throws Exception{
@@ -59,25 +58,16 @@ public class Db {
         start();
     }
 
-    private void start() throws InstantiationException, IllegalAccessException, SQLException {
-        c=com.datastax.driver.core.Cluster.builder().addContactPoint(host).build();
-        s=c.connect(name);
+    private void start() throws Exception {
+        c=new com.mongodb.MongoClient("localhost", 27017);
+        d=c.getDB(name);
     }
 
     public void close() throws Exception {
-        s.close();
         c.close();
     }
 
-    public com.datastax.driver.core.PreparedStatement getPS(String cql)throws Exception{
-        return s.prepare(cql);
-    }
-
-    public com.datastax.driver.core.ResultSet getRS(String cql)throws Exception{
-        return s.execute(cql);
-    }
-
-    public com.datastax.driver.core.Session getS() {
-        return s;
+    public com.mongodb.DB getD(){
+        return d;
     }
 }

@@ -5,15 +5,12 @@
  */
 package achmad.rifai.erp1;
 
-import achmad.rifai.erp1.entity.Bonusan;
 import achmad.rifai.erp1.entity.ItemBeli;
 import achmad.rifai.erp1.entity.ItemJual;
 import achmad.rifai.erp1.entity.Penerima;
 import achmad.rifai.erp1.entity.Petugas;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.time.Month;
-import java.time.Year;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,37 +25,16 @@ import org.joda.money.CurrencyUnit;
  * @author ai
  */
 public class Main {
-    public static void main(String[]args)throws Exception{
-        /*try {
-            achmad.rifai.erp1.util.Work.styling();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            achmad.rifai.erp1.util.Db.hindar(ex);
-        }java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            mlaku();
-            }
-            });*/
-        
-        /*achmad.rifai.erp1.entity.Penjualan p=new achmad.rifai.erp1.entity.Penjualan("anonim", "biasane");
-        p.setItems(Main.genJualan());
-        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        String s=p.toString();
-        System.out.println(s);
-        List<String>ls=Main.spliting(s),enc=new java.util.LinkedList<>();
-        for(String st:ls)enc.add(r.encrypt(st));
-        enc.forEach((st)->{System.out.println(st);});
-        s="";
-        for(String st:enc)s+=r.decrypt(st);
-        System.out.println(s);
-        p=new achmad.rifai.erp1.entity.Penjualan(s);
-        System.out.println(p.getTgl());
-        System.out.println(p.getTotal());
-        System.out.println(p.isDeleted());
-        System.out.println(p.getItems().get(0).getUang());*/
-        jajal1();
-        //jajal2();
-        //jajal3();
+    public static void main(String[]args){
+        try {
+            
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.entity.Karyawan k=achmad.rifai.erp1.entity.Karyawan.of(d, "asura");
+            System.out.println(k.getJabatan());
+            d.close();
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private static void mlaku() {

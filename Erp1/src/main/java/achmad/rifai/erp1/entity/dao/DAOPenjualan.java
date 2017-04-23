@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Penjualan;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class DAOPenjualan implements DAO<Penjualan>{
     @Override
     public void insert(Penjualan v) throws Exception {
         achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getNota(), v);
-        d.getS().execute(QueryBuilder.insertInto("penjualan").value("berkas", f.getKode()).value("bin", f.getData()));
+        d.getD().getCollectionFromString("penjualan").insert(f.genComparasion());
     }
 
     @Override
@@ -36,19 +35,24 @@ public class DAOPenjualan implements DAO<Penjualan>{
 
     @Override
     public void update(Penjualan a, Penjualan b) throws Exception {
-        trueDelete(a);
-        insert(b);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(b.getNota(), b);
+        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
+        w.put("berkas", a.getNota());
+        d.getD().getCollectionFromString("penjualan").update(w, f.genComparasion());
     }
 
     @Override
     public List<Penjualan> all() throws Exception {
         List<Penjualan>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        for(com.datastax.driver.core.Row ro:d.getS().execute(QueryBuilder.select("bin").from("penjualan"))){
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("penjualan").find();
+        while(c.hasNext()){
+            com.mongodb.DBObject o=c.next();
+            com.mongodb.BasicDBList li=(com.mongodb.BasicDBList) o.get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
-            Penjualan v=new Penjualan(json);
-            if(!v.isDeleted())l.add(v);
+            for(int x=0;x<li.size();x++)json+=r.decrypt(""+li.get(x));
+            Penjualan p=new Penjualan(json);
+            if(!p.isDeleted())l.add(p);
         }l.sort(sorter());
         return l;
     }
@@ -64,11 +68,13 @@ public class DAOPenjualan implements DAO<Penjualan>{
     }
 
     public void trueDelete(Penjualan v)throws Exception{
-        d.getS().execute(QueryBuilder.delete().from("penjualan").where(QueryBuilder.eq("berkas", v.getNota())));
+        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
+        o.put("berkas", v.getNota());
+        d.getD().getCollectionFromString("penjualan").remove(o);
     }
 
     @Override
     public void createTable() throws Exception {
-        d.getRS("create table if not exists penjualan(berkas text primary key,bin list<text>);");
+        //d.getRS("create table if not exists penjualan(berkas text primary key,bin list<text>);");
     }
 }

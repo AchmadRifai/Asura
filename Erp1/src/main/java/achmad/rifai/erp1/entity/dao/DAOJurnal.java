@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity.dao;
 
 import achmad.rifai.erp1.entity.Jurnal;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class DAOJurnal implements DAO<Jurnal>{
     @Override
     public void insert(Jurnal v) throws Exception {
         achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(v.getKode(), v);
-        d.getS().execute(QueryBuilder.insertInto("jurnal").value("berkas", f.getKode()).value("bin", f.getData()));
+        d.getD().getCollectionFromString("jurnal").insert(f.genComparasion());
     }
 
     @Override
@@ -36,26 +35,31 @@ public class DAOJurnal implements DAO<Jurnal>{
 
     @Override
     public void update(Jurnal a, Jurnal b) throws Exception {
-        trueDelete(a);
-        insert(b);
+        achmad.rifai.erp1.beans.Form1 f=new achmad.rifai.erp1.beans.Form1(b.getKode(), b);
+        com.mongodb.DBObject w=new com.mongodb.BasicDBObject();
+        w.put("berkas", a.getKode());
+        d.getD().getCollectionFromString("jurnal").update(w, f.genComparasion());
     }
 
     @Override
     public List<Jurnal> all() throws Exception {
         List<Jurnal>l=new java.util.LinkedList<>();
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("jurnal"));
-        for(com.datastax.driver.core.Row ro:rs){
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("jurnal").find();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList li=(com.mongodb.BasicDBList) c.next().get("bin");
             String json="";
-            for(String s:ro.getList("bin", String.class))json+=r.decrypt(s);
-            Jurnal v=new Jurnal(json);
-            if(!v.isDeleted())l.add(v);
+            for(int x=0;x<li.size();x++)json+=r.decrypt(""+li.get(x));
+            Jurnal j=new Jurnal(json);
+            if(!j.isDeleted())l.add(j);
         }l.sort(sorter());
         return l;
     }
 
     public void trueDelete(Jurnal v)throws Exception{
-        d.getS().execute(QueryBuilder.delete().from("jurnal").where(QueryBuilder.eq("berkas", v.getKode())));
+        com.mongodb.DBObject o=new com.mongodb.BasicDBObject();
+        o.put("berkas", v.getKode());
+        d.getD().getCollectionFromString("jurnal").remove(o);
     }
 
     private Comparator<? super Jurnal> sorter() {
@@ -70,6 +74,6 @@ public class DAOJurnal implements DAO<Jurnal>{
 
     @Override
     public void createTable() throws Exception {
-        d.getRS("create table if not exists jurnal(berkas text primary key,bin list<text>);");
+        //d.getRS("create table if not exists jurnal(berkas text primary key,bin list<text>);");
     }
 }

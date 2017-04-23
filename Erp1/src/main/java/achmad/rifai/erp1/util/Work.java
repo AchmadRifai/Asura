@@ -31,8 +31,8 @@ public class Work {
 
     public static void styling() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String o=System.getProperty("os.name");
-        if("Linux".equals(o))style("GTK+");
-        else if("Windows".equals(o))style("Windows");
+        if(o.contains("Linux"))style("GTK+");
+        else if(o.contains("Windows"))style("Windows");
         else style("Nimbus");
     }
 
@@ -72,10 +72,10 @@ public class Work {
     }
 
     public static void initDb(String host, String name) throws Exception {
-        Db d=new Db(host,"system");
-        d.getS().execute("create keyspace if not exists asura with replication={'class':'SimpleStrategy','replication_factor':3};");
-        d.setName(name);
-        createDB(d);
+        Db d=new Db(host,name);
+        java.io.File f1=new java.io.File(System.getProperty("user.home")+"/.asura/work/pri"),
+                f2=new java.io.File(System.getProperty("user.home")+"/.asura/work/pub");
+        while(!f1.exists()||!f2.exists()){}
         createData(d);
         d.close();
     }
@@ -89,29 +89,7 @@ public class Work {
         }
     }
 
-    private static void createDB(Db d) throws Exception {
-        new achmad.rifai.erp1.entity.dao.DAOTracks(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOBulanBonus(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOBarang(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOJabatan(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOJurnal(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOKeluar(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOLedger(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOPelanggan(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOPembelian(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOPenjualan(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOPesan(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAORekening(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOSuplier(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOTerima(d).createTable();
-        new achmad.rifai.erp1.entity.dao.DAOTugas(d).createTable();
-    }
-
     private static void createData(Db d) throws Exception {
-        java.io.File f1=new java.io.File(System.getProperty("user.home")+"/.asura/work/pub");
-        while(!f1.exists()){}
         jabatanData(d);
         karyawanData(d);
     }

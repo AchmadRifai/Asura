@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity;
 
 import achmad.rifai.erp1.util.Db;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.time.LocalDate;
 import org.json.simple.parser.ParseException;
 
@@ -18,13 +17,16 @@ public class Tugas {
     public static Tugas of(Db d, String kode) throws Exception {
         Tugas t=null;
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("tugas").
-                where(QueryBuilder.eq("berkas", kode)));
-        for(com.datastax.driver.core.Row ro:rs){
-            String enc="";
-            java.util.List<String>ls=ro.getList("bin", String.class);
-            for(String s:ls)enc+=r.decrypt(s);
-            t=new Tugas(enc);
+        com.mongodb.DBObject p=new com.mongodb.BasicDBObject();
+        p.put("berkas", kode);
+        com.mongodb.DBCursor c=d.getD().getCollection("tugas").find(p);
+        while(c.hasNext()){
+            com.mongodb.DBObject o=c.next();
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) o.get("bin");
+            String json="";
+            for(int x=0;x<l.size();x++)json+=r.decrypt(""+l.get(x));
+            t=new Tugas(json);
+            break;
         }return t;
     }
 
@@ -45,9 +47,7 @@ public class Tugas {
         kode=ket+tgl+no;
     }
 
-    public Tugas() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Tugas() {}
 
     public String getKet() {
         return ket;
@@ -114,6 +114,7 @@ public class Tugas {
     }
 
     public Tugas(String json) throws ParseException {
+        System.out.println("Parsing \""+json+"\"");
         org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
         org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(json);
         petugasObject(o.get("l"));

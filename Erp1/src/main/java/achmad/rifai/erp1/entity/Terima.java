@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.entity;
 
 import achmad.rifai.erp1.util.Db;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -17,13 +16,14 @@ public class Terima {
     public static Terima of(Db d, String kode) throws Exception{
         Terima t=null;
         achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
-        com.datastax.driver.core.ResultSet rs=d.getS().execute(QueryBuilder.select("bin").from("terima").where(
-                QueryBuilder.eq("berkas", kode)));
-        for(com.datastax.driver.core.Row ro:rs){
-            java.util.List<String>ls=ro.getList("bin", String.class);
-            String st="";
-            for(String s:ls)st+=r.decrypt(s);
-            t=new Terima(st);
+        com.mongodb.DBObject p=new com.mongodb.BasicDBObject();
+        p.put("berkas", kode);
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("terima").find(p);
+        if(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String json="";
+            for(int x=0;x<l.size();x++)json+=r.decrypt(""+l.get(x));
+            t=new Terima(json);
         }return t;
     }
 
