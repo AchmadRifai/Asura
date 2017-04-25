@@ -23,6 +23,9 @@ private achmad.rifai.erp1.entity.Pelanggan sPelanggan;
 private achmad.rifai.erp1.entity.Pembelian sPembelian;
 private achmad.rifai.erp1.entity.Penjualan sPenjualan;
 private achmad.rifai.erp1.entity.Pesan sPesan;
+private achmad.rifai.erp1.entity.Rekening sAset;
+private achmad.rifai.erp1.entity.Suplier sSuplier;
+private achmad.rifai.erp1.entity.Terima sTerima;
     /**
      * Creates new form Dash
      */
@@ -91,10 +94,17 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         dtlPesan = new javax.swing.JMenuItem();
         jMenu12 = new javax.swing.JMenu();
         jMenuItem13 = new javax.swing.JMenuItem();
+        jMenuItem30 = new javax.swing.JMenuItem();
+        hpsAset = new javax.swing.JMenuItem();
         jMenu13 = new javax.swing.JMenu();
         jMenuItem14 = new javax.swing.JMenuItem();
+        jMenuItem31 = new javax.swing.JMenuItem();
+        hpsSuplier = new javax.swing.JMenuItem();
+        dtlSuplier = new javax.swing.JMenuItem();
         jMenu14 = new javax.swing.JMenu();
         jMenuItem15 = new javax.swing.JMenuItem();
+        jMenuItem33 = new javax.swing.JMenuItem();
+        hpsIncome = new javax.swing.JMenuItem();
         jMenu15 = new javax.swing.JMenu();
         jMenuItem16 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
@@ -104,6 +114,8 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         detailTrack = new javax.swing.JMenuItem();
         jMenu17 = new javax.swing.JMenu();
         jMenuItem22 = new javax.swing.JMenuItem();
+        jMenu18 = new javax.swing.JMenu();
+        jMenuItem32 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dashboard admin");
@@ -280,7 +292,7 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
 
         menu.add(jMenu5);
 
-        jMenu6.setText("Expenses");
+        jMenu6.setText("Pengeluaran");
 
         jMenuItem8.setText("LIHAT DATA");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
@@ -505,6 +517,23 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         });
         jMenu12.add(jMenuItem13);
 
+        jMenuItem30.setText("Tambah / Ralat");
+        jMenuItem30.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem30ActionPerformed(evt);
+            }
+        });
+        jMenu12.add(jMenuItem30);
+
+        hpsAset.setText("Hapus");
+        hpsAset.setEnabled(false);
+        hpsAset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsAsetActionPerformed(evt);
+            }
+        });
+        jMenu12.add(hpsAset);
+
         menu.add(jMenu12);
 
         jMenu13.setText("Suplier");
@@ -517,9 +546,35 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         });
         jMenu13.add(jMenuItem14);
 
+        jMenuItem31.setText("Tambah / Ralat");
+        jMenuItem31.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem31ActionPerformed(evt);
+            }
+        });
+        jMenu13.add(jMenuItem31);
+
+        hpsSuplier.setText("Hapus");
+        hpsSuplier.setEnabled(false);
+        hpsSuplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsSuplierActionPerformed(evt);
+            }
+        });
+        jMenu13.add(hpsSuplier);
+
+        dtlSuplier.setText("Detail");
+        dtlSuplier.setEnabled(false);
+        dtlSuplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtlSuplierActionPerformed(evt);
+            }
+        });
+        jMenu13.add(dtlSuplier);
+
         menu.add(jMenu13);
 
-        jMenu14.setText("Income");
+        jMenu14.setText("Pemasukan");
 
         jMenuItem15.setText("LIHAT DATA");
         jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
@@ -528,6 +583,23 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
             }
         });
         jMenu14.add(jMenuItem15);
+
+        jMenuItem33.setText("Tambah / Ralat");
+        jMenuItem33.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem33ActionPerformed(evt);
+            }
+        });
+        jMenu14.add(jMenuItem33);
+
+        hpsIncome.setText("Hapus");
+        hpsIncome.setEnabled(false);
+        hpsIncome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsIncomeActionPerformed(evt);
+            }
+        });
+        jMenu14.add(hpsIncome);
 
         menu.add(jMenu14);
 
@@ -555,7 +627,7 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
 
         menu.add(jMenu4);
 
-        jMenu16.setText("Buku Jejak");
+        jMenu16.setText("Buku Perilaku");
 
         jMenuItem18.setText("LIHAT DATA");
         jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
@@ -587,6 +659,18 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         jMenu17.add(jMenuItem22);
 
         menu.add(jMenu17);
+
+        jMenu18.setText("Bonus Bulanan");
+
+        jMenuItem32.setText("Lihat Data");
+        jMenuItem32.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem32ActionPerformed(evt);
+            }
+        });
+        jMenu18.add(jMenuItem32);
+
+        menu.add(jMenu18);
 
         setJMenuBar(menu);
 
@@ -872,6 +956,9 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         else if("pembelian".equals(mode))activatePembelian();
         else if("penjualan".equals(mode))activatePenjualan();
         else if("pesan".equals(mode))activatePesan();
+        else if("aset".equals(mode))activateAset();
+        else if("suplier".equals(mode))activateSuplier();
+        else if("income".equals(mode))activateIncome();
     }//GEN-LAST:event_tblDataMouseClicked
 
     private void detailTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailTrackActionPerformed
@@ -1162,6 +1249,88 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         clean();
     }//GEN-LAST:event_jMenuItem29ActionPerformed
 
+    private void jMenuItem30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem30ActionPerformed
+        if(sAset==null)new achmad.rifai.admin.ui.rekening.Add(this, true, id).setVisible(true);
+        else new achmad.rifai.admin.ui.rekening.Add(this, true, id, sAset).setVisible(true);
+        cleanAset();
+    }//GEN-LAST:event_jMenuItem30ActionPerformed
+
+    private void hpsAsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsAsetActionPerformed
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus aset "+sAset.getKode()+"?", "Hapus?", JOptionPane.YES_NO_OPTION);
+        final achmad.rifai.erp1.entity.Rekening r=sAset;
+        if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus Aset "+r.getKode());
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAORekening(d).delete(r);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }).start();
+        cleanAset();
+    }//GEN-LAST:event_hpsAsetActionPerformed
+
+    private void dtlSuplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtlSuplierActionPerformed
+        new achmad.rifai.admin.ui.suplier.Detail(this, true, id, sSuplier).setVisible(true);
+        cleanSuplier();
+    }//GEN-LAST:event_dtlSuplierActionPerformed
+
+    private void hpsSuplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsSuplierActionPerformed
+        final achmad.rifai.erp1.entity.Suplier s=sSuplier;
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus suplier "+s.getKode()+"?", "HAPUS?", JOptionPane.YES_NO_OPTION);
+        if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus suplier "+s.getKode());
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAOSuplier(d).delete(s);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }).start();
+        cleanSuplier();
+    }//GEN-LAST:event_hpsSuplierActionPerformed
+
+    private void jMenuItem31ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem31ActionPerformed
+        if(sSuplier==null)new achmad.rifai.admin.ui.suplier.Add(this, true, id).setVisible(true);
+        else new achmad.rifai.admin.ui.suplier.Add(this, true, id, sSuplier).setVisible(true);
+        cleanSuplier();
+    }//GEN-LAST:event_jMenuItem31ActionPerformed
+
+    private void jMenuItem32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem32ActionPerformed
+        new Thread(()->{
+            setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+            menu.setEnabled(false);try {
+                achmad.rifai.admin.util.Work.jejak(id, "Melihat Data Bonus");
+                achmad.rifai.admin.util.Work.readBonus(tblData);
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }menu.setEnabled(true);
+            setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }).start();mode="bonus";clean();
+    }//GEN-LAST:event_jMenuItem32ActionPerformed
+
+    private void hpsIncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsIncomeActionPerformed
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin manghapus?", "HAPUS?", JOptionPane.YES_NO_OPTION);
+        final achmad.rifai.erp1.entity.Terima t=sTerima;
+        if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus Pemasukan "+t.getKode());
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAOTerima(d).insert(t);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }).start();cleanIncome();
+    }//GEN-LAST:event_hpsIncomeActionPerformed
+
+    private void jMenuItem33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem33ActionPerformed
+        
+        cleanIncome();
+    }//GEN-LAST:event_jMenuItem33ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem detailTrack;
     private javax.swing.JMenuItem dtlKaryawan;
@@ -1169,8 +1338,11 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
     private javax.swing.JMenuItem dtlPembelian;
     private javax.swing.JMenuItem dtlPenjualan;
     private javax.swing.JMenuItem dtlPesan;
+    private javax.swing.JMenuItem dtlSuplier;
+    private javax.swing.JMenuItem hpsAset;
     private javax.swing.JMenuItem hpsBarang;
     private javax.swing.JMenuItem hpsExpenses;
+    private javax.swing.JMenuItem hpsIncome;
     private javax.swing.JMenuItem hpsJabatan;
     private javax.swing.JMenuItem hpsKaryawan;
     private javax.swing.JMenuItem hpsLedger;
@@ -1178,6 +1350,7 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
     private javax.swing.JMenuItem hpsPembelian;
     private javax.swing.JMenuItem hpsPenjualan;
     private javax.swing.JMenuItem hpsPesan;
+    private javax.swing.JMenuItem hpsSuplier;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenu jMenu11;
@@ -1187,6 +1360,7 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
     private javax.swing.JMenu jMenu15;
     private javax.swing.JMenu jMenu16;
     private javax.swing.JMenu jMenu17;
+    private javax.swing.JMenu jMenu18;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -1218,6 +1392,10 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
     private javax.swing.JMenuItem jMenuItem28;
     private javax.swing.JMenuItem jMenuItem29;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem30;
+    private javax.swing.JMenuItem jMenuItem31;
+    private javax.swing.JMenuItem jMenuItem32;
+    private javax.swing.JMenuItem jMenuItem33;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
@@ -1374,6 +1552,9 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         cleanPembelian();
         cleanPenjualan();
         cleanPesan();
+        cleanAset();
+        cleanSuplier();
+        cleanIncome();
         cleanTracks();
     }
 
@@ -1515,5 +1696,61 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
         hpsPesan.setEnabled(false);
         dtlPesan.setEnabled(false);
         sPesan=null;
+    }
+
+    private void activateAset() {
+        int x=tblData.getSelectedRow();
+        boolean b=tblData.isRowSelected(x);
+    if(b)try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        sAset=achmad.rifai.erp1.entity.Rekening.of(d, ""+tblData.getValueAt(x, 0));
+        d.close();
+        hpsAset.setEnabled(b);
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
+    }
+
+    private void cleanAset() {
+        hpsAset.setEnabled(false);
+        sAset=null;
+    }
+
+    private void activateSuplier() {
+        int x=tblData.getSelectedRow();
+        boolean b=tblData.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sSuplier=achmad.rifai.erp1.entity.Suplier.of(d, ""+tblData.getValueAt(x, 0));
+            d.close();
+            hpsSuplier.setEnabled(b);
+            dtlSuplier.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }
+
+    private void cleanSuplier() {
+        hpsSuplier.setEnabled(false);
+        dtlSuplier.setEnabled(false);
+        sSuplier=null;
+    }
+
+    private void activateIncome() {
+        int x=tblData.getSelectedRow();
+        boolean b=tblData.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sTerima=achmad.rifai.erp1.entity.Terima.of(d, ""+tblData.getValueAt(x, 0));
+            d.close();
+            hpsIncome.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }
+
+    private void cleanIncome() {
+        hpsIncome.setEnabled(false);
+        sTerima=null;
     }
 }

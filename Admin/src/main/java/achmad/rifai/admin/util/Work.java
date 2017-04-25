@@ -326,4 +326,21 @@ public class Work {
             achmad.rifai.erp1.util.Db.hindar(ex);
         }
     }
+
+    public static void readBonus(JTable tblData) throws Exception {
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(){
+            private Class[]c=new Class[]{String.class,String.class,java.time.Month.class,java.time.Year.class};
+            @Override
+            public boolean isCellEditable(int i, int i1) {
+                return false;
+            }@Override
+            public Class<?> getColumnClass(int i) {
+                return c[i];
+            }
+        };achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        java.util.List<achmad.rifai.erp1.entity.BulanBonus>l=new achmad.rifai.erp1.entity.dao.DAOBulanBonus(d).all();
+        tblData.setModel(m);
+        l.forEach((b)->{m.addRow(new Object[]{b.getKode(),b.getPeg(),b.getBln(),b.getThn()});});
+        d.close();
+    }
 }
