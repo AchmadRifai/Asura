@@ -26,6 +26,8 @@ private achmad.rifai.erp1.entity.Pesan sPesan;
 private achmad.rifai.erp1.entity.Rekening sAset;
 private achmad.rifai.erp1.entity.Suplier sSuplier;
 private achmad.rifai.erp1.entity.Terima sTerima;
+private achmad.rifai.erp1.entity.Tugas sTugas;
+private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     /**
      * Creates new form Dash
      */
@@ -107,8 +109,14 @@ private achmad.rifai.erp1.entity.Terima sTerima;
         hpsIncome = new javax.swing.JMenuItem();
         jMenu15 = new javax.swing.JMenu();
         jMenuItem16 = new javax.swing.JMenuItem();
+        jMenuItem34 = new javax.swing.JMenuItem();
+        hpsTugas = new javax.swing.JMenuItem();
+        dtlTugas = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem17 = new javax.swing.JMenuItem();
+        jMenuItem35 = new javax.swing.JMenuItem();
+        hpsAbsen = new javax.swing.JMenuItem();
+        dtlAbsen = new javax.swing.JMenuItem();
         jMenu16 = new javax.swing.JMenu();
         jMenuItem18 = new javax.swing.JMenuItem();
         detailTrack = new javax.swing.JMenuItem();
@@ -613,6 +621,32 @@ private achmad.rifai.erp1.entity.Terima sTerima;
         });
         jMenu15.add(jMenuItem16);
 
+        jMenuItem34.setText("Tambah / Ralat");
+        jMenuItem34.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem34ActionPerformed(evt);
+            }
+        });
+        jMenu15.add(jMenuItem34);
+
+        hpsTugas.setText("Hapus");
+        hpsTugas.setEnabled(false);
+        hpsTugas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsTugasActionPerformed(evt);
+            }
+        });
+        jMenu15.add(hpsTugas);
+
+        dtlTugas.setText("Detail");
+        dtlTugas.setEnabled(false);
+        dtlTugas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtlTugasActionPerformed(evt);
+            }
+        });
+        jMenu15.add(dtlTugas);
+
         menu.add(jMenu15);
 
         jMenu4.setText("Buku Absen");
@@ -624,6 +658,32 @@ private achmad.rifai.erp1.entity.Terima sTerima;
             }
         });
         jMenu4.add(jMenuItem17);
+
+        jMenuItem35.setText("Tambah / Ralat");
+        jMenuItem35.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem35ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem35);
+
+        hpsAbsen.setText("Hapus");
+        hpsAbsen.setEnabled(false);
+        hpsAbsen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsAbsenActionPerformed(evt);
+            }
+        });
+        jMenu4.add(hpsAbsen);
+
+        dtlAbsen.setText("Detail");
+        dtlAbsen.setEnabled(false);
+        dtlAbsen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtlAbsenActionPerformed(evt);
+            }
+        });
+        jMenu4.add(dtlAbsen);
 
         menu.add(jMenu4);
 
@@ -959,6 +1019,8 @@ private achmad.rifai.erp1.entity.Terima sTerima;
         else if("aset".equals(mode))activateAset();
         else if("suplier".equals(mode))activateSuplier();
         else if("income".equals(mode))activateIncome();
+        else if("tugas".equals(mode))activateTugas();
+        else if("buku absen".equals(mode))activateAbsen();
     }//GEN-LAST:event_tblDataMouseClicked
 
     private void detailTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailTrackActionPerformed
@@ -1327,18 +1389,74 @@ private achmad.rifai.erp1.entity.Terima sTerima;
     }//GEN-LAST:event_hpsIncomeActionPerformed
 
     private void jMenuItem33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem33ActionPerformed
-        
+        if(sTerima==null)new achmad.rifai.admin.ui.terima.Add(this, true, id).setVisible(true);
+        else new achmad.rifai.admin.ui.terima.Add(this, true, id, sTerima).setVisible(true);
         cleanIncome();
     }//GEN-LAST:event_jMenuItem33ActionPerformed
 
+    private void dtlTugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtlTugasActionPerformed
+        new achmad.rifai.admin.ui.tugas.Detail(this, true, id, sTugas).setVisible(true);
+        cleanTugas();
+    }//GEN-LAST:event_dtlTugasActionPerformed
+
+    private void hpsTugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsTugasActionPerformed
+        achmad.rifai.erp1.entity.Tugas t=sTugas;
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus tugas "+t.getKode()+"?", "HAPUS?", JOptionPane.YES_NO_OPTION);
+        if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus tugas "+t.getKode());
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAOTugas(d).delete(t);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }).start();cleanTugas();
+    }//GEN-LAST:event_hpsTugasActionPerformed
+
+    private void jMenuItem34ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem34ActionPerformed
+        if(sTugas==null)new achmad.rifai.admin.ui.tugas.Add(this, true, id).setVisible(true);
+        else new achmad.rifai.admin.ui.tugas.Add(this, true, id, sTugas).setVisible(true);
+        cleanTugas();
+    }//GEN-LAST:event_jMenuItem34ActionPerformed
+
+    private void hpsAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsAbsenActionPerformed
+        achmad.rifai.erp1.entity.BukuAbsen b=sBukuAbsen;
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus Absen tgl "+b.getTgl()+"?", "HAPUS?", JOptionPane.YES_NO_OPTION);
+        if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus absen tgl "+b.getTgl());
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d).delete(b);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }).start();cleanAbsen();
+    }//GEN-LAST:event_hpsAbsenActionPerformed
+
+    private void dtlAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtlAbsenActionPerformed
+        new achmad.rifai.admin.ui.absen.Detail(this, true, id, sBukuAbsen).setVisible(true);
+        cleanAbsen();
+    }//GEN-LAST:event_dtlAbsenActionPerformed
+
+    private void jMenuItem35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem35ActionPerformed
+        if(sBukuAbsen==null)new achmad.rifai.admin.ui.absen.Add(this, true, id).setVisible(true);
+        else new achmad.rifai.admin.ui.absen.Add(this, true, id, sBukuAbsen).setVisible(true);
+        cleanAbsen();
+    }//GEN-LAST:event_jMenuItem35ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem detailTrack;
+    private javax.swing.JMenuItem dtlAbsen;
     private javax.swing.JMenuItem dtlKaryawan;
     private javax.swing.JMenuItem dtlPelanggan;
     private javax.swing.JMenuItem dtlPembelian;
     private javax.swing.JMenuItem dtlPenjualan;
     private javax.swing.JMenuItem dtlPesan;
     private javax.swing.JMenuItem dtlSuplier;
+    private javax.swing.JMenuItem dtlTugas;
+    private javax.swing.JMenuItem hpsAbsen;
     private javax.swing.JMenuItem hpsAset;
     private javax.swing.JMenuItem hpsBarang;
     private javax.swing.JMenuItem hpsExpenses;
@@ -1351,6 +1469,7 @@ private achmad.rifai.erp1.entity.Terima sTerima;
     private javax.swing.JMenuItem hpsPenjualan;
     private javax.swing.JMenuItem hpsPesan;
     private javax.swing.JMenuItem hpsSuplier;
+    private javax.swing.JMenuItem hpsTugas;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenu jMenu11;
@@ -1396,6 +1515,8 @@ private achmad.rifai.erp1.entity.Terima sTerima;
     private javax.swing.JMenuItem jMenuItem31;
     private javax.swing.JMenuItem jMenuItem32;
     private javax.swing.JMenuItem jMenuItem33;
+    private javax.swing.JMenuItem jMenuItem34;
+    private javax.swing.JMenuItem jMenuItem35;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
@@ -1543,6 +1664,7 @@ private achmad.rifai.erp1.entity.Terima sTerima;
     }
 
     private void clean() {
+        cleanAbsen();
         cleanKaryawan();
         cleanJabatan();
         cleanBarang();
@@ -1556,6 +1678,7 @@ private achmad.rifai.erp1.entity.Terima sTerima;
         cleanSuplier();
         cleanIncome();
         cleanTracks();
+        cleanTugas();
     }
 
     private void cleanJabatan() {
@@ -1752,5 +1875,45 @@ private achmad.rifai.erp1.entity.Terima sTerima;
     private void cleanIncome() {
         hpsIncome.setEnabled(false);
         sTerima=null;
+    }
+
+    private void activateTugas() {
+        int x=tblData.getSelectedRow();
+        boolean b=tblData.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sTugas=achmad.rifai.erp1.entity.Tugas.of(d, ""+tblData.getValueAt(x, 0));
+            d.close();
+            hpsTugas.setEnabled(b);
+            dtlTugas.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }
+
+    private void cleanTugas() {
+        hpsTugas.setEnabled(false);
+        dtlTugas.setEnabled(false);
+        sTugas=null;
+    }
+
+    private void activateAbsen() {
+        int x=tblData.getSelectedRow();
+        boolean b=tblData.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sBukuAbsen=achmad.rifai.erp1.entity.BukuAbsen.of(d, ""+tblData.getValueAt(x, 0));
+            d.close();
+            hpsAbsen.setEnabled(b);
+            dtlAbsen.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }
+
+    private void cleanAbsen() {
+        hpsAbsen.setEnabled(false);
+        dtlAbsen.setEnabled(false);
+        sBukuAbsen=null;
     }
 }

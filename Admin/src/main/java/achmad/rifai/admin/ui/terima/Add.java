@@ -5,7 +5,10 @@
  */
 package achmad.rifai.admin.ui.terima;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
+import org.joda.money.CurrencyUnit;
+import org.joda.time.DateTimeZone;
 
 /**
  *
@@ -24,6 +27,13 @@ private achmad.rifai.erp1.entity.Terima t;
         initComponents();
     }
 
+    public Add(java.awt.Frame parent, boolean modal,String i) {
+        super(parent, modal);
+        id=i;
+        t=null;
+        initComponents();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,12 +49,18 @@ private achmad.rifai.erp1.entity.Terima t;
         jLabel4 = new javax.swing.JLabel();
         waktu = new javax.swing.JSpinner();
         jurnal = new javax.swing.JComboBox<>();
+        uang = new javax.swing.JFormattedTextField();
+        kode = new javax.swing.JTextField();
+        s = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dialog Pendataan Pemasukan");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -56,11 +72,26 @@ private achmad.rifai.erp1.entity.Terima t;
 
         jLabel4.setText("Uang");
 
-        waktu.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, new java.util.Date(), java.util.Calendar.SECOND));
+        waktu.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, new java.util.Date(), java.util.Calendar.HOUR));
 
-        jurnal.addActionListener(new java.awt.event.ActionListener() {
+        uang.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        uang.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                uangKeyReleased(evt);
+            }
+        });
+
+        kode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                kodeKeyReleased(evt);
+            }
+        });
+
+        s.setText("SAVE");
+        s.setEnabled(false);
+        s.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jurnalActionPerformed(evt);
+                sActionPerformed(evt);
             }
         });
 
@@ -70,24 +101,36 @@ private achmad.rifai.erp1.entity.Terima t;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jurnal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(waktu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(198, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(waktu)
+                                    .addComponent(uang)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jurnal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(kode))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(kode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -97,8 +140,12 @@ private achmad.rifai.erp1.entity.Terima t;
                     .addComponent(jLabel3)
                     .addComponent(waktu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(uang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(s)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -113,16 +160,62 @@ private achmad.rifai.erp1.entity.Terima t;
         }this.setVisible(false);
     }//GEN-LAST:event_formWindowClosing
 
-    private void jurnalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jurnalActionPerformed
-        
-    }//GEN-LAST:event_jurnalActionPerformed
+    private void kodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_kodeKeyReleased
+        if(!kode.getText().isEmpty())try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.entity.Terima te=achmad.rifai.erp1.entity.Terima.of(d, kode.getText());
+            if(te!=null)kode.setForeground(Color.red);
+            else kode.setForeground(Color.BLACK);
+            d.close();
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }refresh();
+    }//GEN-LAST:event_kodeKeyReleased
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        new Thread(()->{
+            jurnale();
+            if(t!=null)inisial();
+        }).start();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void uangKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_uangKeyReleased
+        if(uang.isValid()&&!uang.getText().isEmpty()){
+            int i=Integer.parseInt(uang.getText());
+            if(i<0)uang.setForeground(Color.red);
+            else uang.setForeground(Color.BLACK);
+        }refresh();
+    }//GEN-LAST:event_uangKeyReleased
+
+    private void sActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sActionPerformed
+        saving();
+        writeDB();
+        this.setVisible(false);
+    }//GEN-LAST:event_sActionPerformed
 
     private void saving() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(t==null){
+            t=new achmad.rifai.erp1.entity.Terima();
+            t.setDeleted(false);
+        }t.setJurnal(jurnal.getItemAt(jurnal.getSelectedIndex()));
+        t.setKode(kode.getText());
+        java.util.Date d=(java.util.Date) waktu.getValue();
+        t.setTgl(new org.joda.time.DateTime(d.getTime(), DateTimeZone.getDefault()));
+        t.setUang(org.joda.money.Money.of(CurrencyUnit.of("IDR"), Long.parseLong(uang.getText())));
     }
 
     private void writeDB() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mendata Income "+t.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Terima te=achmad.rifai.erp1.entity.Terima.of(d, t.getKode());
+        achmad.rifai.erp1.entity.dao.DAOTerima dao=new achmad.rifai.erp1.entity.dao.DAOTerima(d);
+        if(te==null)dao.insert(t);
+        else dao.update(te, t);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -130,6 +223,33 @@ private achmad.rifai.erp1.entity.Terima t;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JComboBox<String> jurnal;
+    private javax.swing.JTextField kode;
+    private javax.swing.JButton s;
+    private javax.swing.JFormattedTextField uang;
     private javax.swing.JSpinner waktu;
     // End of variables declaration//GEN-END:variables
+
+    private void jurnale() {
+    this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        java.util.List<achmad.rifai.erp1.entity.Jurnal>l=new achmad.rifai.erp1.entity.dao.DAOJurnal(d).all();
+        l.forEach((j)->{jurnal.addItem(j.getKode());});
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }
+
+    private void inisial() {
+        kode.setEnabled(false);
+        kode.setText(t.getKode());
+        jurnal.setSelectedItem(t.getJurnal());
+        waktu.setValue(t.getTgl().toDate());
+        uang.setText(""+t.getUang().getAmount().longValue());
+    }
+
+    private void refresh() {
+        s.setEnabled(!kode.getText().isEmpty()&&!uang.getText().isEmpty()&&uang.isValid()&&Color.BLACK==uang.getForeground()&&
+        Color.BLACK==kode.getForeground());
+    }
 }
