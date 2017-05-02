@@ -14,9 +14,11 @@ import javax.swing.JOptionPane;
 public class Dash extends javax.swing.JFrame {
 public String id,mode;
 private achmad.rifai.erp1.entity.Tracks sTracks;
+private achmad.rifai.erp1.entity.BulanBonus sBonus;
 private achmad.rifai.erp1.entity.Karyawan sKaryawan;
 private achmad.rifai.erp1.entity.Jabatan sJabatan;
 private achmad.rifai.erp1.entity.Barang sBarang;
+private achmad.rifai.erp1.entity.Jurnal sJurnal;
 private achmad.rifai.erp1.entity.Keluar sKeluar;
 private achmad.rifai.erp1.entity.Ledger sLedger;
 private achmad.rifai.erp1.entity.Pelanggan sPelanggan;
@@ -119,11 +121,18 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         dtlAbsen = new javax.swing.JMenuItem();
         jMenu16 = new javax.swing.JMenu();
         jMenuItem18 = new javax.swing.JMenuItem();
+        jMenuItem36 = new javax.swing.JMenuItem();
         detailTrack = new javax.swing.JMenuItem();
+        hpsTrack = new javax.swing.JMenuItem();
         jMenu17 = new javax.swing.JMenu();
         jMenuItem22 = new javax.swing.JMenuItem();
+        jMenuItem37 = new javax.swing.JMenuItem();
+        hpsJurnal = new javax.swing.JMenuItem();
         jMenu18 = new javax.swing.JMenu();
         jMenuItem32 = new javax.swing.JMenuItem();
+        jMenuItem38 = new javax.swing.JMenuItem();
+        hpsBonus = new javax.swing.JMenuItem();
+        dtlBonus = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dashboard admin");
@@ -697,6 +706,14 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         });
         jMenu16.add(jMenuItem18);
 
+        jMenuItem36.setText("Tambah / Ralat");
+        jMenuItem36.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem36ActionPerformed(evt);
+            }
+        });
+        jMenu16.add(jMenuItem36);
+
         detailTrack.setText("Lihat Detail");
         detailTrack.setEnabled(false);
         detailTrack.addActionListener(new java.awt.event.ActionListener() {
@@ -705,6 +722,15 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
             }
         });
         jMenu16.add(detailTrack);
+
+        hpsTrack.setText("Hapus");
+        hpsTrack.setEnabled(false);
+        hpsTrack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsTrackActionPerformed(evt);
+            }
+        });
+        jMenu16.add(hpsTrack);
 
         menu.add(jMenu16);
 
@@ -718,6 +744,23 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         });
         jMenu17.add(jMenuItem22);
 
+        jMenuItem37.setText("Tambah / Ralat");
+        jMenuItem37.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem37ActionPerformed(evt);
+            }
+        });
+        jMenu17.add(jMenuItem37);
+
+        hpsJurnal.setText("Hapus");
+        hpsJurnal.setEnabled(false);
+        hpsJurnal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsJurnalActionPerformed(evt);
+            }
+        });
+        jMenu17.add(hpsJurnal);
+
         menu.add(jMenu17);
 
         jMenu18.setText("Bonus Bulanan");
@@ -729,6 +772,27 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
             }
         });
         jMenu18.add(jMenuItem32);
+
+        jMenuItem38.setText("Tambah / Ralat");
+        jMenuItem38.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem38ActionPerformed(evt);
+            }
+        });
+        jMenu18.add(jMenuItem38);
+
+        hpsBonus.setText("Hapus");
+        hpsBonus.setEnabled(false);
+        hpsBonus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsBonusActionPerformed(evt);
+            }
+        });
+        jMenu18.add(hpsBonus);
+
+        dtlBonus.setText("Detail");
+        dtlBonus.setEnabled(false);
+        jMenu18.add(dtlBonus);
 
         menu.add(jMenu18);
 
@@ -1021,6 +1085,8 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         else if("income".equals(mode))activateIncome();
         else if("tugas".equals(mode))activateTugas();
         else if("buku absen".equals(mode))activateAbsen();
+        else if("bonus".equals(mode))activateBonus();
+        else return;
     }//GEN-LAST:event_tblDataMouseClicked
 
     private void detailTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailTrackActionPerformed
@@ -1446,9 +1512,73 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         cleanAbsen();
     }//GEN-LAST:event_jMenuItem35ActionPerformed
 
+    private void hpsTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsTrackActionPerformed
+        final achmad.rifai.erp1.entity.Tracks t=sTracks;
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus Buku perilaku "+t.getKode()+" ?",
+                "HAPUS?", JOptionPane.YES_NO_OPTION);
+        if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus buku perilaku "+t.getKode());
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAOTracks(d).delete(t);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }).start();cleanTracks();
+    }//GEN-LAST:event_hpsTrackActionPerformed
+
+    private void jMenuItem36ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem36ActionPerformed
+        if(sTracks==null)new achmad.rifai.admin.ui.tracks.Add(this, true, id).setVisible(true);
+        else new achmad.rifai.admin.ui.tracks.Add(this, true, id, sTracks).setVisible(true);
+        cleanTracks();
+    }//GEN-LAST:event_jMenuItem36ActionPerformed
+
+    private void jMenuItem37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem37ActionPerformed
+        if(sJurnal==null)new achmad.rifai.admin.ui.jurnal.Add(this, true, id).setVisible(true);
+        else new achmad.rifai.admin.ui.jurnal.Add(this, true, id, sJurnal).setVisible(true);
+        cleanJurnal();
+    }//GEN-LAST:event_jMenuItem37ActionPerformed
+
+    private void hpsJurnalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsJurnalActionPerformed
+        final achmad.rifai.erp1.entity.Jurnal j=sJurnal;
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus Jurnal "+j.getKode()+"?",
+                "HAPUS?", JOptionPane.YES_NO_OPTION);if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus jurnal "+j.getKode());
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAOJurnal(d).delete(j);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }
+        }).start();cleanJurnal();
+    }//GEN-LAST:event_hpsJurnalActionPerformed
+
+    private void hpsBonusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsBonusActionPerformed
+        final achmad.rifai.erp1.entity.BulanBonus b=sBonus;
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus bonus "+b.getKode()+"?", "HAPUS?", JOptionPane.YES_NO_OPTION);
+        if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus bonus "+b.getKode());
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAOBulanBonus(d).delete(b);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }
+        }).start();
+        cleanBonus();
+    }//GEN-LAST:event_hpsBonusActionPerformed
+
+    private void jMenuItem38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem38ActionPerformed
+        cleanBonus();
+    }//GEN-LAST:event_jMenuItem38ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem detailTrack;
     private javax.swing.JMenuItem dtlAbsen;
+    private javax.swing.JMenuItem dtlBonus;
     private javax.swing.JMenuItem dtlKaryawan;
     private javax.swing.JMenuItem dtlPelanggan;
     private javax.swing.JMenuItem dtlPembelian;
@@ -1459,9 +1589,11 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     private javax.swing.JMenuItem hpsAbsen;
     private javax.swing.JMenuItem hpsAset;
     private javax.swing.JMenuItem hpsBarang;
+    private javax.swing.JMenuItem hpsBonus;
     private javax.swing.JMenuItem hpsExpenses;
     private javax.swing.JMenuItem hpsIncome;
     private javax.swing.JMenuItem hpsJabatan;
+    private javax.swing.JMenuItem hpsJurnal;
     private javax.swing.JMenuItem hpsKaryawan;
     private javax.swing.JMenuItem hpsLedger;
     private javax.swing.JMenuItem hpsPelanggan;
@@ -1469,6 +1601,7 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     private javax.swing.JMenuItem hpsPenjualan;
     private javax.swing.JMenuItem hpsPesan;
     private javax.swing.JMenuItem hpsSuplier;
+    private javax.swing.JMenuItem hpsTrack;
     private javax.swing.JMenuItem hpsTugas;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
@@ -1517,6 +1650,9 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     private javax.swing.JMenuItem jMenuItem33;
     private javax.swing.JMenuItem jMenuItem34;
     private javax.swing.JMenuItem jMenuItem35;
+    private javax.swing.JMenuItem jMenuItem36;
+    private javax.swing.JMenuItem jMenuItem37;
+    private javax.swing.JMenuItem jMenuItem38;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
@@ -1606,6 +1742,7 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
             sTracks=achmad.rifai.erp1.entity.Tracks.of(d, ""+tblData.getValueAt(x, 0));
             d.close();
             detailTrack.setEnabled(b);
+            hpsTrack.setEnabled(b);
         } catch (Exception ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
         }
@@ -1647,6 +1784,7 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
 
     private void cleanTracks() {
         detailTrack.setEnabled(false);
+        hpsTrack.setEnabled(false);
         sTracks=null;
     }
 
@@ -1665,10 +1803,12 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
 
     private void clean() {
         cleanAbsen();
+        cleanBonus();
         cleanKaryawan();
         cleanJabatan();
         cleanBarang();
         cleanExpenses();
+        cleanJurnal();
         cleanLedger();
         cleanPelanggan();
         cleanPembelian();
@@ -1915,5 +2055,30 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         hpsAbsen.setEnabled(false);
         dtlAbsen.setEnabled(false);
         sBukuAbsen=null;
+    }
+
+    private void cleanJurnal() {
+        hpsJurnal.setEnabled(false);
+        sJurnal=null;
+    }
+
+    private void activateBonus() {
+        int x=tblData.getSelectedRow();
+        boolean b=tblData.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sBonus=achmad.rifai.erp1.entity.BulanBonus.of(""+tblData.getValueAt(x, 0), d);
+            d.close();
+            hpsBonus.setEnabled(b);
+            dtlBonus.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }
+
+    private void cleanBonus() {
+        hpsBonus.setEnabled(false);
+        dtlBonus.setEnabled(false);
+        sBonus=null;
     }
 }

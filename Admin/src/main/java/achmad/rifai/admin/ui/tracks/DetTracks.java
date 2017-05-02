@@ -7,6 +7,7 @@ package achmad.rifai.admin.ui.tracks;
 
 import achmad.rifai.erp1.entity.Jejak;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,11 +15,13 @@ import java.util.List;
  */
 public class DetTracks extends javax.swing.JDialog {
 private String kode,id;
+private java.awt.Frame f;
     /**
      * Creates new form DetTracks
      */
     public DetTracks(java.awt.Frame parent, boolean modal,String kode,String id) {
         super(parent, modal);
+        f=parent;
         initComponents();
         this.kode=kode;
         this.id=id;
@@ -38,6 +41,8 @@ private String kode,id;
         tahun = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         isi = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Detail Buku Jejak");
@@ -63,6 +68,20 @@ private String kode,id;
         ));
         jScrollPane1.setViewportView(isi);
 
+        jButton1.setText("Ralat");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Hapus");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -80,7 +99,12 @@ private String kode,id;
                         .addComponent(bulan)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
                         .addComponent(tahun)
-                        .addGap(132, 132, 132))))
+                        .addGap(132, 132, 132))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,6 +117,10 @@ private String kode,id;
                     .addComponent(tahun))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -115,6 +143,31 @@ private String kode,id;
         this.setTitle("Detail Buku Jejak "+kode);
     }//GEN-LAST:event_formWindowOpened
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        new Add(f,true,id,achmad.rifai.erp1.entity.Tracks.of(d, kode)).setVisible(true);
+        d.close();
+        this.setVisible(false);
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus buku perilaku ini?", "HAPUS?", JOptionPane.YES_NO_OPTION);
+        if(x==JOptionPane.YES_OPTION)new Thread(()->{
+            try {
+                achmad.rifai.admin.util.Work.jejak(id, "Menghapus buku perilaku "+kode);
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.entity.dao.DAOTracks(d).delete(achmad.rifai.erp1.entity.Tracks.of(d, kode));
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }this.setVisible(false);
+        }).start();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     private void awal() throws Exception {
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         achmad.rifai.erp1.entity.Tracks t=achmad.rifai.erp1.entity.Tracks.of(d, kode);
@@ -128,6 +181,8 @@ private String kode,id;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel bulan;
     private javax.swing.JTable isi;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel pelaku;
     private javax.swing.JLabel tahun;

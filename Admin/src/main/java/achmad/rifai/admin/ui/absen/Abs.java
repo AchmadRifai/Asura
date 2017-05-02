@@ -98,4 +98,8 @@ public class Abs extends javax.swing.JInternalFrame {
         a.setL(Absen.Jenise.valueOf(ket.getItemAt(ket.getSelectedIndex())));
         return a;
     }
+
+    public String getKaryawan(){
+        return karyawan.getText();
+    }
 }

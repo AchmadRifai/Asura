@@ -5,8 +5,10 @@
  */
 package achmad.rifai.admin.ui.absen;
 
+import achmad.rifai.erp1.entity.Absen;
 import java.awt.Color;
 import java.time.ZoneId;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -49,6 +51,9 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -140,6 +145,14 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
         this.setVisible(false);
     }//GEN-LAST:event_sActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if(b!=null){
+            saving();
+            int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menyimpan perubahan?", "SIMPAN?", JOptionPane.YES_NO_OPTION);
+            if(x==JOptionPane.YES_OPTION)writeDB();
+        }this.setVisible(false);
+    }//GEN-LAST:event_formWindowClosing
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -172,14 +185,54 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
         }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }muatLanjut();
     }
 
     private void saving() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(b==null){
+            b=new achmad.rifai.erp1.entity.BukuAbsen();
+            b.setDeleted(true);
+        }java.util.Date t=(java.util.Date) tgl.getValue();
+        java.sql.Date sq=java.sql.Date.valueOf(t.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        b.setTgl(""+sq);
+        java.util.List<Absen>l=new java.util.LinkedList<>();
+        for(javax.swing.JInternalFrame i:lst.getAllFrames()){
+            Abs a=(Abs) i;
+            l.add(a.genAbsen());
+        }b.setL(l);
     }
 
     private void writeDB() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mendata Buku Absen tanggal "+b.getTgl());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOBukuAbsen dao=new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d);
+        achmad.rifai.erp1.entity.BukuAbsen bu=achmad.rifai.erp1.entity.BukuAbsen.of(d, b.getTgl());
+        if(bu==null)dao.insert(b);
+        else dao.update(bu, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
+    }
+
+    private void muatLanjut() {
+        if(b!=null){
+            java.sql.Date t=java.sql.Date.valueOf(b.getTgl());
+            tgl.setEnabled(false);
+            tgl.setValue(t);
+            b.getL().forEach((a)->{filling(a);});
+            s.setEnabled(true);
+        }this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }
+
+    private void filling(Absen a) {
+        for(javax.swing.JInternalFrame i:lst.getAllFrames()){
+            Abs ab=(Abs) i;
+            if(a.getS() == null ? ab.getKaryawan() == null : a.getS().equals(ab.getKaryawan())){
+                ab.setL(a.getL());
+                break;
+            }
+        }
     }
 }
