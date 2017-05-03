@@ -792,6 +792,11 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
 
         dtlBonus.setText("Detail");
         dtlBonus.setEnabled(false);
+        dtlBonus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtlBonusActionPerformed(evt);
+            }
+        });
         jMenu18.add(dtlBonus);
 
         menu.add(jMenu18);
@@ -1572,8 +1577,15 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     }//GEN-LAST:event_hpsBonusActionPerformed
 
     private void jMenuItem38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem38ActionPerformed
+        if(sBonus==null)new achmad.rifai.admin.ui.bonus.Add(this, true, id).setVisible(true);
+        else new achmad.rifai.admin.ui.bonus.Add(this, true, id, sBonus).setVisible(true);
         cleanBonus();
     }//GEN-LAST:event_jMenuItem38ActionPerformed
+
+    private void dtlBonusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtlBonusActionPerformed
+        new achmad.rifai.admin.ui.bonus.Detail(this, true, id, sBonus).setVisible(true);
+        cleanBonus();
+    }//GEN-LAST:event_dtlBonusActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem detailTrack;
