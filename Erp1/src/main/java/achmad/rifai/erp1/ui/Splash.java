@@ -53,14 +53,11 @@ private javax.swing.JFrame nek;
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    jalan();
-                } catch (Exception ex) {
-                    achmad.rifai.erp1.util.Db.hindar(ex);
-                }
+        new Thread(() -> {
+            try {
+                jalan();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
             }
         }).start();
     }//GEN-LAST:event_formWindowOpened

@@ -119,11 +119,8 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passKeyReleased
 
     private void sActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sActionPerformed
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                jalan();
-            }
+        new Thread(() -> {
+            jalan();
         }).start();
         disableAll();
     }//GEN-LAST:event_sActionPerformed
@@ -162,7 +159,7 @@ public class Login extends javax.swing.JFrame {
         try {
             achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
             achmad.rifai.erp1.entity.Karyawan k=achmad.rifai.erp1.entity.Karyawan.of(d, user.getText());
-            if(null!=k.getId()){
+            if(null!=k){
                 if(!k.isDeleted()&&!k.isBlocked()){
                     if("admin".equals(k.getJabatan())){
                         if(!k.isMasuk())next(k);

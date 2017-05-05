@@ -17,15 +17,10 @@ public class Main {
             achmad.rifai.erp1.util.Work.styling();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
-        }java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                jalan();
-            }
-        });
+        }java.awt.EventQueue.invokeLater(Main::jalan);
     }
 
     private static void jalan() {
-        new achmad.rifai.erp1.ui.Splash(new achmad.rifai.suplier.ui.Maine()).setVisible(true);
+        new achmad.rifai.erp1.ui.Splash(new achmad.rifai.suplier.ui.Login()).setVisible(true);
     }
 }

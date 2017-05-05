@@ -104,7 +104,11 @@ public class Work {
 
     private static List<Jabatan> listJabatan() {
         List<Jabatan>l=new java.util.LinkedList<>();
-        Jabatan j1=new Jabatan();
+        Jabatan j1=new Jabatan(),j2=new Jabatan();
+        j2.setDeleted(false);
+        j2.setGaji(org.joda.money.Money.of(CurrencyUnit.of("IDR"), 2750000));
+        j2.setKapasitas(30);
+        j2.setNama("pergudangan");
         j1.setKapasitas(3);
         j1.setNama("admin");
         j1.setGaji(org.joda.money.Money.zero(CurrencyUnit.of("IDR")));
