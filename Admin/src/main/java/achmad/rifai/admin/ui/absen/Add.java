@@ -48,6 +48,7 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
         jScrollPane1 = new javax.swing.JScrollPane();
         lst = new javax.swing.JDesktopPane();
         s = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -84,6 +85,13 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
             }
         });
 
+        jButton1.setText("+");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,7 +105,10 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
                         .addGap(18, 18, 18)
                         .addComponent(tgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 189, Short.MAX_VALUE))
-                    .addComponent(s, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -110,7 +121,9 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(s)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(s)
+                    .addComponent(jButton1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -153,7 +166,23 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
         }this.setVisible(false);
     }//GEN-LAST:event_formWindowClosing
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        java.util.List<achmad.rifai.erp1.entity.Karyawan>l=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).all();
+        for(achmad.rifai.erp1.entity.Karyawan k:l){
+            if(!gagOno(k.getId())){
+                lst.add(new Abs(k.getId()));
+                break;
+            }
+        }d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JDesktopPane lst;
@@ -166,26 +195,7 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
     }
 
     private void muatKaryawan() {
-    try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        java.util.List<achmad.rifai.erp1.entity.Karyawan>l=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).all();
-        int x=0,y=0;
-        for(achmad.rifai.erp1.entity.Karyawan k:l){
-            java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
-            gbc.gridx=x;
-            gbc.gridy=y;
-            Abs a=new Abs(k.getId());
-            a.setVisible(true);
-            lst.add(a, gbc);
-            x++;
-            if(x==3){
-                x=0;
-                y++;
-            }
-        }d.close();
-    } catch (Exception ex) {
-        achmad.rifai.erp1.util.Db.hindar(ex);
-    }muatLanjut();
+        muatLanjut();
     }
 
     private void saving() {
@@ -221,18 +231,19 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
             java.sql.Date t=java.sql.Date.valueOf(b.getTgl());
             tgl.setEnabled(false);
             tgl.setValue(t);
-            b.getL().forEach((a)->{filling(a);});
+            b.getL().forEach((a)->{lst.add(new Abs(a.getS()));});
             s.setEnabled(true);
         }this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }
 
-    private void filling(Absen a) {
+    private boolean gagOno(String id) {
+        boolean b=true;
         for(javax.swing.JInternalFrame i:lst.getAllFrames()){
-            Abs ab=(Abs) i;
-            if(a.getS() == null ? ab.getKaryawan() == null : a.getS().equals(ab.getKaryawan())){
-                ab.setL(a.getL());
+            Abs a=(Abs) i;
+            if(id == null ? a.getKaryawan() != null : !id.equals(a.getKaryawan())){
+                b=false;
                 break;
             }
-        }
+        }return b;
     }
 }

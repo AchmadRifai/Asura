@@ -843,7 +843,9 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin keluar?", "KELUAR?", JOptionPane.YES_NO_OPTION);
     if(x==JOptionPane.YES_OPTION)try {
-        achmad.rifai.admin.util.Work.jejak(id, "Keluar dari meja kerja");
+        achmad.rifai.admin.util.Work.jejak(id, "Keluar dari meja kerja Database Admin");
+        java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
+        if(f.exists())f.delete();
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         achmad.rifai.erp1.entity.Karyawan a=achmad.rifai.erp1.entity.Karyawan.of(d, id),b
                 =achmad.rifai.erp1.entity.Karyawan.of(d, id);
@@ -1682,8 +1684,10 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     while(isVisible())try {
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         achmad.rifai.erp1.entity.Karyawan k=achmad.rifai.erp1.entity.Karyawan.of(d, id);
-        if(k.isBlocked()||!k.isMasuk()||k.isDeleted()||!"admin".equals(k.getJabatan())){
+        java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
+        if(k.isBlocked()||!k.isMasuk()||k.isDeleted()||!"admin".equals(k.getJabatan())||!f.exists()){
             new Login().setVisible(true);
+            if(f.exists())f.delete();
             this.setVisible(false);
         }d.close();
         if(this.getCursor().getType()==java.awt.Cursor.DEFAULT_CURSOR)refreshData();
@@ -1696,6 +1700,9 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     private void refreshData() throws Exception {
         if(null == mode)tblData.setModel(new javax.swing.table.DefaultTableModel());
         else switch (mode) {
+        case"bonus":
+            achmad.rifai.admin.util.Work.readBonus(tblData);
+            break;
         case"buku jejak":
             achmad.rifai.admin.util.Work.readBukuJejak(tblData, id);
             break;

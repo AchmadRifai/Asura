@@ -40,6 +40,11 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login for SCM");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("User Name :");
 
@@ -116,6 +121,23 @@ public class Login extends javax.swing.JFrame {
         new Thread(this::jalan).start();
         disableAll();
     }//GEN-LAST:event_sActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        new Thread(()->{
+            java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
+            if(f.exists())try{
+                disableAll();
+                org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
+                org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(new java.io.FileReader(f));
+                achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+                String s=r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("achmad")));
+                new Dash(s).setVisible(true);
+                this.setVisible(false);
+            }catch(Exception e){
+                achmad.rifai.erp1.util.Db.hindar(e);
+            }
+        }).start();
+    }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField id;
@@ -195,7 +217,8 @@ public class Login extends javax.swing.JFrame {
         new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d).update(bu, b);
     }
 
-    private void masuk(String id) {
+    private void masuk(String id) throws Exception {
+        achmad.rifai.erp1.util.Work.saveSession(id);
         new Dash(id).setVisible(true);
         this.setVisible(false);
     }

@@ -98,7 +98,11 @@ public class Work {
         achmad.rifai.erp1.entity.dao.DAOJabatan dao=new achmad.rifai.erp1.entity.dao.DAOJabatan(d);
         if(0==dao.all().size()){
             List<Jabatan>l=listJabatan();
-            for(Jabatan j:l)dao.insert(j);
+            for(Jabatan j:l){
+                Jabatan b=Jabatan.of(d, j.getNama());
+                if(b==null)dao.insert(j);
+                else dao.update(b, j);
+            }
         }
     }
 
@@ -109,6 +113,7 @@ public class Work {
         j2.setGaji(org.joda.money.Money.of(CurrencyUnit.of("IDR"), 2750000));
         j2.setKapasitas(30);
         j2.setNama("pergudangan");
+        l.add(j2);
         j1.setKapasitas(3);
         j1.setNama("admin");
         j1.setGaji(org.joda.money.Money.zero(CurrencyUnit.of("IDR")));
@@ -168,5 +173,16 @@ public class Work {
         l.add(new Jejak("Terdaftar",k.getId()));
         t2.setL(l);
         dao.update(t, t2);
+    }
+
+    public static void saveSession(String s)throws Exception{
+        org.json.simple.JSONObject o=new org.json.simple.JSONObject();
+        RSA r=loadRSA();
+        o.put(Work.MD5("achmad"), r.encrypt(s));
+        o.put(Work.MD5("rifa'i"), r.encrypt(""+org.joda.time.DateTime.now()));
+        java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
+        java.io.FileWriter w=new java.io.FileWriter(f);
+        o.writeJSONString(w);
+        w.close();
     }
 }

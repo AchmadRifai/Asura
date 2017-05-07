@@ -19,6 +19,7 @@ public class Abs extends javax.swing.JInternalFrame {
     public Abs(String s) {
         initComponents();
         karyawan.setText(s);
+        lanjut();
     }
 
     /**
@@ -101,5 +102,21 @@ public class Abs extends javax.swing.JInternalFrame {
 
     public String getKaryawan(){
         return karyawan.getText();
+    }
+
+    private void lanjut() {
+        new Thread(this::wedus).start();
+    }
+
+    private void wedus() {
+        try {
+            this.setVisible(true);
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.entity.Karyawan k=achmad.rifai.erp1.entity.Karyawan.of(d, karyawan.getText());
+            karyawan.setToolTipText("Nama Pegawai : "+k.getNama());
+            d.close();
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
     }
 }

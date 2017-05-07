@@ -135,12 +135,22 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                init();
-            }
-        }).start();
+        new Thread(this::init).start();
+        new Thread(()->{
+            java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
+        if(f.exists())try{
+            disableAll();
+            org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
+            org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(new java.io.FileReader(f));
+            achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+            String s=r.decrypt(""+o.get(achmad.rifai.erp1.util.Work.MD5("achmad")));
+            Dash d=new Dash();
+            d.id=s;
+            d.setVisible(true);
+            this.setVisible(false);
+        }catch(Exception e){
+            achmad.rifai.erp1.util.Db.hindar(e);
+        }}).start();
     }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -204,6 +214,7 @@ public class Login extends javax.swing.JFrame {
             absen(k);
             jejak(k);
             JOptionPane.showMessageDialog(rootPane, "Halo "+k.getNama());
+            achmad.rifai.erp1.util.Work.saveSession(k.getId());
             Dash d=new Dash();
             d.id=user.getText();
             d.setVisible(true);
