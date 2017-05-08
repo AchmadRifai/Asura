@@ -13,13 +13,13 @@ import org.joda.money.CurrencyUnit;
  *
  * @author ai
  */
-public class ListBarang extends javax.swing.JInternalFrame {
+public abstract class ListBarang extends javax.swing.JInternalFrame {
+public abstract void entek();
     /**
      * Creates new form ListBarang
      */
     public ListBarang() {
         initComponents();
-        refresh();
     }
 
     /**
@@ -36,6 +36,24 @@ public class ListBarang extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setTitle("Data Barang");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
+            }
+        });
 
         data.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,6 +115,14 @@ public class ListBarang extends javax.swing.JInternalFrame {
         pengingat();
     }//GEN-LAST:event_dataMouseEntered
 
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        entek();
+    }//GEN-LAST:event_formInternalFrameClosing
+
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        refresh();
+    }//GEN-LAST:event_formInternalFrameOpened
+
     private void refresh() {
         new Thread(()->{while(isVisible())reload();}).start();
     }
@@ -128,10 +154,11 @@ public class ListBarang extends javax.swing.JInternalFrame {
         for(achmad.rifai.erp1.entity.Pembelian p:new achmad.rifai.erp1.entity.dao.DAOPembelian(d).all())
             for(achmad.rifai.erp1.entity.ItemBeli i:p.getItems())
                 if(b.getKode() == null ? i.getBarang() == null : b.getKode().equals(i.getBarang())){
-                    m.addRow(new Object[]{b.getNama(),""+b.getStok(),i.getHarga(),b.getHarga()});
+                    m.addRow(new Object[]{b.getNama(),""+b.getStok()+" "+b.getSatuan(),i.getHarga(),b.getHarga()});
                     return;
                 }
-        m.addRow(new Object[]{b.getNama(),""+b.getStok(),org.joda.money.Money.zero(CurrencyUnit.of("IDR")),b.getHarga()});
+        m.addRow(new Object[]{b.getNama(),""+b.getStok()+" "+b.getSatuan(),
+            org.joda.money.Money.zero(CurrencyUnit.of("IDR")),b.getHarga()});
     }
 
     private void pengingat() {

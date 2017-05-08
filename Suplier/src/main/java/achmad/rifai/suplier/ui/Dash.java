@@ -5,9 +5,6 @@
  */
 package achmad.rifai.suplier.ui;
 
-import javax.swing.JOptionPane;
-import javax.swing.event.InternalFrameEvent;
-
 /**
  *
  * @author ai
@@ -136,18 +133,18 @@ private String id;
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin keluar?", "Keluar?", JOptionPane.YES_NO_OPTION);
-        if(x==JOptionPane.YES_OPTION)System.exit(0);
+        System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void ldbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ldbActionPerformed
         ldb.setEnabled(false);
-        achmad.rifai.suplier.ui.barang.ListBarang l=new achmad.rifai.suplier.ui.barang.ListBarang();
-        l.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+        achmad.rifai.suplier.ui.barang.ListBarang l=new achmad.rifai.suplier.ui.barang.ListBarang(){
             @Override
-            public void internalFrameClosing(InternalFrameEvent e) {
+            public void entek() {
                 ldb.setEnabled(true);
-            }});desk.add(l);
+                this.dispose();
+            }
+        };desk.add(l);
         l.setVisible(true);
     }//GEN-LAST:event_ldbActionPerformed
 
