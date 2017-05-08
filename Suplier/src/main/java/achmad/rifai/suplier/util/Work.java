@@ -12,12 +12,12 @@ import achmad.rifai.erp1.util.Db;
  * @author ai
  */
 public class Work {
-    public static void jejak(String id, String s, Db d) throws Exception {
-        achmad.rifai.erp1.entity.Tracks t=new achmad.rifai.erp1.entity.dao.DAOTracks(d).current(id);
-        java.util.List<achmad.rifai.erp1.entity.Jejak>l=t.getL();
-        l.add(new achmad.rifai.erp1.entity.Jejak(s, id));
-        achmad.rifai.erp1.entity.Tracks b=achmad.rifai.erp1.entity.Tracks.of(d, t.getId());
-        b.setL(l);
-        new achmad.rifai.erp1.entity.dao.DAOTracks(d).update(t, b);
+    public static void jejak(String id, String aksi, Db d) throws Exception {
+        achmad.rifai.erp1.entity.dao.DAOTracks dao=new achmad.rifai.erp1.entity.dao.DAOTracks(d);
+        achmad.rifai.erp1.entity.Tracks t1=dao.current(id),t2=dao.current(id);
+        java.util.List<achmad.rifai.erp1.entity.Jejak>l=t1.getL();
+        l.add(new achmad.rifai.erp1.entity.Jejak(aksi, id));
+        t2.setL(l);
+        dao.update(t1, t2);
     }
 }

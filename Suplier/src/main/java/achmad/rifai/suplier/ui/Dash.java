@@ -5,6 +5,9 @@
  */
 package achmad.rifai.suplier.ui;
 
+import javax.swing.JOptionPane;
+import javax.swing.event.InternalFrameEvent;
+
 /**
  *
  * @author ai
@@ -38,6 +41,10 @@ private String id;
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        ldb = new javax.swing.JMenuItem();
+        tb = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -72,7 +79,36 @@ private String id;
         });
         jMenu2.add(jMenuItem2);
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Quit");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
+
         jMenuBar2.add(jMenu2);
+
+        jMenu1.setText("Barang");
+
+        ldb.setText("Lihat Data");
+        ldb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ldbActionPerformed(evt);
+            }
+        });
+        jMenu1.add(ldb);
+
+        tb.setText("Tambah Barang");
+        tb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbActionPerformed(evt);
+            }
+        });
+        jMenu1.add(tb);
+
+        jMenuBar2.add(jMenu1);
 
         setJMenuBar(jMenuBar2);
 
@@ -99,11 +135,41 @@ private String id;
     }usir();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin keluar?", "Keluar?", JOptionPane.YES_NO_OPTION);
+        if(x==JOptionPane.YES_OPTION)System.exit(0);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void ldbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ldbActionPerformed
+        ldb.setEnabled(false);
+        achmad.rifai.suplier.ui.barang.ListBarang l=new achmad.rifai.suplier.ui.barang.ListBarang();
+        l.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {
+                ldb.setEnabled(true);
+            }});desk.add(l);
+        l.setVisible(true);
+    }//GEN-LAST:event_ldbActionPerformed
+
+    private void tbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbActionPerformed
+        tb.setEnabled(false);
+        achmad.rifai.suplier.ui.barang.Add a=new achmad.rifai.suplier.ui.barang.Add() {
+            @Override
+            public void finish() {
+                tb.setEnabled(true);
+            }};desk.add(a);
+        a.setVisible(true);
+    }//GEN-LAST:event_tbActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desk;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem ldb;
+    private javax.swing.JMenuItem tb;
     // End of variables declaration//GEN-END:variables
 
     private void validasi() {
@@ -121,5 +187,6 @@ private String id;
     private void usir() {
         new Login().setVisible(true);
         this.setVisible(false);
+        this.dispose();
     }
 }

@@ -134,6 +134,7 @@ public class Login extends javax.swing.JFrame {
                 new Dash(s).setVisible(true);
                 this.setVisible(false);
             }catch(Exception e){
+                enableAll();
                 achmad.rifai.erp1.util.Db.hindar(e);
             }
         }).start();
@@ -180,9 +181,9 @@ public class Login extends javax.swing.JFrame {
 
     private void next(Karyawan k) throws Exception {
         Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.suplier.util.Work.jejak(k.getId(),"Masuk kerja",d);
         bloksek(k,d);
         absenJajal(k,d);
-        achmad.rifai.suplier.util.Work.jejak(k.getId(),"Masuk kerja",d);
         masuk(k.getId());
         d.close();
     }
