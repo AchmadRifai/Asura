@@ -1339,7 +1339,8 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     }//GEN-LAST:event_dtlPenjualanActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
+        new Sampah(this,true,id).setVisible(true);
+        clean();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void hpsPesanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsPesanActionPerformed
@@ -1775,6 +1776,8 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
                 =achmad.rifai.erp1.entity.Karyawan.of(d, id);
         b.setMasuk(false);
         new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).update(a, b);
+        java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
+        if(f.exists())f.delete();
         d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);

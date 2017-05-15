@@ -42,7 +42,7 @@ public class Work {
         return bi.toString(36);
     }
 
-    public static void saveDbs(DBSetting dbs) throws GeneralSecurityException, IOException, ClassNotFoundException {
+    public static void saveDbs(DBSetting dbs) throws Exception {
         RSA r=loadRSA();
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put(Work.MD5("host"), r.encrypt(dbs.getHost()));
@@ -53,6 +53,7 @@ public class Work {
         java.io.FileWriter w=new java.io.FileWriter(f);
         o.writeJSONString(w);
         w.close();
+        hiding();
     }
 
     public static Db loadDB() throws Exception {
@@ -184,5 +185,13 @@ public class Work {
         java.io.FileWriter w=new java.io.FileWriter(f);
         o.writeJSONString(w);
         w.close();
+    }
+
+    private static void hiding() throws Exception{
+        java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura");
+        if(System.getProperty("os.name").contains("Windows")){
+            Process p=Runtime.getRuntime().exec("attrib +h "+f.getAbsolutePath());
+            p.waitFor();
+        }
     }
 }

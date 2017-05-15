@@ -124,8 +124,6 @@ private String id;
         achmad.rifai.erp1.entity.Karyawan a=achmad.rifai.erp1.entity.Karyawan.of(d, id),b=achmad.rifai.erp1.entity.Karyawan.of(d, id);
         b.setMasuk(false);
         new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).update(a, b);
-        java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
-        if(f.exists())f.delete();
         d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
@@ -137,8 +135,16 @@ private String id;
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void ldbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ldbActionPerformed
-        ldb.setEnabled(false);
-        achmad.rifai.suplier.ui.barang.ListBarang l=new achmad.rifai.suplier.ui.barang.ListBarang(){
+        new Thread(()->{
+            try {
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                achmad.rifai.suplier.util.Work.jejak(id, "Sedang melihat data barang", d);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }
+        }).start();ldb.setEnabled(false);
+        achmad.rifai.suplier.ui.barang.ListBarang l=new achmad.rifai.suplier.ui.barang.ListBarang(id,desk){
             @Override
             public void entek() {
                 ldb.setEnabled(true);
@@ -149,11 +155,20 @@ private String id;
     }//GEN-LAST:event_ldbActionPerformed
 
     private void tbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbActionPerformed
-        tb.setEnabled(false);
-        achmad.rifai.suplier.ui.barang.Add a=new achmad.rifai.suplier.ui.barang.Add() {
+        new Thread(()->{
+            try {
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                achmad.rifai.suplier.util.Work.jejak(id, "akan menambah sebuah barang", d);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }
+        }).start();tb.setEnabled(false);
+        achmad.rifai.suplier.ui.barang.Add a=new achmad.rifai.suplier.ui.barang.Add(id) {
             @Override
             public void finish() {
                 tb.setEnabled(true);
+                this.dispose();
             }};desk.add(a);
         a.setVisible(true);
     }//GEN-LAST:event_tbActionPerformed
@@ -173,8 +188,15 @@ private String id;
         while(isVisible())try {
             achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
             achmad.rifai.erp1.entity.Karyawan k=achmad.rifai.erp1.entity.Karyawan.of(d, id);
-            if(k.isBlocked()||k.isDeleted()||!k.isMasuk())usir();
-            d.close();
+            java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
+            if(k.isBlocked()||k.isDeleted()||!k.isMasuk()||!f.exists()||!"pergudangan".equals(k.getJabatan())){
+                if(k.isMasuk()){
+                    achmad.rifai.erp1.entity.dao.DAOKaryawan dao=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d);
+                    achmad.rifai.erp1.entity.Karyawan b=achmad.rifai.erp1.entity.Karyawan.of(d, id);
+                    b.setMasuk(false);
+                    dao.update(k, b);
+                }usir();
+            }d.close();
             Thread.sleep(5000);
             } catch (Exception ex) {
                 achmad.rifai.erp1.util.Db.hindar(ex);
@@ -182,6 +204,8 @@ private String id;
     }
 
     private void usir() {
+        java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/work/jejak");
+        if(f.exists())f.delete();
         new Login().setVisible(true);
         this.setVisible(false);
         this.dispose();

@@ -185,7 +185,7 @@ private Thread t1,t2;
                 dbs.setHost(host.getText());
                 dbs.setName(name.getText());
                 achmad.rifai.erp1.util.Work.saveDbs(dbs);
-            } catch (GeneralSecurityException | IOException | ClassNotFoundException ex) {
+            } catch (Exception ex) {
                 achmad.rifai.erp1.util.Db.hindar(ex);
                 enableAll(2);
             }

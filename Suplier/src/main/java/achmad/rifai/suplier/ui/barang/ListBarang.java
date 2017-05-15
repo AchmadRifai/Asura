@@ -6,6 +6,7 @@
 package achmad.rifai.suplier.ui.barang;
 
 import achmad.rifai.erp1.entity.Barang;
+import achmad.rifai.erp1.util.Db;
 import javax.swing.JOptionPane;
 import org.joda.money.CurrencyUnit;
 
@@ -15,10 +16,15 @@ import org.joda.money.CurrencyUnit;
  */
 public abstract class ListBarang extends javax.swing.JInternalFrame {
 public abstract void entek();
+private achmad.rifai.erp1.entity.Barang sBarang;
+private String id;
+private javax.swing.JDesktopPane desk;
     /**
      * Creates new form ListBarang
      */
-    public ListBarang() {
+    public ListBarang(String i,javax.swing.JDesktopPane jd) {
+        id=i;
+        desk=jd;
         initComponents();
     }
 
@@ -33,6 +39,8 @@ public abstract void entek();
 
         jScrollPane1 = new javax.swing.JScrollPane();
         data = new javax.swing.JTable();
+        hps = new javax.swing.JButton();
+        edit = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Data Barang");
@@ -88,12 +96,32 @@ public abstract void entek();
         });
         jScrollPane1.setViewportView(data);
 
+        hps.setText("Hapus");
+        hps.setEnabled(false);
+        hps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsActionPerformed(evt);
+            }
+        });
+
+        edit.setText("Edit");
+        edit.setEnabled(false);
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(hps)
+                    .addComponent(edit))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -101,15 +129,17 @@ public abstract void entek();
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 4, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(hps)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(edit)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void dataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dataMouseClicked
 
     private void dataMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataMouseEntered
         pengingat();
@@ -122,6 +152,61 @@ public abstract void entek();
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         refresh();
     }//GEN-LAST:event_formInternalFrameOpened
+
+    private void dataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataMouseClicked
+        int x=data.getSelectedRow();
+        boolean b=data.isRowSelected(x);
+        if(b)try {
+            String s=""+data.getValueAt(x, 0),hrg=""+data.getValueAt(x, 3);
+            Db d=achmad.rifai.erp1.util.Work.loadDB();
+            for(Barang ba:new achmad.rifai.erp1.entity.dao.DAOBarang(d).all())
+                if((s == null ? ba.getNama() == null : s.equals(ba.getNama()))&&
+                        (hrg == null ? ba.getHarga().toString() == null : hrg.equals(ba.getHarga().toString()))){
+                sBarang=ba;
+                hps.setEnabled(b);
+                edit.setEnabled(b);
+                break;
+            }d.close();
+        } catch (Exception ex) {
+            Db.hindar(ex);
+        }
+    }//GEN-LAST:event_dataMouseClicked
+
+    private void hpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsActionPerformed
+        final Barang b=sBarang;
+        if(b!=null){
+            int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus barang "+b.getNama()
+                    +" ?", "HAPUS?", JOptionPane.YES_NO_OPTION);
+            if(x==JOptionPane.YES_OPTION)new Thread(()->{
+                try {
+                    Db d=achmad.rifai.erp1.util.Work.loadDB();
+                    achmad.rifai.suplier.util.Work.jejak(id, "Menghapus barang "+b.getKode(), d);
+                    new achmad.rifai.erp1.entity.dao.DAOBarang(d).delete(b);
+                    d.close();
+                } catch (Exception ex) {
+                    Db.hindar(ex);
+                }
+            }).start();
+        }hps.setEnabled(false);
+        edit.setEnabled(false);
+    }//GEN-LAST:event_hpsActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        final Barang b=sBarang;
+        new Thread(()->{
+            try {
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                achmad.rifai.suplier.util.Work.jejak(id, "akan mengubah data barang "+b.getKode(), d);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }
+        }).start();Edit e=new Edit(id,b);
+        desk.add(e);
+        e.setVisible(true);
+        hps.setEnabled(false);
+        edit.setEnabled(false);
+    }//GEN-LAST:event_editActionPerformed
 
     private void refresh() {
         new Thread(()->{while(isVisible())reload();}).start();
@@ -146,6 +231,8 @@ public abstract void entek();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable data;
+    private javax.swing.JButton edit;
+    private javax.swing.JButton hps;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
@@ -165,10 +252,15 @@ public abstract void entek();
         try {
             achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
             for(achmad.rifai.erp1.entity.Barang ba:new achmad.rifai.erp1.entity.dao.DAOBarang(d).all()){
-                if(10<ba.getStok())JOptionPane.showMessageDialog(rootPane, "barang "+ba.getNama()+" akan kehabisan stok");
+                if(10>ba.getStok())next2(ba,d);
             }d.close();
         } catch (Exception ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
         }
+    }
+
+    private void next2(Barang ba, Db d) throws Exception {
+        boolean oleh=achmad.rifai.suplier.util.Work.isSupportedMarket(ba,d);
+        if(oleh)JOptionPane.showMessageDialog(rootPane, "Barang "+ba.getNama()+" tinggal sedikit");
     }
 }

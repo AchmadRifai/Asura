@@ -12,15 +12,15 @@ import org.joda.money.CurrencyUnit;
  *
  * @author ai
  */
-public abstract class Add extends javax.swing.JInternalFrame {
-public abstract void finish();
-private achmad.rifai.erp1.entity.Barang b;
+public class Edit extends javax.swing.JInternalFrame {
 private String id;
+private achmad.rifai.erp1.entity.Barang b;
     /**
-     * Creates new form Add
+     * Creates new form Edit
      */
-    public Add(String i) {
+    public Edit(String i,achmad.rifai.erp1.entity.Barang ba) {
         id=i;
+        b=ba;
         initComponents();
     }
 
@@ -44,8 +44,7 @@ private String id;
         s = new javax.swing.JButton();
 
         setClosable(true);
-        setTitle("Tambah Barang");
-        setToolTipText("Tambah Barang");
+        setTitle("Edit Barang");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -61,6 +60,7 @@ private String id;
             public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
             }
         });
 
@@ -93,13 +93,7 @@ private String id;
             }
         });
 
-        kode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                kodeKeyReleased(evt);
-            }
-        });
-
-        s.setText("SIMPAN");
+        s.setText("SAVE");
         s.setEnabled(false);
         s.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,10 +105,12 @@ private String id;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -123,12 +119,10 @@ private String id;
                             .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(hrg, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                            .addComponent(hrg, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
                             .addComponent(satuan)
                             .addComponent(nama)
-                            .addComponent(kode))
-                        .addGap(0, 1, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(kode)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,7 +143,7 @@ private String id;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(hrg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(s)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -157,40 +151,19 @@ private String id;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-    try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.suplier.util.Work.jejak(id, "Membatalkan penambahan barang", d);
-        d.close();
-    } catch (Exception ex) {
-        achmad.rifai.erp1.util.Db.hindar(ex);
-    }finish();
-    }//GEN-LAST:event_formInternalFrameClosing
-
-    private void sActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sActionPerformed
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        saving();
-        writeDB();
-        this.setVisible(false);
-        finish();
-    }//GEN-LAST:event_sActionPerformed
-
-    private void kodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_kodeKeyReleased
-        if(!kode.getText().isEmpty())try {
-            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.entity.Barang ba=achmad.rifai.erp1.entity.Barang.of(d, kode.getText());
-            if(ba!=null)kode.setForeground(Color.red);
-            else kode.setForeground(Color.BLACK);
-            d.close();
-        } catch (Exception ex) {
-            achmad.rifai.erp1.util.Db.hindar(ex);
-        }refresh();
-    }//GEN-LAST:event_kodeKeyReleased
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        this.setTitle("Edit barang "+b.getKode());
+        kode.setEnabled(false);
+        kode.setText(b.getKode());
+        nama.setText(b.getNama());
+        satuan.setText(b.getSatuan());
+        hrg.setText(""+b.getHarga().getAmount().longValue());
+    }//GEN-LAST:event_formInternalFrameOpened
 
     private void hrgKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_hrgKeyReleased
-        if(!hrg.getText().isEmpty()&&hrg.isValid()){
-            long l=Long.parseLong(hrg.getText());
-            if(l<=0)hrg.setForeground(Color.red);
+        if(hrg.isValid()&&!hrg.getText().isEmpty()){
+            int x=Integer.parseInt(hrg.getText());
+            if(x>0)hrg.setForeground(Color.red);
             else hrg.setForeground(Color.BLACK);
         }refresh();
     }//GEN-LAST:event_hrgKeyReleased
@@ -202,6 +175,25 @@ private String id;
     private void satuanKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_satuanKeyReleased
         refresh();
     }//GEN-LAST:event_satuanKeyReleased
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+    try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.suplier.util.Work.jejak(id, "Membatalkan pengubahan data barang "+b.getKode(), d);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }this.setVisible(false);
+    this.dispose();
+    }//GEN-LAST:event_formInternalFrameClosing
+
+    private void sActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sActionPerformed
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        saving();
+        writeDB();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_sActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -216,12 +208,13 @@ private String id;
     private javax.swing.JTextField satuan;
     // End of variables declaration//GEN-END:variables
 
+    private void refresh() {
+        s.setEnabled(hrg.isValid()&&!hrg.getText().isEmpty()&&Color.BLACK==hrg.getForeground()&&!nama.getText().isEmpty()
+                &&!satuan.getText().isEmpty());
+    }
+
     private void saving() {
-        b=new achmad.rifai.erp1.entity.Barang();
-        b.setDeleted(false);
-        b.setStok(0);
         b.setHarga(org.joda.money.Money.of(CurrencyUnit.of("IDR"), Long.parseLong(hrg.getText())));
-        b.setKode(kode.getText());
         b.setNama(nama.getText());
         b.setSatuan(satuan.getText());
     }
@@ -229,16 +222,12 @@ private String id;
     private void writeDB() {
     try {
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.suplier.util.Work.jejak(id, "Menyimpan barang "+b.getKode(), d);
-        new achmad.rifai.erp1.entity.dao.DAOBarang(d).insert(b);
+        achmad.rifai.suplier.util.Work.jejak(id, "Menyimpan perubahan data pada barang "+b.getKode(), d);
+        achmad.rifai.erp1.entity.Barang a=achmad.rifai.erp1.entity.Barang.of(d, b.getKode());
+        new achmad.rifai.erp1.entity.dao.DAOBarang(d).update(a, b);
         d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }
-
-    private void refresh() {
-        s.setEnabled(Color.BLACK==kode.getForeground()&&Color.BLACK==hrg.getForeground()&&hrg.isValid()&&!hrg.getText().isEmpty()&&
-        !kode.getText().isEmpty()&&!nama.getText().isEmpty()&&!satuan.getText().isEmpty());
     }
 }

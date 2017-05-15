@@ -328,7 +328,7 @@ public class Work {
     }
 
     public static void readBonus(JTable tblData) throws Exception {
-        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(){
+        javax.swing.table.DefaultTableModel m=new javax.swing.table.DefaultTableModel(new Object[]{"Kode","Pegawai","Bulan","Tahun"},0){
             private Class[]c=new Class[]{String.class,String.class,java.time.Month.class,java.time.Year.class};
             @Override
             public boolean isCellEditable(int i, int i1) {
