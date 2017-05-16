@@ -35,6 +35,7 @@ public class Karyawan{
     private java.sql.Date hiredate;
 
     public Karyawan(String s) throws ParseException {
+        System.out.println(s);
         org.json.simple.parser.JSONParser p=new org.json.simple.parser.JSONParser();
         org.json.simple.JSONObject o=(org.json.simple.JSONObject) p.parse(s);
         id=""+o.get("id");

@@ -26,7 +26,7 @@ public class RSA {
 
     private void init() throws GeneralSecurityException, IOException{
         java.security.KeyPairGenerator kpg=java.security.KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(2101);
+        kpg.initialize(4202);
         java.security.KeyPair kp=kpg.genKeyPair();
         savePri(kp.getPrivate());
         savePub(kp.getPublic());

@@ -6,7 +6,6 @@
 package achmad.rifai.erp1.util;
 
 import java.io.FileNotFoundException;
-import java.security.GeneralSecurityException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,13 +16,14 @@ import java.util.logging.Logger;
 public class Db {
     public static void hindar(Exception ex) {
         try {
-            org.joda.time.DateTime d=org.joda.time.DateTime.now();
-            java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/error/"+Work.MD5(d.toString())+"log");
+            java.util.Date d=new java.util.Date();
+            java.io.File f=new java.io.File(System.getProperty("user.home")+"/.asura/error/"+d.getDate()+"-"+d.getMonth()+"-"+d.getYear()+"/"+
+                    d.getHours()+"-"+d.getMinutes()+"-"+d.getSeconds()+".log");
             if(!f.getParentFile().exists())f.getParentFile().mkdirs();
             java.io.PrintWriter o = new java.io.PrintWriter(f);
             ex.printStackTrace(o);
             o.close();
-        } catch (FileNotFoundException | GeneralSecurityException ex1) {
+        } catch (FileNotFoundException ex1) {
             Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex1);
         }
     }

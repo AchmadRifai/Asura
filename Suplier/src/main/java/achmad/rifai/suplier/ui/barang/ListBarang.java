@@ -178,14 +178,14 @@ private javax.swing.JDesktopPane desk;
             int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus barang "+b.getNama()
                     +" ?", "HAPUS?", JOptionPane.YES_NO_OPTION);
             if(x==JOptionPane.YES_OPTION)new Thread(()->{
-                try {
+                setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
                     Db d=achmad.rifai.erp1.util.Work.loadDB();
                     achmad.rifai.suplier.util.Work.jejak(id, "Menghapus barang "+b.getKode(), d);
                     new achmad.rifai.erp1.entity.dao.DAOBarang(d).delete(b);
                     d.close();
                 } catch (Exception ex) {
                     Db.hindar(ex);
-                }
+                }setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             }).start();
         }hps.setEnabled(false);
         edit.setEnabled(false);

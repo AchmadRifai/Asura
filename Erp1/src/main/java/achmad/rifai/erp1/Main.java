@@ -7,6 +7,7 @@ package achmad.rifai.erp1;
 
 import achmad.rifai.erp1.entity.ItemBeli;
 import achmad.rifai.erp1.entity.ItemJual;
+import achmad.rifai.erp1.entity.Karyawan;
 import achmad.rifai.erp1.entity.Penerima;
 import achmad.rifai.erp1.entity.Petugas;
 import java.io.IOException;
@@ -27,11 +28,15 @@ import org.joda.money.CurrencyUnit;
 public class Main {
     public static void main(String[]args){
         try {
-            
             achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.entity.Karyawan k=achmad.rifai.erp1.entity.Karyawan.of(d, "asura");
-            System.out.println(k.getJabatan());
-            d.close();
+            com.mongodb.DBCursor c=d.getD().getCollectionFromString("karyawan").find();
+            achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+            while(c.hasNext()){
+                com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+                String s="";
+                for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+                cetak(new Karyawan(s));
+            }d.close();
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -165,5 +170,12 @@ public class Main {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private static void cetak(Karyawan k) {
+        System.out.println("ID\t: "+k.getId());
+        System.out.println(k.getHiredate());
+        System.out.println(k.getNama());
+        System.out.println();
     }
 }

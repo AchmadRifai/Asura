@@ -6,6 +6,7 @@
 package achmad.rifai.admin.ui.karyawan;
 
 import java.awt.Color;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.JOptionPane;
 
@@ -64,11 +65,11 @@ java.awt.Frame p;
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pendataan Karyawan 1");
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -144,7 +145,7 @@ java.awt.Frame p;
             }
         });
 
-        hire.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, new java.util.Date(), java.util.Calendar.DAY_OF_MONTH));
+        hire.setModel(new javax.swing.SpinnerListModel(new String[] {"Item 0", "Item 1", "Item 2", "Item 3"}));
         hire.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 hireStateChanged(evt);
@@ -174,10 +175,9 @@ java.awt.Frame p;
                             .addComponent(email)
                             .addComponent(hp)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(hire, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(jabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(hire)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(blocked)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -234,7 +234,7 @@ java.awt.Frame p;
                 jabatane();
             } catch (Exception ex) {
                 achmad.rifai.erp1.util.Db.hindar(ex);
-            }
+            }tgle();
         }).start();if(k==null)k=new achmad.rifai.erp1.entity.Karyawan();
         else tayang();
     }//GEN-LAST:event_formWindowOpened
@@ -409,5 +409,28 @@ java.awt.Frame p;
         id.setEnabled(true);
         jabatan.setSelectedIndex(0);
         nama.setText("");
+    }
+
+    private void tgle() {
+        java.sql.Date a=java.sql.Date.valueOf(LocalDate.now()),b=java.sql.Date.valueOf(a.toLocalDate().minusYears(5));
+        if(k!=null){
+            if(b.after(k.getHiredate())){
+                java.util.List<java.sql.Date>l=new java.util.LinkedList<>();
+                java.sql.Date c=k.getHiredate();
+                while(a.after(c)){
+                    l.add(a);
+                    a=java.sql.Date.valueOf(a.toLocalDate().minusDays(1));
+                }hire.setModel(new javax.swing.SpinnerListModel(l.toArray()));
+            }else nextTgle();
+        }else nextTgle();
+    }
+
+    private void nextTgle() {
+        java.util.List<java.sql.Date>l=new java.util.LinkedList<>();
+        java.sql.Date a=java.sql.Date.valueOf(LocalDate.now()),b=java.sql.Date.valueOf(a.toLocalDate().minusYears(5));
+        while(a.after(b)){
+            l.add(a);
+            a=java.sql.Date.valueOf(a.toLocalDate().minusDays(1));
+        }hire.setModel(new javax.swing.SpinnerListModel(l.toArray()));
     }
 }

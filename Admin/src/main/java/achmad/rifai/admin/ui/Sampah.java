@@ -16,6 +16,20 @@ private String id;
 private achmad.rifai.erp1.entity.BukuAbsen sAbsen;
 private achmad.rifai.erp1.entity.Barang sBarang;
 private achmad.rifai.erp1.entity.Rekening sAset;
+private achmad.rifai.erp1.entity.BulanBonus sBonus;
+private achmad.rifai.erp1.entity.Jabatan sJabatan;
+private achmad.rifai.erp1.entity.Jurnal sJurnal;
+private achmad.rifai.erp1.entity.Karyawan sKaryawan;
+private achmad.rifai.erp1.entity.Terima sTerima;
+private achmad.rifai.erp1.entity.Keluar sKeluar;
+private achmad.rifai.erp1.entity.Ledger sLedger;
+private achmad.rifai.erp1.entity.Pelanggan sPelanggan;
+private achmad.rifai.erp1.entity.Pembelian sPembelian;
+private achmad.rifai.erp1.entity.Penjualan sPenjualan;
+private achmad.rifai.erp1.entity.Pesan sPesan;
+private achmad.rifai.erp1.entity.Suplier sSuplier;
+private achmad.rifai.erp1.entity.Tracks sTracks;
+private achmad.rifai.erp1.entity.Tugas sTugas;
     /**
      * Creates new form Sampah
      */
@@ -34,11 +48,6 @@ private achmad.rifai.erp1.entity.Rekening sAset;
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        rAbsen = new javax.swing.JButton();
-        rBarang = new javax.swing.JButton();
-        rAset = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAbsen = new javax.swing.JTable();
@@ -74,6 +83,27 @@ private achmad.rifai.erp1.entity.Rekening sAset;
         tblPerilaku = new javax.swing.JTable();
         jScrollPane17 = new javax.swing.JScrollPane();
         tblTugas = new javax.swing.JTable();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButton1 = new javax.swing.JButton();
+        rAbsen = new javax.swing.JButton();
+        rBarang = new javax.swing.JButton();
+        rAset = new javax.swing.JButton();
+        rBonus = new javax.swing.JButton();
+        rJabatan = new javax.swing.JButton();
+        rJurnal = new javax.swing.JButton();
+        rTerima = new javax.swing.JButton();
+        rKaryawan = new javax.swing.JButton();
+        rKeluar = new javax.swing.JButton();
+        rLedger = new javax.swing.JButton();
+        rPelanggan = new javax.swing.JButton();
+        rPembelian = new javax.swing.JButton();
+        jToolBar2 = new javax.swing.JToolBar();
+        rPenjualan = new javax.swing.JButton();
+        rPesan = new javax.swing.JButton();
+        rSuplier = new javax.swing.JButton();
+        rTracks = new javax.swing.JButton();
+        rTugas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tempat Sampah");
@@ -85,55 +115,6 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 formWindowOpened(evt);
             }
         });
-
-        jToolBar1.setRollover(true);
-
-        jButton1.setText("Kosongkan");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButton1);
-
-        rAbsen.setText("Restore Buku Absen");
-        rAbsen.setEnabled(false);
-        rAbsen.setFocusable(false);
-        rAbsen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rAbsen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rAbsen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rAbsenActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(rAbsen);
-
-        rBarang.setText("Restore Barang");
-        rBarang.setEnabled(false);
-        rBarang.setFocusable(false);
-        rBarang.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rBarang.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rBarang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rBarangActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(rBarang);
-
-        rAset.setText("Restore Aset");
-        rAset.setEnabled(false);
-        rAset.setFocusable(false);
-        rAset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rAset.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rAset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rAsetActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(rAset);
 
         tblAbsen.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -206,6 +187,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblBonus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBonusMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(tblBonus);
 
         jTabbedPane1.addTab("Bonus Pegawai", jScrollPane4);
@@ -221,6 +207,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblJabatan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblJabatanMouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(tblJabatan);
 
         jTabbedPane1.addTab("Jabatan", jScrollPane5);
@@ -236,6 +227,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblJurnal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblJurnalMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(tblJurnal);
 
         jTabbedPane1.addTab("Jurnal", jScrollPane6);
@@ -251,6 +247,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblIncome.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblIncomeMouseClicked(evt);
+            }
+        });
         jScrollPane7.setViewportView(tblIncome);
 
         jTabbedPane1.addTab("Pemasukan", jScrollPane7);
@@ -266,6 +267,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblKaryawan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblKaryawanMouseClicked(evt);
+            }
+        });
         jScrollPane8.setViewportView(tblKaryawan);
 
         jTabbedPane1.addTab("Karyawan", jScrollPane8);
@@ -281,6 +287,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblKeluarMouseClicked(evt);
+            }
+        });
         jScrollPane9.setViewportView(tblKeluar);
 
         jTabbedPane1.addTab("Expenses", jScrollPane9);
@@ -296,6 +307,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblLedger.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLedgerMouseClicked(evt);
+            }
+        });
         jScrollPane10.setViewportView(tblLedger);
 
         jTabbedPane1.addTab("Ledger", jScrollPane10);
@@ -311,6 +327,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblPelanggan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPelangganMouseClicked(evt);
+            }
+        });
         jScrollPane11.setViewportView(tblPelanggan);
 
         jTabbedPane1.addTab("Pelanggan", jScrollPane11);
@@ -326,6 +347,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblPembelian.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPembelianMouseClicked(evt);
+            }
+        });
         jScrollPane12.setViewportView(tblPembelian);
 
         jTabbedPane1.addTab("Pembelian", jScrollPane12);
@@ -341,6 +367,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblPenjualan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPenjualanMouseClicked(evt);
+            }
+        });
         jScrollPane13.setViewportView(tblPenjualan);
 
         jTabbedPane1.addTab("Penjualan", jScrollPane13);
@@ -356,6 +387,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblPesan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPesanMouseClicked(evt);
+            }
+        });
         jScrollPane14.setViewportView(tblPesan);
 
         jTabbedPane1.addTab("Pesan", jScrollPane14);
@@ -371,6 +407,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblSuplier.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSuplierMouseClicked(evt);
+            }
+        });
         jScrollPane15.setViewportView(tblSuplier);
 
         jTabbedPane1.addTab("Suplier", jScrollPane15);
@@ -386,6 +427,11 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblPerilaku.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPerilakuMouseClicked(evt);
+            }
+        });
         jScrollPane16.setViewportView(tblPerilaku);
 
         jTabbedPane1.addTab("Perilaku", jScrollPane16);
@@ -401,26 +447,254 @@ private achmad.rifai.erp1.entity.Rekening sAset;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblTugas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTugasMouseClicked(evt);
+            }
+        });
         jScrollPane17.setViewportView(tblTugas);
 
         jTabbedPane1.addTab("Tugas", jScrollPane17);
+
+        jToolBar1.setRollover(true);
+
+        jButton1.setText("Kosongkan");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton1);
+
+        rAbsen.setText("Restore Buku Absen");
+        rAbsen.setEnabled(false);
+        rAbsen.setFocusable(false);
+        rAbsen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rAbsen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rAbsen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rAbsenActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rAbsen);
+
+        rBarang.setText("Restore Barang");
+        rBarang.setEnabled(false);
+        rBarang.setFocusable(false);
+        rBarang.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rBarang.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBarangActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rBarang);
+
+        rAset.setText("Restore Aset");
+        rAset.setEnabled(false);
+        rAset.setFocusable(false);
+        rAset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rAset.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rAset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rAsetActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rAset);
+
+        rBonus.setText("Restore Bonus");
+        rBonus.setEnabled(false);
+        rBonus.setFocusable(false);
+        rBonus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rBonus.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rBonus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBonusActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rBonus);
+
+        rJabatan.setText("Restore Jabatan");
+        rJabatan.setEnabled(false);
+        rJabatan.setFocusable(false);
+        rJabatan.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rJabatan.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rJabatan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rJabatanActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rJabatan);
+
+        rJurnal.setText("Restore Jurnal");
+        rJurnal.setEnabled(false);
+        rJurnal.setFocusable(false);
+        rJurnal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rJurnal.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rJurnal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rJurnalActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rJurnal);
+
+        rTerima.setText("Restore Pemasukan");
+        rTerima.setEnabled(false);
+        rTerima.setFocusable(false);
+        rTerima.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rTerima.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rTerima.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rTerimaActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rTerima);
+
+        rKaryawan.setText("Restore Karyawan");
+        rKaryawan.setEnabled(false);
+        rKaryawan.setFocusable(false);
+        rKaryawan.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rKaryawan.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rKaryawan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rKaryawanActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rKaryawan);
+
+        rKeluar.setText("Restore Expenses");
+        rKeluar.setEnabled(false);
+        rKeluar.setFocusable(false);
+        rKeluar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rKeluar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rKeluarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rKeluar);
+
+        rLedger.setText("Restore Ledger");
+        rLedger.setEnabled(false);
+        rLedger.setFocusable(false);
+        rLedger.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rLedger.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rLedger.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rLedgerActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rLedger);
+
+        rPelanggan.setText("Restore Pelanggan");
+        rPelanggan.setEnabled(false);
+        rPelanggan.setFocusable(false);
+        rPelanggan.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rPelanggan.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rPelanggan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rPelangganActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rPelanggan);
+
+        rPembelian.setText("Restore Pembelian");
+        rPembelian.setEnabled(false);
+        rPembelian.setFocusable(false);
+        rPembelian.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rPembelian.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rPembelian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rPembelianActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rPembelian);
+
+        jTabbedPane2.addTab("Operation 1", jToolBar1);
+
+        jToolBar2.setRollover(true);
+
+        rPenjualan.setText("Restore Penjualan");
+        rPenjualan.setEnabled(false);
+        rPenjualan.setFocusable(false);
+        rPenjualan.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rPenjualan.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rPenjualan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rPenjualanActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(rPenjualan);
+
+        rPesan.setText("Restore Pesan");
+        rPesan.setEnabled(false);
+        rPesan.setFocusable(false);
+        rPesan.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rPesan.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rPesan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rPesanActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(rPesan);
+
+        rSuplier.setText("Restore Suplier");
+        rSuplier.setEnabled(false);
+        rSuplier.setFocusable(false);
+        rSuplier.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSuplier.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rSuplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSuplierActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(rSuplier);
+
+        rTracks.setText("Restore Perilaku");
+        rTracks.setEnabled(false);
+        rTracks.setFocusable(false);
+        rTracks.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rTracks.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rTracks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rTracksActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(rTracks);
+
+        rTugas.setText("Restore Tugas");
+        rTugas.setEnabled(false);
+        rTugas.setFocusable(false);
+        rTugas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rTugas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rTugas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rTugasActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(rTugas);
+
+        jTabbedPane2.addTab("Operation 2", jToolBar2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1032, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane1)
+                    .addComponent(jTabbedPane2)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -438,7 +712,12 @@ private achmad.rifai.erp1.entity.Rekening sAset;
     }//GEN-LAST:event_formWindowClosing
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        new Thread(()->{try {
+            hapusAll();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }}).start();
+        disableAll();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -526,6 +805,386 @@ private achmad.rifai.erp1.entity.Rekening sAset;
     sAset=null;
     }//GEN-LAST:event_rAsetActionPerformed
 
+    private void tblBonusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBonusMouseClicked
+        int x=tblBonus.getSelectedRow();
+        boolean b=tblBonus.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sBonus=achmad.rifai.erp1.entity.BulanBonus.of(""+tblBonus.getValueAt(x, 0), d);
+            d.close();
+            rBonus.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblBonusMouseClicked
+
+    private void rBonusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBonusActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data bonus "+sBonus.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.BulanBonus b=achmad.rifai.erp1.entity.BulanBonus.of(sBonus.getKode(), d);
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOBulanBonus(d).update(sBonus, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rBonus.setEnabled(false);
+    sBonus=null;
+    }//GEN-LAST:event_rBonusActionPerformed
+
+    private void tblJabatanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblJabatanMouseClicked
+        int x=tblJabatan.getSelectedRow();
+        boolean b=tblJabatan.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sJabatan=achmad.rifai.erp1.entity.Jabatan.of(d, ""+tblJabatan.getValueAt(x, 0));
+            d.close();
+            rJabatan.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblJabatanMouseClicked
+
+    private void rJabatanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rJabatanActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data jabatan "+sJabatan.getNama());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Jabatan b=achmad.rifai.erp1.entity.Jabatan.of(d, sJabatan.getNama());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOJabatan(d).update(sJabatan, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rJabatan.setEnabled(false);
+    sJabatan=null;
+    }//GEN-LAST:event_rJabatanActionPerformed
+
+    private void tblJurnalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblJurnalMouseClicked
+        int x=tblJurnal.getSelectedRow();
+        boolean b=tblJurnal.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sJurnal=achmad.rifai.erp1.entity.Jurnal.of(d, ""+tblJurnal.getValueAt(x, 0));
+            d.close();
+            rJurnal.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblJurnalMouseClicked
+
+    private void rJurnalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rJurnalActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data jurnal "+sJurnal.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Jurnal b=achmad.rifai.erp1.entity.Jurnal.of(d, sJurnal.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOJurnal(d).update(sJurnal, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rJurnal.setEnabled(false);
+    sJurnal=null;
+    }//GEN-LAST:event_rJurnalActionPerformed
+
+    private void tblKaryawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblKaryawanMouseClicked
+        int x=tblKaryawan.getSelectedRow();
+        boolean b=tblKaryawan.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sKaryawan=achmad.rifai.erp1.entity.Karyawan.of(d, ""+tblKaryawan.getValueAt(x, 0));
+            d.close();
+            rKaryawan.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblKaryawanMouseClicked
+
+    private void rKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rKaryawanActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data karyawan "+sKaryawan.getId());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Karyawan b=achmad.rifai.erp1.entity.Karyawan.of(d, sKaryawan.getId());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOKaryawan(d).update(sKaryawan, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rKaryawan.setEnabled(false);
+    sKaryawan=null;
+    }//GEN-LAST:event_rKaryawanActionPerformed
+
+    private void tblIncomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblIncomeMouseClicked
+        int x=tblIncome.getSelectedRow();
+        boolean b=tblIncome.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sTerima=achmad.rifai.erp1.entity.Terima.of(d, ""+tblIncome.getValueAt(x, 0));
+            d.close();
+            rTerima.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblIncomeMouseClicked
+
+    private void rTerimaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rTerimaActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data income "+sTerima.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Terima b=achmad.rifai.erp1.entity.Terima.of(d, sTerima.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOTerima(d).update(sTerima, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rTerima.setEnabled(false);
+    sTerima=null;
+    }//GEN-LAST:event_rTerimaActionPerformed
+
+    private void tblKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblKeluarMouseClicked
+        int x=tblKeluar.getSelectedRow();
+        boolean b=tblKeluar.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sKeluar=achmad.rifai.erp1.entity.Keluar.of(d, ""+tblKeluar.getValueAt(x, 0));
+            d.close();
+            rKeluar.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblKeluarMouseClicked
+
+    private void rKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rKeluarActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data Expenses "+sKeluar.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Keluar b=achmad.rifai.erp1.entity.Keluar.of(d, sKeluar.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOKeluar(d).update(sKeluar, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rKeluar.setEnabled(false);
+    sKeluar=null;
+    }//GEN-LAST:event_rKeluarActionPerformed
+
+    private void tblLedgerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLedgerMouseClicked
+        int x=tblLedger.getSelectedRow();
+        boolean b=tblLedger.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sLedger=achmad.rifai.erp1.entity.Ledger.of(d, ""+tblLedger.getValueAt(x, 0));
+            d.close();
+            rLedger.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblLedgerMouseClicked
+
+    private void rLedgerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rLedgerActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data ledger "+sLedger.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Ledger b=achmad.rifai.erp1.entity.Ledger.of(d, sLedger.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOLedger(d).update(sLedger, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rLedger.setEnabled(false);
+    sLedger=null;
+    }//GEN-LAST:event_rLedgerActionPerformed
+
+    private void tblPelangganMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPelangganMouseClicked
+        int x=tblPelanggan.getSelectedRow();
+        boolean b=tblPelanggan.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sPelanggan=achmad.rifai.erp1.entity.Pelanggan.of(d, ""+tblPelanggan.getValueAt(x, 0));
+            d.close();
+            rPelanggan.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblPelangganMouseClicked
+
+    private void rPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rPelangganActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data pelanggan "+sPelanggan.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Pelanggan b=achmad.rifai.erp1.entity.Pelanggan.of(d, sPelanggan.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOPelanggan(d).update(sPelanggan, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rPelanggan.setEnabled(false);
+    sPelanggan=null;
+    }//GEN-LAST:event_rPelangganActionPerformed
+
+    private void tblPembelianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPembelianMouseClicked
+        int x=tblPembelian.getSelectedRow();
+        boolean b=tblPembelian.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sPembelian=achmad.rifai.erp1.entity.Pembelian.of(d, ""+tblPembelian.getValueAt(x, 0),
+                    ""+tblPembelian.getValueAt(x, 1), java.sql.Date.valueOf(""+tblPembelian.getValueAt(x, 2)));
+            d.close();
+            rPembelian.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblPembelianMouseClicked
+
+    private void rPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rPembelianActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data pembelian "+sPembelian.getStruk());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Pembelian b=achmad.rifai.erp1.entity.Pembelian.of(d, sPembelian.getStruk(), 
+                sPembelian.getSuplier(), sPembelian.getTgl());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOPembelian(d).update(sPembelian, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rPembelian.setEnabled(false);
+    sPembelian=null;
+    }//GEN-LAST:event_rPembelianActionPerformed
+
+    private void tblPenjualanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPenjualanMouseClicked
+        int x=tblPenjualan.getSelectedRow();
+        boolean b=tblPenjualan.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sPenjualan=achmad.rifai.erp1.entity.Penjualan.of(d, ""+tblPenjualan.getValueAt(x, 0));
+            d.close();
+            rPenjualan.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblPenjualanMouseClicked
+
+    private void rPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rPenjualanActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data penjualan "+sPenjualan.getNota());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Penjualan b=achmad.rifai.erp1.entity.Penjualan.of(d, sPenjualan.getNota());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOPenjualan(d).update(sPenjualan, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rPenjualan.setEnabled(false);
+    sPenjualan=null;
+    }//GEN-LAST:event_rPenjualanActionPerformed
+
+    private void tblPesanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPesanMouseClicked
+        int x=tblPesan.getSelectedRow();
+        boolean b=tblPesan.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sPesan=achmad.rifai.erp1.entity.Pesan.of(d, ""+tblPesan.getValueAt(x, 0));
+            d.close();
+            rPesan.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblPesanMouseClicked
+
+    private void rPesanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rPesanActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data pesan "+sPesan.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Pesan b=achmad.rifai.erp1.entity.Pesan.of(d, sPesan.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOPesan(d).update(sPesan, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rPesan.setEnabled(false);
+    sPesan=null;
+    }//GEN-LAST:event_rPesanActionPerformed
+
+    private void tblSuplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSuplierMouseClicked
+        int x=tblSuplier.getSelectedRow();
+        boolean b=tblSuplier.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sSuplier=achmad.rifai.erp1.entity.Suplier.of(d, ""+tblSuplier.getValueAt(x, 0));
+            d.close();
+            rSuplier.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblSuplierMouseClicked
+
+    private void rSuplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSuplierActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data suplier "+sSuplier.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Suplier b=achmad.rifai.erp1.entity.Suplier.of(d, sSuplier.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOSuplier(d).update(sSuplier, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rSuplier.setEnabled(false);
+    sSuplier=null;
+    }//GEN-LAST:event_rSuplierActionPerformed
+
+    private void tblPerilakuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPerilakuMouseClicked
+        int x=tblPerilaku.getSelectedRow();
+        boolean b=tblPerilaku.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sTracks=achmad.rifai.erp1.entity.Tracks.of(d, ""+tblPerilaku.getValueAt(x, 0));
+            d.close();
+            rTracks.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblPerilakuMouseClicked
+
+    private void rTracksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rTracksActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan buku jejak "+sTracks.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Tracks b=achmad.rifai.erp1.entity.Tracks.of(d, sTracks.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOTracks(d).update(sTracks, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rTracks.setEnabled(false);
+    sTracks=null;
+    }//GEN-LAST:event_rTracksActionPerformed
+
+    private void tblTugasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTugasMouseClicked
+        int x=tblTugas.getSelectedRow();
+        boolean b=tblTugas.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sTugas=achmad.rifai.erp1.entity.Tugas.of(d, ""+tblTugas.getValueAt(x, 0));
+            d.close();
+            rTugas.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_tblTugasMouseClicked
+
+    private void rTugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rTugasActionPerformed
+    try {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengembalikan data tugas "+sTugas.getKode());
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Tugas b=achmad.rifai.erp1.entity.Tugas.of(d, sTugas.getKode());
+        b.setDeleted(false);
+        new achmad.rifai.erp1.entity.dao.DAOTugas(d).update(sTugas, b);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }rTugas.setEnabled(false);
+    sTugas=null;
+    }//GEN-LAST:event_rTugasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -546,10 +1205,26 @@ private achmad.rifai.erp1.entity.Rekening sAset;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JButton rAbsen;
     private javax.swing.JButton rAset;
     private javax.swing.JButton rBarang;
+    private javax.swing.JButton rBonus;
+    private javax.swing.JButton rJabatan;
+    private javax.swing.JButton rJurnal;
+    private javax.swing.JButton rKaryawan;
+    private javax.swing.JButton rKeluar;
+    private javax.swing.JButton rLedger;
+    private javax.swing.JButton rPelanggan;
+    private javax.swing.JButton rPembelian;
+    private javax.swing.JButton rPenjualan;
+    private javax.swing.JButton rPesan;
+    private javax.swing.JButton rSuplier;
+    private javax.swing.JButton rTerima;
+    private javax.swing.JButton rTracks;
+    private javax.swing.JButton rTugas;
     private javax.swing.JTable tblAbsen;
     private javax.swing.JTable tblAset;
     private javax.swing.JTable tblBarang;
@@ -941,6 +1616,269 @@ private achmad.rifai.erp1.entity.Rekening sAset;
             for(int x=0;x<li.size();x++)json+=r.decrypt(""+li.get(x));
             achmad.rifai.erp1.entity.Tugas t=new achmad.rifai.erp1.entity.Tugas(json);
             if(t.isDeleted())m.addRow(new Object[]{t.getKode(),t.getNo(),t.getTgl(),t.getKet(),t.isBatal(),t.isPending()});
+        }
+    }
+
+    private void hapusAll() throws Exception {
+        achmad.rifai.admin.util.Work.jejak(id, "Mengosongkan tempat sampah");
+        Db d=achmad.rifai.erp1.util.Work.loadDB();
+        hpsPertama(d);
+        hpsKedua(d);
+        hpsKetiga(d);
+        d.close();
+        this.setVisible(false);
+    }
+
+    private void disableAll() {
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        jTabbedPane1.setEnabled(false);
+        jTabbedPane2.setEnabled(false);
+    }
+
+    private void hpsPertama(Db d) throws Exception {
+        hpsAbsen(d);
+        hpsBarang(d);
+        hpsAset(d);
+        hpsBonus(d);
+        hpsJabatan(d);
+    }
+
+    private void hpsKedua(Db d) throws Exception {
+        hpsJurnal(d);
+        hpsIncome(d);
+        hpsKaryawan(d);
+        hpsExpenses(d);
+        hpsLedger(d);
+    }
+
+    private void hpsKetiga(Db d) throws Exception {
+        hpsPelanggan(d);
+        hpsPembelian(d);
+        hpsPenjualan(d);
+        hpsPesan(d);
+        hpsSuplier(d);
+        hpsPerilaku(d);
+        hpsTugas(d);
+    }
+
+    private void hpsAbsen(Db d) throws Exception{
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("absen").find();
+        achmad.rifai.erp1.entity.dao.DAOBukuAbsen dao=new achmad.rifai.erp1.entity.dao.DAOBukuAbsen(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.BukuAbsen b=new achmad.rifai.erp1.entity.BukuAbsen(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsBarang(Db d) throws Exception{
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("barang").find();
+        achmad.rifai.erp1.entity.dao.DAOBarang dao=new achmad.rifai.erp1.entity.dao.DAOBarang(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Barang b=new achmad.rifai.erp1.entity.Barang(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsAset(Db d) throws Exception{
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("rekening").find();
+        achmad.rifai.erp1.entity.dao.DAORekening dao=new achmad.rifai.erp1.entity.dao.DAORekening(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Rekening b=new achmad.rifai.erp1.entity.Rekening(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsBonus(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("bulanbonus").find();
+        achmad.rifai.erp1.entity.dao.DAOBulanBonus dao=new achmad.rifai.erp1.entity.dao.DAOBulanBonus(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.BulanBonus b=new achmad.rifai.erp1.entity.BulanBonus(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsJabatan(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("jabatan").find();
+        achmad.rifai.erp1.entity.dao.DAOJabatan dao=new achmad.rifai.erp1.entity.dao.DAOJabatan(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Jabatan b=new achmad.rifai.erp1.entity.Jabatan(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsJurnal(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("jurnal").find();
+        achmad.rifai.erp1.entity.dao.DAOJurnal dao=new achmad.rifai.erp1.entity.dao.DAOJurnal(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Jurnal b=new achmad.rifai.erp1.entity.Jurnal(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsIncome(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("terima").find();
+        achmad.rifai.erp1.entity.dao.DAOTerima dao=new achmad.rifai.erp1.entity.dao.DAOTerima(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Terima b=new achmad.rifai.erp1.entity.Terima(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsKaryawan(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("karyawan").find();
+        achmad.rifai.erp1.entity.dao.DAOKaryawan dao=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Karyawan b=new achmad.rifai.erp1.entity.Karyawan(s);
+            if(b.isDeleted())dao.truedelete(b);
+        }
+    }
+
+    private void hpsExpenses(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("keluar").find();
+        achmad.rifai.erp1.entity.dao.DAOKeluar dao=new achmad.rifai.erp1.entity.dao.DAOKeluar(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Keluar b=new achmad.rifai.erp1.entity.Keluar(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsLedger(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("ledger").find();
+        achmad.rifai.erp1.entity.dao.DAOLedger dao=new achmad.rifai.erp1.entity.dao.DAOLedger(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Ledger b=new achmad.rifai.erp1.entity.Ledger(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsPelanggan(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("pelanggan").find();
+        achmad.rifai.erp1.entity.dao.DAOPelanggan dao=new achmad.rifai.erp1.entity.dao.DAOPelanggan(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Pelanggan b=new achmad.rifai.erp1.entity.Pelanggan(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsPembelian(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("pembelian").find();
+        achmad.rifai.erp1.entity.dao.DAOPembelian dao=new achmad.rifai.erp1.entity.dao.DAOPembelian(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Pembelian b=new achmad.rifai.erp1.entity.Pembelian(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsPenjualan(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("penjualan").find();
+        achmad.rifai.erp1.entity.dao.DAOPenjualan dao=new achmad.rifai.erp1.entity.dao.DAOPenjualan(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Penjualan b=new achmad.rifai.erp1.entity.Penjualan(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsPesan(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("pesan").find();
+        achmad.rifai.erp1.entity.dao.DAOPesan dao=new achmad.rifai.erp1.entity.dao.DAOPesan(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Pesan b=new achmad.rifai.erp1.entity.Pesan(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsSuplier(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("suplier").find();
+        achmad.rifai.erp1.entity.dao.DAOSuplier dao=new achmad.rifai.erp1.entity.dao.DAOSuplier(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Suplier b=new achmad.rifai.erp1.entity.Suplier(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsPerilaku(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("tracks").find();
+        achmad.rifai.erp1.entity.dao.DAOTracks dao=new achmad.rifai.erp1.entity.dao.DAOTracks(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Tracks b=new achmad.rifai.erp1.entity.Tracks(s);
+            if(b.isDeleted())dao.trueDelete(b);
+        }
+    }
+
+    private void hpsTugas(Db d) throws Exception {
+        com.mongodb.DBCursor c=d.getD().getCollectionFromString("tugas").find();
+        achmad.rifai.erp1.entity.dao.DAOTugas dao=new achmad.rifai.erp1.entity.dao.DAOTugas(d);
+        achmad.rifai.erp1.util.RSA r=achmad.rifai.erp1.util.Work.loadRSA();
+        while(c.hasNext()){
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
+            String s="";
+            for(int x=0;x<l.size();x++)s+=r.decrypt(""+l.get(x));
+            achmad.rifai.erp1.entity.Tugas b=new achmad.rifai.erp1.entity.Tugas(s);
+            if(b.isDeleted())dao.trueDelete(b);
         }
     }
 }

@@ -10,8 +10,8 @@
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
   <Events>
-    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
+    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
   </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -48,12 +48,10 @@
                           <Component id="email" alignment="0" max="32767" attributes="0"/>
                           <Component id="hp" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jabatan" min="-2" max="-2" attributes="0"/>
-                                  <Component id="hire" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jabatan" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="hire" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
@@ -217,7 +215,12 @@
     <Component class="javax.swing.JSpinner" name="hire">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="now" maximum="now" stepSize="5" type="date"/>
+          <SpinnerModel type="list">
+            <ListItem value="Item 0"/>
+            <ListItem value="Item 1"/>
+            <ListItem value="Item 2"/>
+            <ListItem value="Item 3"/>
+          </SpinnerModel>
         </Property>
       </Properties>
       <Events>
