@@ -52,10 +52,10 @@ private achmad.rifai.erp1.entity.Ledger l;
         ket = new javax.swing.JTextArea();
         kredit = new javax.swing.JFormattedTextField();
         debit = new javax.swing.JFormattedTextField();
-        tgl = new javax.swing.JComboBox<>();
         no = new javax.swing.JSpinner();
         kode = new javax.swing.JTextField();
         s = new javax.swing.JButton();
+        tgl = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pendataan Buku Besar");
@@ -105,12 +105,6 @@ private achmad.rifai.erp1.entity.Ledger l;
             }
         });
 
-        tgl.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                tglItemStateChanged(evt);
-            }
-        });
-
         no.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         no.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -129,6 +123,13 @@ private achmad.rifai.erp1.entity.Ledger l;
         s.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sActionPerformed(evt);
+            }
+        });
+
+        tgl.setToolTipText("<Tahun>-<Bulan>-<Tanggal>");
+        tgl.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tglKeyReleased(evt);
             }
         });
 
@@ -153,8 +154,8 @@ private achmad.rifai.erp1.entity.Ledger l;
                             .addComponent(jScrollPane1)
                             .addComponent(kredit)
                             .addComponent(debit)
-                            .addComponent(tgl, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(kode))
+                            .addComponent(kode)
+                            .addComponent(tgl))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(s, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -209,17 +210,12 @@ private achmad.rifai.erp1.entity.Ledger l;
     }//GEN-LAST:event_kodeKeyReleased
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        tgle();
         if(l!=null)inisial();
     }//GEN-LAST:event_formWindowOpened
 
     private void noStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_noStateChanged
         refresh();
     }//GEN-LAST:event_noStateChanged
-
-    private void tglItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tglItemStateChanged
-        refresh();
-    }//GEN-LAST:event_tglItemStateChanged
 
     private void debitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_debitKeyReleased
         if(!debit.getText().isEmpty()){
@@ -260,6 +256,10 @@ private achmad.rifai.erp1.entity.Ledger l;
         this.setVisible(false);
     }//GEN-LAST:event_formWindowClosing
 
+    private void tglKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tglKeyReleased
+        refresh();
+    }//GEN-LAST:event_tglKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFormattedTextField debit;
     private javax.swing.JLabel jLabel1;
@@ -274,22 +274,8 @@ private achmad.rifai.erp1.entity.Ledger l;
     private javax.swing.JFormattedTextField kredit;
     private javax.swing.JSpinner no;
     private javax.swing.JButton s;
-    private javax.swing.JComboBox<java.sql.Date> tgl;
+    private javax.swing.JTextField tgl;
     // End of variables declaration//GEN-END:variables
-
-    private void tgle() {
-        java.sql.Date d1=java.sql.Date.valueOf(LocalDate.now()),d2;
-        if(l!=null){
-            if(l.getTgl().after(java.sql.Date.valueOf(d1.toLocalDate().minusYears(3))))d2=l.getTgl();
-            else d2=java.sql.Date.valueOf(d1.toLocalDate().minusYears(3));
-        }else d2=java.sql.Date.valueOf(d1.toLocalDate().minusYears(3));
-        while(!d1.before(d2)){
-            tgl.addItem(d1);
-            d1=java.sql.Date.valueOf(d1.toLocalDate().minusDays(1));
-        }kode.setForeground(Color.BLACK);
-        debit.setForeground(Color.BLACK);
-        kredit.setForeground(Color.BLACK);
-    }
 
     private void inisial() {
         debit.setText(""+l.getDebit().getAmount().longValueExact());
@@ -297,14 +283,14 @@ private achmad.rifai.erp1.entity.Ledger l;
         kode.setText(l.getKode());
         kredit.setText(""+l.getKredit().getAmount().longValueExact());
         no.setValue(l.getNo());
-        tgl.setSelectedItem(l.getTgl());
+        tgl.setText(""+l.getTgl());
         s.setEnabled(false);
     }
 
     private void refresh() {
         s.setEnabled(!kode.getText().isEmpty()&&Color.BLACK==kode.getForeground()&&!debit.getText().isEmpty()&&debit.isValid()&&
         Color.BLACK==debit.getForeground()&&!kredit.getText().isEmpty()&&kredit.isValid()&&Color.BLACK==kredit.getForeground()&&
-        !ket.getText().isEmpty());
+        !ket.getText().isEmpty()&&achmad.rifai.admin.util.TglModel.isValidDate(tgl.getText()));
     }
 
     private void saving() {
@@ -319,7 +305,7 @@ private achmad.rifai.erp1.entity.Ledger l;
         b.setKode(kode.getText());
         b.setKredit(org.joda.money.Money.of(CurrencyUnit.of("IDR"), Long.parseLong(kredit.getText())));
         b.setNo(Integer.parseInt(""+no.getValue()));
-        b.setTgl(tgl.getItemAt(tgl.getSelectedIndex()));
+        b.setTgl(java.sql.Date.valueOf(tgl.getText()));
         achmad.rifai.admin.util.Work.jejak(id, "Menyimpan ledger "+b.getKode());
         achmad.rifai.erp1.entity.dao.DAOLedger dao=new achmad.rifai.erp1.entity.dao.DAOLedger(d);
         if(l!=null)dao.update(l, b);

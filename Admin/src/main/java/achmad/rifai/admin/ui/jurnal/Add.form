@@ -3,6 +3,7 @@
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="title" type="java.lang.String" value="Pendataan Jurnal"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -44,11 +45,9 @@
                           <Component id="jScrollPane1" max="32767" attributes="0"/>
                           <Component id="kredit" max="32767" attributes="0"/>
                           <Component id="debit" max="32767" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="no" alignment="0" max="32767" attributes="0"/>
-                              <Component id="tgl" alignment="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="no" alignment="0" max="32767" attributes="0"/>
                           <Component id="kode" alignment="0" max="32767" attributes="0"/>
+                          <Component id="tgl" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -156,16 +155,6 @@
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="debitKeyReleased"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JSpinner" name="tgl">
-      <Properties>
-        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="now" maximum="now" stepSize="5" type="date"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="tglStateChanged"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JSpinner" name="no">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
@@ -188,6 +177,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tgl">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="&lt;Tahun&gt;-&lt;Bulan&gt;-&lt;Tanggal&gt;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tglKeyReleased"/>
       </Events>
     </Component>
   </SubComponents>

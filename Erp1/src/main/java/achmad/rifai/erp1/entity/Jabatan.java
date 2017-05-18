@@ -29,7 +29,7 @@ public class Jabatan {
 
     private String nama;
     private org.joda.money.Money gaji;
-    private int kapasitas;
+    private int kapasitas,isi;
     private boolean deleted;
 
     public String getNama() {
@@ -61,6 +61,7 @@ public class Jabatan {
         gaji=org.joda.money.Money.parse(""+o.get("gaji"));
         kapasitas=Integer.parseInt(""+o.get("kap"));
         deleted=Boolean.parseBoolean(""+o.get("deleted"));
+        isi=Integer.parseInt(""+o.get("isi"));
     }
 
     @Override
@@ -68,6 +69,7 @@ public class Jabatan {
         org.json.simple.JSONObject o=new org.json.simple.JSONObject();
         o.put("nama", nama);
         o.put("gaji", ""+gaji);
+        o.put("isi", ""+isi);
         o.put("kap", ""+kapasitas);
         o.put("deleted", ""+deleted);
         return o.toJSONString();
@@ -87,5 +89,13 @@ public class Jabatan {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public int getIsi() {
+        return isi;
+    }
+
+    public void setIsi(int isi) {
+        this.isi = isi;
     }
 }

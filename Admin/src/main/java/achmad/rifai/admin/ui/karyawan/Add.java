@@ -6,8 +6,6 @@
 package achmad.rifai.admin.ui.karyawan;
 
 import java.awt.Color;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import javax.swing.JOptionPane;
 
 /**
@@ -60,7 +58,7 @@ java.awt.Frame p;
         deleted = new javax.swing.JCheckBox();
         masuk = new javax.swing.JCheckBox();
         n = new javax.swing.JButton();
-        hire = new javax.swing.JSpinner();
+        tgl = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pendataan Karyawan 1");
@@ -145,10 +143,10 @@ java.awt.Frame p;
             }
         });
 
-        hire.setModel(new javax.swing.SpinnerListModel(new String[] {"Item 0", "Item 1", "Item 2", "Item 3"}));
-        hire.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                hireStateChanged(evt);
+        tgl.setToolTipText("<Tahun>-<Bulan>-<Tanggal>");
+        tgl.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tglKeyReleased(evt);
             }
         });
 
@@ -177,7 +175,7 @@ java.awt.Frame p;
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(hire)))
+                            .addComponent(tgl)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(blocked)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -213,7 +211,7 @@ java.awt.Frame p;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(hire, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(blocked)
@@ -234,9 +232,10 @@ java.awt.Frame p;
                 jabatane();
             } catch (Exception ex) {
                 achmad.rifai.erp1.util.Db.hindar(ex);
-            }tgle();
-        }).start();if(k==null)k=new achmad.rifai.erp1.entity.Karyawan();
-        else tayang();
+            }if(k==null)k=new achmad.rifai.erp1.entity.Karyawan();
+            else tayang();
+            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }).start();this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
     }//GEN-LAST:event_formWindowOpened
 
     private void idKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_idKeyReleased
@@ -308,17 +307,15 @@ java.awt.Frame p;
         }this.setVisible(false);
     }//GEN-LAST:event_formWindowClosing
 
-    private void hireStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_hireStateChanged
-        java.util.Date d=(java.util.Date) hire.getValue();
-        k.setHiredate(java.sql.Date.valueOf(d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+    private void tglKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tglKeyReleased
+        if(achmad.rifai.admin.util.TglModel.isValidDate(tgl.getText()))k.setHiredate(java.sql.Date.valueOf(tgl.getText()));
         refresh();
-    }//GEN-LAST:event_hireStateChanged
+    }//GEN-LAST:event_tglKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox blocked;
     private javax.swing.JCheckBox deleted;
     private javax.swing.JTextField email;
-    private javax.swing.JSpinner hire;
     private javax.swing.JTextField hp;
     private javax.swing.JTextField id;
     private javax.swing.JLabel jLabel1;
@@ -331,6 +328,7 @@ java.awt.Frame p;
     private javax.swing.JCheckBox masuk;
     private javax.swing.JButton n;
     private javax.swing.JTextField nama;
+    private javax.swing.JTextField tgl;
     // End of variables declaration//GEN-END:variables
 
     private void jabatane() throws Exception {
@@ -348,10 +346,6 @@ java.awt.Frame p;
         else{
             bersih();
             return;
-        }if(null!=k.getHiredate())hire.setValue(k.getHiredate());
-        else{
-            bersih();
-            return;
         }if(null!=k.getTelp())hp.setText(k.getTelp());
         else{
             bersih();
@@ -362,8 +356,14 @@ java.awt.Frame p;
         }else{
             bersih();
             return;
-        }if(k.getJabatan()!=null)jabatan.setSelectedItem(k.getJabatan());
-        else{
+        }if(k.getJabatan()!=null){
+            for(int x=0;x<jabatan.getItemCount();x++){
+                if(k.getJabatan() == null ? jabatan.getItemAt(x) == null : k.getJabatan().equals(jabatan.getItemAt(x))){
+                    jabatan.setSelectedIndex(x);
+                    break;
+                }
+            }
+        }else{
             bersih();
             return;
         }if(k.getNama()!=null)nama.setText(k.getNama());
@@ -371,11 +371,13 @@ java.awt.Frame p;
             bersih();
             return;
         }masuk.setSelected(k.isMasuk());
+        if(null!=k.getHiredate())tgl.setText(""+k.getHiredate());
+        else tgl.setText("");
     }
 
     private void refresh() {
         n.setEnabled(!email.getText().isEmpty()&&!hp.getText().isEmpty()&&Color.BLACK==id.getForeground()&&0<jabatan.getSelectedIndex()&&
-        !nama.getText().isEmpty());
+        !nama.getText().isEmpty()&&achmad.rifai.admin.util.TglModel.isValidDate(tgl.getText()));
     }
 
 @SuppressWarnings("null")
@@ -405,32 +407,10 @@ java.awt.Frame p;
         deleted.setSelected(false);
         email.setText("");
         hp.setText("0");
+        tgl.setText("");
         id.setText("");
         id.setEnabled(true);
         jabatan.setSelectedIndex(0);
         nama.setText("");
-    }
-
-    private void tgle() {
-        java.sql.Date a=java.sql.Date.valueOf(LocalDate.now()),b=java.sql.Date.valueOf(a.toLocalDate().minusYears(5));
-        if(k!=null){
-            if(b.after(k.getHiredate())){
-                java.util.List<java.sql.Date>l=new java.util.LinkedList<>();
-                java.sql.Date c=k.getHiredate();
-                while(a.after(c)){
-                    l.add(a);
-                    a=java.sql.Date.valueOf(a.toLocalDate().minusDays(1));
-                }hire.setModel(new javax.swing.SpinnerListModel(l.toArray()));
-            }else nextTgle();
-        }else nextTgle();
-    }
-
-    private void nextTgle() {
-        java.util.List<java.sql.Date>l=new java.util.LinkedList<>();
-        java.sql.Date a=java.sql.Date.valueOf(LocalDate.now()),b=java.sql.Date.valueOf(a.toLocalDate().minusYears(5));
-        while(a.after(b)){
-            l.add(a);
-            a=java.sql.Date.valueOf(a.toLocalDate().minusDays(1));
-        }hire.setModel(new javax.swing.SpinnerListModel(l.toArray()));
     }
 }

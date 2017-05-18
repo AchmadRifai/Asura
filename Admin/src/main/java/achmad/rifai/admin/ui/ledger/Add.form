@@ -46,8 +46,8 @@
                           <Component id="jScrollPane1" max="32767" attributes="0"/>
                           <Component id="kredit" max="32767" attributes="0"/>
                           <Component id="debit" alignment="0" max="32767" attributes="0"/>
-                          <Component id="tgl" max="32767" attributes="0"/>
                           <Component id="kode" alignment="0" max="32767" attributes="0"/>
+                          <Component id="tgl" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -168,19 +168,6 @@
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="debitKeyReleased"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JComboBox" name="tgl">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="tglItemStateChanged"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;java.sql.Date&gt;"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JSpinner" name="no">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
@@ -203,6 +190,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tgl">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="&lt;Tahun&gt;-&lt;Bulan&gt;-&lt;Tanggal&gt;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tglKeyReleased"/>
       </Events>
     </Component>
   </SubComponents>

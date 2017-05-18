@@ -109,7 +109,21 @@ public class Work {
 
     private static List<Jabatan> listJabatan() {
         List<Jabatan>l=new java.util.LinkedList<>();
-        Jabatan j1=new Jabatan(),j2=new Jabatan();
+        Jabatan j1=new Jabatan(),j2=new Jabatan(),j3=new Jabatan(),j4=new Jabatan();
+        j4.setDeleted(false);
+        j4.setGaji(org.joda.money.Money.zero(CurrencyUnit.of("IDR")));
+        j4.setKapasitas(1);
+        j4.setNama("pemilik");
+        j4.setIsi(0);
+        j3.setIsi(0);
+        j2.setIsi(0);
+        j1.setIsi(0);
+        l.add(j4);
+        j3.setDeleted(false);
+        j3.setGaji(org.joda.money.Money.of(CurrencyUnit.of("IDR"), 7500000));
+        j3.setKapasitas(5);
+        j3.setNama("Keuangan");
+        l.add(j3);
         j2.setDeleted(false);
         j2.setGaji(org.joda.money.Money.of(CurrencyUnit.of("IDR"), 2750000));
         j2.setKapasitas(30);
@@ -165,6 +179,7 @@ public class Work {
         achmad.rifai.erp1.entity.Tracks t=dao.current(k.getId()),t2=dao.current(k.getId());
         t2.setL(jejakPertama(k.getId()));
         dao.update(t, t2);
+        ralatJabatane(k,d);
     }
 
     private static void jejakbiasa(Karyawan k, Db d) throws Exception {
@@ -174,6 +189,7 @@ public class Work {
         l.add(new Jejak("Terdaftar",k.getId()));
         t2.setL(l);
         dao.update(t, t2);
+        ralatJabatane(k,d);
     }
 
     public static void saveSession(String s)throws Exception{
@@ -193,5 +209,12 @@ public class Work {
             Process p=Runtime.getRuntime().exec("attrib +h "+f.getAbsolutePath());
             p.waitFor();
         }
+    }
+
+    private static void ralatJabatane(Karyawan k, Db d) throws Exception {
+        Jabatan j=Jabatan.of(d, k.getJabatan()),b=Jabatan.of(d, k.getJabatan());
+        achmad.rifai.erp1.entity.dao.DAOJabatan dao=new achmad.rifai.erp1.entity.dao.DAOJabatan(d);
+        b.setIsi(b.getIsi()+1);
+        dao.update(j, b);
     }
 }

@@ -7,7 +7,6 @@ package achmad.rifai.admin.ui.absen;
 
 import achmad.rifai.erp1.entity.Absen;
 import java.awt.Color;
-import java.time.ZoneId;
 import javax.swing.JOptionPane;
 
 /**
@@ -44,13 +43,14 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        tgl = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         lst = new javax.swing.JDesktopPane();
         s = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        tgl = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Pendataan Buku Absen");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -61,18 +61,6 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
         });
 
         jLabel1.setText("Tanggal");
-
-        tgl.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, new java.util.Date(), java.util.Calendar.DAY_OF_MONTH));
-        tgl.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                tglStateChanged(evt);
-            }
-        });
-        tgl.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tglKeyReleased(evt);
-            }
-        });
 
         lst.setLayout(new java.awt.GridBagLayout());
         jScrollPane1.setViewportView(lst);
@@ -92,6 +80,13 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
             }
         });
 
+        tgl.setToolTipText("<Tahun>-<Bulan>-<Tanggal>");
+        tgl.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tglKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,12 +98,11 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(tgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 189, Short.MAX_VALUE))
+                        .addComponent(tgl))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -128,24 +122,8 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void tglKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tglKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tglKeyReleased
-
-    private void tglStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tglStateChanged
-        java.util.Date t=(java.util.Date) tgl.getValue();
-        java.sql.Date sq=java.sql.Date.valueOf(t.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());try {
-        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        achmad.rifai.erp1.entity.BukuAbsen bu=achmad.rifai.erp1.entity.BukuAbsen.of(d, ""+sq);
-        if(bu!=null)tgl.setForeground(Color.red);
-        else tgl.setForeground(Color.BLACK);
-        d.close();
-    } catch (Exception ex) {
-        achmad.rifai.erp1.util.Db.hindar(ex);
-    }refresh();
-    }//GEN-LAST:event_tglStateChanged
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         new Thread(this::muatKaryawan).start();
@@ -181,17 +159,29 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void tglKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tglKeyReleased
+        if(achmad.rifai.admin.util.TglModel.isValidDate(tgl.getText()))try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.entity.BukuAbsen b=achmad.rifai.erp1.entity.BukuAbsen.of(d, tgl.getText());
+            if(b!=null)tgl.setForeground(Color.red);
+            else tgl.setForeground(Color.BLACK);
+            d.close();
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }refresh();
+    }//GEN-LAST:event_tglKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JDesktopPane lst;
     private javax.swing.JButton s;
-    private javax.swing.JSpinner tgl;
+    private javax.swing.JTextField tgl;
     // End of variables declaration//GEN-END:variables
 
     private void refresh() {
-        s.setEnabled(Color.BLACK==tgl.getForeground());
+        s.setEnabled(Color.BLACK==tgl.getForeground()&&achmad.rifai.admin.util.TglModel.isValidDate(tgl.getText()));
     }
 
     private void muatKaryawan() {
@@ -202,14 +192,12 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
         if(b==null){
             b=new achmad.rifai.erp1.entity.BukuAbsen();
             b.setDeleted(true);
-        }java.util.Date t=(java.util.Date) tgl.getValue();
-        java.sql.Date sq=java.sql.Date.valueOf(t.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        b.setTgl(""+sq);
-        java.util.List<Absen>l=new java.util.LinkedList<>();
+        }java.util.List<Absen>l=new java.util.LinkedList<>();
         for(javax.swing.JInternalFrame i:lst.getAllFrames()){
             Abs a=(Abs) i;
             l.add(a.genAbsen());
         }b.setL(l);
+        b.setTgl(tgl.getText());
     }
 
     private void writeDB() {
@@ -228,12 +216,11 @@ private achmad.rifai.erp1.entity.BukuAbsen b;
 
     private void muatLanjut() {
         if(b!=null){
-            java.sql.Date t=java.sql.Date.valueOf(b.getTgl());
-            tgl.setEnabled(false);
-            tgl.setValue(t);
             b.getL().forEach((a)->{lst.add(new Abs(a.getS()));});
             s.setEnabled(true);
-        }this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            tgl.setText(b.getTgl());
+            tgl.setEnabled(false);
+        }
     }
 
     private boolean gagOno(String id) {

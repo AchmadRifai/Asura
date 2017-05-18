@@ -6,7 +6,7 @@
 package achmad.rifai.admin.ui.jurnal;
 
 import java.awt.Color;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import org.joda.money.CurrencyUnit;
 
@@ -53,12 +53,13 @@ private achmad.rifai.erp1.entity.Jurnal j;
         ket = new javax.swing.JTextArea();
         kredit = new javax.swing.JFormattedTextField();
         debit = new javax.swing.JFormattedTextField();
-        tgl = new javax.swing.JSpinner();
         no = new javax.swing.JSpinner();
         kode = new javax.swing.JTextField();
         s = new javax.swing.JButton();
+        tgl = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Pendataan Jurnal");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -101,13 +102,6 @@ private achmad.rifai.erp1.entity.Jurnal j;
             }
         });
 
-        tgl.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, new java.util.Date(), java.util.Calendar.DAY_OF_MONTH));
-        tgl.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                tglStateChanged(evt);
-            }
-        });
-
         no.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         no.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -126,6 +120,13 @@ private achmad.rifai.erp1.entity.Jurnal j;
         s.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sActionPerformed(evt);
+            }
+        });
+
+        tgl.setToolTipText("<Tahun>-<Bulan>-<Tanggal>");
+        tgl.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tglKeyReleased(evt);
             }
         });
 
@@ -149,10 +150,9 @@ private achmad.rifai.erp1.entity.Jurnal j;
                             .addComponent(jScrollPane1)
                             .addComponent(kredit)
                             .addComponent(debit)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(no, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(tgl, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(kode))
+                            .addComponent(no)
+                            .addComponent(kode)
+                            .addComponent(tgl))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(s, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -205,10 +205,10 @@ private achmad.rifai.erp1.entity.Jurnal j;
             kode.setEnabled(false);
             kode.setText(j.getKode());
             no.setValue(j.getNo());
-            tgl.setValue(j.getTgl());
             debit.setText(""+j.getDebit().getAmount().longValue());
             kredit.setText(""+j.getKredit().getAmount().longValue());
             ket.setText(j.getKet());
+            tgl.setText(""+j.getTgl());
         }
     }//GEN-LAST:event_formWindowOpened
 
@@ -227,10 +227,6 @@ private achmad.rifai.erp1.entity.Jurnal j;
     private void noStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_noStateChanged
         refresh();
     }//GEN-LAST:event_noStateChanged
-
-    private void tglStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tglStateChanged
-        refresh();
-    }//GEN-LAST:event_tglStateChanged
 
     private void debitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_debitKeyReleased
         if(!debit.getText().isEmpty()&&debit.isValid()){
@@ -258,6 +254,10 @@ private achmad.rifai.erp1.entity.Jurnal j;
         this.setVisible(false);
     }//GEN-LAST:event_sActionPerformed
 
+    private void tglKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tglKeyReleased
+        refresh();
+    }//GEN-LAST:event_tglKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFormattedTextField debit;
     private javax.swing.JLabel jLabel1;
@@ -272,7 +272,7 @@ private achmad.rifai.erp1.entity.Jurnal j;
     private javax.swing.JFormattedTextField kredit;
     private javax.swing.JSpinner no;
     private javax.swing.JButton s;
-    private javax.swing.JSpinner tgl;
+    private javax.swing.JTextField tgl;
     // End of variables declaration//GEN-END:variables
 
     private void saving() {
@@ -284,8 +284,7 @@ private achmad.rifai.erp1.entity.Jurnal j;
         j.setKode(kode.getText());
         j.setKredit(org.joda.money.Money.of(CurrencyUnit.of("IDR"), Long.parseLong(kredit.getText())));
         j.setNo(Integer.parseInt(""+no.getValue()));
-        java.util.Date d=(java.util.Date) tgl.getValue();
-        j.setTgl(java.sql.Date.valueOf(d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+        j.setTgl(java.sql.Date.valueOf(tgl.getText()));
     }
 
     private void writeDB() {
@@ -304,6 +303,7 @@ private achmad.rifai.erp1.entity.Jurnal j;
 
     private void refresh() {
         s.setEnabled(!kode.getText().isEmpty()&&!ket.getText().isEmpty()&&!debit.getText().isEmpty()&&!kredit.getText().isEmpty()&&
-        debit.isValid()&&kredit.isValid()&&Color.BLACK==debit.getForeground()&&Color.BLACK==kredit.getForeground());
+        debit.isValid()&&kredit.isValid()&&Color.BLACK==debit.getForeground()&&Color.BLACK==kredit.getForeground()&&
+        achmad.rifai.admin.util.TglModel.isValidDate(tgl.getText()));
     }
 }

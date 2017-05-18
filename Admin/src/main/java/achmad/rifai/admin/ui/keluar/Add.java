@@ -45,11 +45,11 @@ private achmad.rifai.erp1.entity.Keluar k;
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        waktu = new javax.swing.JComboBox<>();
         uang = new javax.swing.JFormattedTextField();
         jurnal = new javax.swing.JComboBox<>();
         kode = new javax.swing.JTextField();
         s = new javax.swing.JButton();
+        waktu = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pendataan Pengeluaran");
@@ -69,12 +69,6 @@ private achmad.rifai.erp1.entity.Keluar k;
         jLabel3.setText("Uang");
 
         jLabel4.setText("Waktu");
-
-        waktu.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                waktuItemStateChanged(evt);
-            }
-        });
 
         uang.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         uang.setText("0");
@@ -105,6 +99,13 @@ private achmad.rifai.erp1.entity.Keluar k;
             }
         });
 
+        waktu.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, new java.util.Date(), java.util.Calendar.SECOND));
+        waktu.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                waktuStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,11 +121,12 @@ private achmad.rifai.erp1.entity.Keluar k;
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
                         .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(waktu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(uang)
-                            .addComponent(jurnal, 0, 203, Short.MAX_VALUE)
-                            .addComponent(kode))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(uang)
+                                .addComponent(jurnal, 0, 203, Short.MAX_VALUE)
+                                .addComponent(kode))
+                            .addComponent(waktu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -164,7 +166,6 @@ private achmad.rifai.erp1.entity.Keluar k;
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         jurnale();
-        waktune();
         if(k!=null)inisial();
     }//GEN-LAST:event_formWindowOpened
 
@@ -192,21 +193,22 @@ private achmad.rifai.erp1.entity.Keluar k;
         }refresh();
     }//GEN-LAST:event_uangKeyReleased
 
-    private void waktuItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_waktuItemStateChanged
-        refresh();
-    }//GEN-LAST:event_waktuItemStateChanged
-
     private void sActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sActionPerformed
         saving();
         this.setVisible(false);
     }//GEN-LAST:event_sActionPerformed
 
+    private void waktuStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_waktuStateChanged
+        refresh();
+    }//GEN-LAST:event_waktuStateChanged
+
     private void inisial() {
         kode.setText(k.getKode());
         jurnal.setSelectedItem(k.getJurnal());
         uang.setText(""+k.getUang().getAmount().longValue());
-        waktu.setSelectedItem(k.getTgl());
         s.setEnabled(false);
+        java.util.Date d=k.getTgl().toDate();
+        waktu.setValue(d);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -217,7 +219,7 @@ private achmad.rifai.erp1.entity.Keluar k;
     private javax.swing.JTextField kode;
     private javax.swing.JButton s;
     private javax.swing.JFormattedTextField uang;
-    private javax.swing.JComboBox<org.joda.time.DateTime> waktu;
+    private javax.swing.JSpinner waktu;
     // End of variables declaration//GEN-END:variables
 
     private void jurnale() {
@@ -231,18 +233,6 @@ private achmad.rifai.erp1.entity.Keluar k;
     }
     }
 
-    private void waktune() {
-        org.joda.time.DateTime d1=org.joda.time.DateTime.now(),d2;
-        if(k!=null){
-            if(k.getTgl().isBefore(d1.minusYears(3)))d2=k.getTgl();
-            else d2=d1.minusYears(3);
-        }else d2=d1.minusYears(3);
-        while(d1.isAfter(d2)){
-            waktu.addItem(d1);
-            d1=d1.minusHours(1);
-        }waktu.addItem(k.getTgl());
-    }
-
     private void refresh() {
         s.setEnabled(0!=jurnal.getSelectedIndex()&&!kode.getText().isEmpty()&&Color.BLACK==kode.getForeground()&&!uang.getText().isEmpty()&&
         Color.BLACK==uang.getForeground());
@@ -252,12 +242,15 @@ private achmad.rifai.erp1.entity.Keluar k;
     try {
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         achmad.rifai.erp1.entity.Keluar b;
-        if(k!=null)b=achmad.rifai.erp1.entity.Keluar.of(d, k.getKode());
-        else b=new achmad.rifai.erp1.entity.Keluar();
+        if(k==null){
+            b=new achmad.rifai.erp1.entity.Keluar();
+            b.setDeleted(false);
+        }else b=achmad.rifai.erp1.entity.Keluar.of(d, k.getKode());
         b.setJurnal(jurnal.getItemAt(jurnal.getSelectedIndex()));
         b.setKode(kode.getText());
         b.setUang(org.joda.money.Money.of(CurrencyUnit.of("IDR"), Long.parseLong(uang.getText())));
-        b.setTgl(waktu.getItemAt(waktu.getSelectedIndex()));
+        java.util.Date tg=(java.util.Date) waktu.getValue();
+        b.setTgl(new org.joda.time.DateTime(tg.getTime()));
         achmad.rifai.admin.util.Work.jejak(id, "Menyimpan Pengeluaran "+b.getKode());
         achmad.rifai.erp1.entity.dao.DAOKeluar dao=new achmad.rifai.erp1.entity.dao.DAOKeluar(d);
         if(k!=null)dao.update(k, b);

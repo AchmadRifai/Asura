@@ -5,6 +5,7 @@
  */
 package achmad.rifai.admin.ui;
 
+import achmad.rifai.erp1.util.Db;
 import javax.swing.JOptionPane;
 
 /**
@@ -1102,9 +1103,13 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     }//GEN-LAST:event_detailTrackActionPerformed
 
     private void tbhKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbhKaryawanActionPerformed
-        if(sKaryawan==null)new achmad.rifai.admin.ui.karyawan.Add(this, true, id).setVisible(true);
+        try{
+            if(sKaryawan==null)new achmad.rifai.admin.ui.karyawan.Add(this, true, id).setVisible(true);
         else new achmad.rifai.admin.ui.karyawan.Add(this, true, id, sKaryawan).setVisible(true);
         cleanKaryawan();
+        }catch(Exception e){
+            Db.hindar(e);
+        }
     }//GEN-LAST:event_tbhKaryawanActionPerformed
 
     private void hpsKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsKaryawanActionPerformed
@@ -1701,6 +1706,9 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     private void refreshData() throws Exception {
         if(null == mode)tblData.setModel(new javax.swing.table.DefaultTableModel());
         else switch (mode) {
+        case"jurnal":
+            achmad.rifai.admin.util.Work.readJurnal(tblData, id);
+            break;
         case"bonus":
             achmad.rifai.admin.util.Work.readBonus(tblData);
             break;

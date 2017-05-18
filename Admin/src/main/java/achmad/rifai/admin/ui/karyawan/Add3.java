@@ -13,7 +13,6 @@ public class Add3 extends javax.swing.JDialog {
 private String kode;
 private achmad.rifai.erp1.entity.Karyawan k;
 private java.awt.Frame p;
-private int x,y;
     /**
      * Creates new form Add3
      * @param parent
@@ -68,7 +67,7 @@ private int x,y;
             }
         });
 
-        items.setLayout(new java.awt.GridBagLayout());
+        items.setLayout(new javax.swing.BoxLayout(items, javax.swing.BoxLayout.PAGE_AXIS));
         jScrollPane1.setViewportView(items);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -81,7 +80,7 @@ private int x,y;
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(tbh)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -89,7 +88,7 @@ private int x,y;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tbh)
@@ -102,41 +101,19 @@ private int x,y;
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        x=0;y=0;
-        k.getAlamat().stream().map((s) -> {
-            if(x==2){
-                x=0;
-                y++;
-            }return s;
-    }).map((s) -> {
-        Alamate a=new Alamate();
-        a.setData(s);
-        return a;
-    }).map((a) -> {
-        a.setVisible(true);
-        return a;
-    }).map((a) -> {
-        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
-        gbc.gridx=x;
-        gbc.gridy=y;
-        items.add(a, gbc);
-        return a;
-    }).forEachOrdered((_item) -> {
-        x++;
-    });
+        k.getAlamat().forEach((s)->{
+            Alamate a=new Alamate();
+            a.setData(s);
+            items.add(a);
+            a.setVisible(true);
+        });
     }//GEN-LAST:event_formWindowOpened
 
     private void tbhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbhActionPerformed
-        if(x==2){
-            x=0;
-            y++;
-        }Alamate a=new Alamate();
+        Alamate a=new Alamate();
         a.setData("");
         a.setVisible(true);
-        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
-        gbc.gridy=y;
-        gbc.gridx=x;
-        items.add(a, gbc);
+        items.add(a);
     }//GEN-LAST:event_tbhActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

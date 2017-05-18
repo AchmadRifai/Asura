@@ -211,5 +211,7 @@ private achmad.rifai.erp1.entity.Jabatan j;
         j.setGaji(org.joda.money.Money.of(CurrencyUnit.of("IDR"), Long.parseLong(""+gaji.getValue())));
         j.setKapasitas(Integer.parseInt(""+kap.getValue()));
         j.setNama(nama.getText());
+        j.setIsi(0);
+        j.setDeleted(false);
     }
 }

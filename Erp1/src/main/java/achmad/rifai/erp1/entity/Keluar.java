@@ -20,7 +20,7 @@ public class Keluar {
         p.put("berkas", kode);
         com.mongodb.DBCursor c=d.getD().getCollectionFromString("keluar").find(p);
         while(c.hasNext()){
-            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("keluar");
+            com.mongodb.BasicDBList l=(com.mongodb.BasicDBList) c.next().get("bin");
             String json="";
             for(int x=0;x<l.size();x++)json+=r.decrypt(""+l.get(x));
             v=new Keluar(json);
@@ -34,6 +34,7 @@ public class Keluar {
     private boolean deleted;
 
     public Keluar(String json) throws ParseException{
+        System.out.println(json);
         parsing(json);
     }
 
