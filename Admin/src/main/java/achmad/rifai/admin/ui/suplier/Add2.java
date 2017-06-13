@@ -113,15 +113,7 @@ private int x,y;
     }//GEN-LAST:event_formWindowClosing
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
-        gbc.gridx=x;
-        gbc.gridy=y;
-        desk.add(new Str(), gbc);
-        x++;
-        if(x==2){
-            x=0;
-            y++;
-        }
+        tambah("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -132,17 +124,7 @@ private int x,y;
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         s.getTelp().forEach((st)->{
-            java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
-            gbc.gridy=y;
-            gbc.gridx=x;
-            Str str=new Str();
-            str.setS(st);
-            desk.add(str, gbc);
-            x++;
-            if(x==2){
-                x=0;
-                y++;
-            }
+            tambah(st);
         });
     }//GEN-LAST:event_formWindowOpened
 
@@ -173,5 +155,20 @@ private int x,y;
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
     }
+    }
+
+    private void tambah(String string) {
+        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
+        if(y>0){
+            gbc.gridx=x;
+            gbc.gridy=y;
+        }Str s=new Str();
+        s.setS(string);
+        desk.add(s, gbc);
+        x++;
+        if(x==2){
+            x=0;
+            y++;
+        }s.setVisible(true);
     }
 }

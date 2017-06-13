@@ -1,0 +1,13 @@
+#!/bin/bash
+cd Erp1
+mvn clean
+cd ..
+cd Admin
+mvn clean
+cd ..
+cd Suplier
+mvn clean
+cd ..
+cd Acounting
+mvn clean
+cd ..

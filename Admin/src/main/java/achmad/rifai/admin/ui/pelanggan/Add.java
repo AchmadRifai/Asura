@@ -165,10 +165,14 @@ private java.awt.Frame f;
     }//GEN-LAST:event_blockedStateChanged
 
     private void nActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nActionPerformed
-        if(p==null)p=new achmad.rifai.erp1.entity.Pelanggan();
-        p.setKode(kode.getText());
+        if(p==null){
+            p=new achmad.rifai.erp1.entity.Pelanggan();
+            p.setDeleted(false);
+        }p.setKode(kode.getText());
         p.setNama(nama.getText());
         p.setBlocked(blocked.isSelected());
+        p.setAlamat(new java.util.LinkedList<>());
+        p.setTelp(new java.util.LinkedList<>());
         new achmad.rifai.admin.ui.pelanggan.Add1(f, true, id, p).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_nActionPerformed

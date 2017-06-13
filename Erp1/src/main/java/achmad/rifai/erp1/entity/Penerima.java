@@ -11,7 +11,7 @@ package achmad.rifai.erp1.entity;
  */
 public class Penerima {
     private String akun;
-    private boolean terbaca;
+    private boolean terbaca,sembunyi;
 
     public String getAkun() {
         return akun;
@@ -27,5 +27,13 @@ public class Penerima {
 
     public void setTerbaca(boolean terbaca) {
         this.terbaca = terbaca;
+    }
+
+    public boolean isSembunyi() {
+        return sembunyi;
+    }
+
+    public void setSembunyi(boolean sembunyi) {
+        this.sembunyi = sembunyi;
     }
 }

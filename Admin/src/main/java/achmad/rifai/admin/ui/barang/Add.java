@@ -250,6 +250,7 @@ private achmad.rifai.erp1.entity.Barang b;
 
     private void saving() {
     try {
+        achmad.rifai.admin.util.Work.jejak(id, "Menyimpan barang "+kode.getText());
         achmad.rifai.erp1.entity.Barang c=new achmad.rifai.erp1.entity.Barang();
         c.setDeleted(false);
         c.setHarga(org.joda.money.Money.of(CurrencyUnit.of("IDR"), Long.parseLong(""+harga.getValue())));
@@ -257,7 +258,6 @@ private achmad.rifai.erp1.entity.Barang b;
         c.setNama(nama.getText());
         c.setSatuan(satuan.getText());
         c.setStok(Integer.parseInt(""+stok.getValue()));
-        achmad.rifai.admin.util.Work.jejak(id, "Menyimpan barang "+b.getKode());
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         achmad.rifai.erp1.entity.dao.DAOBarang dao=new achmad.rifai.erp1.entity.dao.DAOBarang(d);
         if(null!=b)dao.update(b, c);

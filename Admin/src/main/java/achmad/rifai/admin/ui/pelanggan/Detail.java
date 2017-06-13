@@ -55,11 +55,13 @@ private java.awt.Frame f;
 
         nama.setText("Nama : ???");
 
+        alamat.setEditable(false);
         alamat.setColumns(20);
         alamat.setRows(5);
         alamat.setToolTipText("alamat");
         jScrollPane1.setViewportView(alamat);
 
+        telp.setEditable(false);
         telp.setColumns(20);
         telp.setRows(5);
         telp.setToolTipText("telepon");

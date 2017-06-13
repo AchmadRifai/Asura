@@ -85,7 +85,7 @@ private int x,y;
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -94,7 +94,7 @@ private int x,y;
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -113,30 +113,12 @@ private int x,y;
     }//GEN-LAST:event_formWindowClosing
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
-        gbc.gridx=x;
-        gbc.gridy=y;
-        desk.add(new Str(), gbc);
-        x++;
-        if(x==2){
-            x=0;
-            y++;
-        }
+        next("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         s.getAlamat().forEach((st)->{
-            java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
-            gbc.gridx=x;
-            gbc.gridy=y;
-            Str str=new Str();
-            str.setS(st);
-            desk.add(str, gbc);
-            x++;
-            if(x==2){
-                x=0;
-                y++;
-            }
+            next(st);
         });
     }//GEN-LAST:event_formWindowOpened
 
@@ -160,5 +142,20 @@ private int x,y;
             Str str=(Str) in;
             l.add(str.getS());
         }s.setAlamat(l);
+    }
+
+    private void next(String string) {
+        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
+        if(y>0){
+            gbc.gridx=x;
+            gbc.gridy=y;
+        }Str s=new Str();
+        s.setS(string);
+        desk.add(s, gbc);
+        x++;
+        if(x==2){
+            x=0;
+            y++;
+        }s.setVisible(true);
     }
 }

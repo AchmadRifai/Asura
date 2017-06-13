@@ -6,6 +6,8 @@
 package achmad.rifai.admin.ui;
 
 import achmad.rifai.erp1.util.Db;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -51,6 +53,7 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         tblData = new javax.swing.JTable();
         menu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        psnMenu = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem28 = new javax.swing.JMenuItem();
         jMenuItem29 = new javax.swing.JMenuItem();
@@ -139,11 +142,11 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         setTitle("Dashboard admin");
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -163,6 +166,14 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         jScrollPane1.setViewportView(tblData);
 
         jMenu1.setText("File");
+
+        psnMenu.setText("Pesan");
+        psnMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                psnMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(psnMenu);
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem3.setText("Tempat Sampah");
@@ -1595,6 +1606,20 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
         cleanBonus();
     }//GEN-LAST:event_dtlBonusActionPerformed
 
+    private void psnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_psnMenuActionPerformed
+        new Thread(()->{try {
+            achmad.rifai.admin.util.Work.jejak(id, "Melihat Kotak Suratnya");
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }}).start();try {
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                new achmad.rifai.erp1.ui.pesan.Pesan(this, true, achmad.rifai.erp1.entity.Karyawan.of(d, id)).setVisible(true);
+                d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
+    }//GEN-LAST:event_psnMenuActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem detailTrack;
     private javax.swing.JMenuItem dtlAbsen;
@@ -1681,6 +1706,7 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuBar menu;
+    private javax.swing.JMenuItem psnMenu;
     private javax.swing.JMenuItem tbhKaryawan;
     private javax.swing.JTable tblData;
     // End of variables declaration//GEN-END:variables
@@ -1696,6 +1722,8 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
             if(f.exists())f.delete();
             this.setVisible(false);
         }d.close();
+        if(achmad.rifai.erp1.ui.pesan.Pesan.isDapet(k))psnMenu.setText("Pesan Masuk");
+        else psnMenu.setText("Pesan");
         if(this.getCursor().getType()==java.awt.Cursor.DEFAULT_CURSOR)refreshData();
         Thread.sleep(5000);
     } catch (Exception ex) {

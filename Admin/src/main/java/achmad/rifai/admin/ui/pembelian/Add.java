@@ -6,7 +6,6 @@
 package achmad.rifai.admin.ui.pembelian;
 
 import java.awt.Color;
-import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import org.joda.money.CurrencyUnit;
 
@@ -49,11 +48,11 @@ private java.awt.Frame f;
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        tgl = new javax.swing.JComboBox<>();
         total = new javax.swing.JFormattedTextField();
         suplier = new javax.swing.JComboBox<>();
         struk = new javax.swing.JTextField();
         n = new javax.swing.JButton();
+        tgl = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pendataan Pembelian 1");
@@ -73,12 +72,6 @@ private java.awt.Frame f;
         jLabel3.setText("Tanggal");
 
         jLabel4.setText("Total");
-
-        tgl.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                tglItemStateChanged(evt);
-            }
-        });
 
         total.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         total.setText("0");
@@ -109,6 +102,13 @@ private java.awt.Frame f;
             }
         });
 
+        tgl.setToolTipText("<tahun>-<bulan>-<tanggal>");
+        tgl.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tglKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -119,18 +119,16 @@ private java.awt.Frame f;
                     .addComponent(n, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(tgl, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(total)
-                                    .addComponent(suplier, 0, 145, Short.MAX_VALUE)
-                                    .addComponent(struk))))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(total)
+                            .addComponent(suplier, 0, 145, Short.MAX_VALUE)
+                            .addComponent(struk)
+                            .addComponent(tgl))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -138,23 +136,22 @@ private java.awt.Frame f;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(struk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(suplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(tgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(struk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(suplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(tgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(n)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -170,46 +167,12 @@ private java.awt.Frame f;
     }//GEN-LAST:event_formWindowOpened
 
     private void strukKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_strukKeyReleased
-        if(!struk.getText().isEmpty()&&0<suplier.getSelectedIndex())try {
-            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.entity.Pembelian p=
-                    achmad.rifai.erp1.entity.Pembelian.of(d, struk.getText(), suplier.getItemAt(suplier.getSelectedIndex()),
-                            tgl.getItemAt(tgl.getSelectedIndex()));
-            if(p!=null)struk.setForeground(Color.red);
-            else struk.setForeground(Color.BLACK);
-            d.close();
-        } catch (Exception ex) {
-            achmad.rifai.erp1.util.Db.hindar(ex);
-        }refresh();
+        refresh();
     }//GEN-LAST:event_strukKeyReleased
 
     private void suplierItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_suplierItemStateChanged
-        if(!struk.getText().isEmpty()&&0<suplier.getSelectedIndex())try {
-            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.entity.Pembelian p=
-                    achmad.rifai.erp1.entity.Pembelian.of(d, struk.getText(), suplier.getItemAt(suplier.getSelectedIndex()),
-                            tgl.getItemAt(tgl.getSelectedIndex()));
-            if(p!=null)suplier.setBackground(Color.red);
-            else suplier.setBackground(Color.BLACK);
-            d.close();
-        } catch (Exception ex) {
-            achmad.rifai.erp1.util.Db.hindar(ex);
-        }refresh();
+        refresh();
     }//GEN-LAST:event_suplierItemStateChanged
-
-    private void tglItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tglItemStateChanged
-        if(!struk.getText().isEmpty()&&0<suplier.getSelectedIndex())try {
-            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.entity.Pembelian p=
-                    achmad.rifai.erp1.entity.Pembelian.of(d, struk.getText(), suplier.getItemAt(suplier.getSelectedIndex()),
-                            tgl.getItemAt(tgl.getSelectedIndex()));
-            if(p!=null)tgl.setBackground(Color.red);
-            else tgl.setBackground(Color.BLACK);
-            d.close();
-        } catch (Exception ex) {
-            achmad.rifai.erp1.util.Db.hindar(ex);
-        }refresh();
-    }//GEN-LAST:event_tglItemStateChanged
 
     private void totalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_totalKeyReleased
         if(!total.getText().isEmpty()){
@@ -222,9 +185,11 @@ private java.awt.Frame f;
     }//GEN-LAST:event_totalKeyReleased
 
     private void nActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nActionPerformed
-        saving();
+        if(tested()){
+            saving();
         new Add1(f,true,id,p).setVisible(true);
         this.setVisible(false);
+        }else JOptionPane.showMessageDialog(rootPane, "Ada kesalahan. Mohon cek ulang");
     }//GEN-LAST:event_nActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -235,6 +200,10 @@ private java.awt.Frame f;
         }this.setVisible(false);
     }//GEN-LAST:event_formWindowClosing
 
+    private void tglKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tglKeyReleased
+        refresh();
+    }//GEN-LAST:event_tglKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -243,7 +212,7 @@ private java.awt.Frame f;
     private javax.swing.JButton n;
     private javax.swing.JTextField struk;
     private javax.swing.JComboBox<String> suplier;
-    private javax.swing.JComboBox<java.sql.Date> tgl;
+    private javax.swing.JTextField tgl;
     private javax.swing.JFormattedTextField total;
     // End of variables declaration//GEN-END:variables
 
@@ -259,20 +228,12 @@ private java.awt.Frame f;
     }
 
     private void tgle() {
-        java.sql.Date d1=java.sql.Date.valueOf(LocalDate.now()),d2;
-        if(p!=null){
-            if(p.getTgl().before(java.sql.Date.valueOf(d1.toLocalDate().minusYears(3))))d2=p.getTgl();
-            else d2=java.sql.Date.valueOf(d1.toLocalDate().minusYears(3));
-        }else d2=java.sql.Date.valueOf(d1.toLocalDate().minusYears(3));
-        while(!d1.before(d2)){
-            tgl.addItem(d1);
-            d1=java.sql.Date.valueOf(d1.toLocalDate().minusDays(1));
-        }
+        //
     }
 
     private void refresh() {
-        n.setEnabled(!struk.getText().isEmpty()&&0<suplier.getSelectedIndex()&&Color.BLACK==struk.getForeground()&&
-        Color.BLACK==suplier.getBackground()&&Color.BLACK==tgl.getBackground()&&!total.getText().isEmpty()&&Color.BLACK==total.getForeground());
+        n.setEnabled(!struk.getText().isEmpty()&&0<suplier.getSelectedIndex()&&!total.getText().isEmpty()&&Color.BLACK==total.getForeground()&&
+        achmad.rifai.admin.util.TglModel.isValidDate(tgl.getText()));
     }
 
     private void inisial() {
@@ -280,7 +241,7 @@ private java.awt.Frame f;
         struk.setEnabled(false);
         suplier.setSelectedItem(p.getSuplier());
         suplier.setEnabled(false);
-        tgl.setSelectedItem(p.getTgl());
+        tgl.setText(""+p.getTgl());
         tgl.setEnabled(false);
         total.setText(""+p.getHarga().getAmount().longValueExact());
         n.setEnabled(true);
@@ -292,7 +253,20 @@ private java.awt.Frame f;
             p.setDeleted(false);
         }p.setStruk(struk.getText());
         p.setSuplier(suplier.getItemAt(suplier.getSelectedIndex()));
-        p.setTgl(tgl.getItemAt(tgl.getSelectedIndex()));
+        p.setTgl(java.sql.Date.valueOf(tgl.getText()));
         p.setHarga(org.joda.money.Money.of(CurrencyUnit.of("IDR"), Long.parseLong(total.getText())));
+    }
+
+    private boolean tested() {
+        boolean b;try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Pembelian pe=achmad.rifai.erp1.entity.Pembelian.of(d, struk.getText(), suplier.getItemAt(suplier.getSelectedIndex()), 
+                java.sql.Date.valueOf(tgl.getText()));
+        b=pe==null;
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+        b=false;
+    }return b;
     }
 }

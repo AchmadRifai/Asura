@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 cd Acounting
 mvn clean install exec:java
 cd ..

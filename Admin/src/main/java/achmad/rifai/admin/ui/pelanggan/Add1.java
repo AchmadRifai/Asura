@@ -196,7 +196,9 @@ private java.awt.Frame f;
         achmad.rifai.admin.util.Work.jejak(id, "Menyimpan pelanggan "+p.getKode());
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         achmad.rifai.erp1.entity.dao.DAOPelanggan dao=new achmad.rifai.erp1.entity.dao.DAOPelanggan(d);
-        dao.update(p, p);
+        achmad.rifai.erp1.entity.Pelanggan a=achmad.rifai.erp1.entity.Pelanggan.of(d, p.getKode());
+        if(a==null)dao.insert(p);
+        else dao.update(a, p);
         d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);

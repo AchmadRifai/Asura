@@ -35,7 +35,7 @@ public class Pesan {
     private java.util.List<Penerima>ke;
 
     public Pesan() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //
     }
 
     @Override
@@ -67,6 +67,7 @@ public class Pesan {
             org.json.simple.JSONObject o=new org.json.simple.JSONObject();
             o.put("terbaca", ""+p.isTerbaca());
             o.put("akun", p.getAkun());
+            o.put("sembunyi", ""+p.isSembunyi());
             return o;
         }).forEachOrdered((o) -> {
             a.add(o);
@@ -81,6 +82,7 @@ public class Pesan {
             Penerima p=new Penerima();
             p.setAkun(""+o.get("akun"));
             p.setTerbaca(Boolean.parseBoolean(""+o.get("terbaca")));
+            p.setSembunyi(Boolean.parseBoolean(""+o.get("sembunyi")));
             ke.add(p);
         }
     }

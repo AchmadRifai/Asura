@@ -13,6 +13,7 @@ public class Add3 extends javax.swing.JDialog {
 private String kode;
 private achmad.rifai.erp1.entity.Karyawan k;
 private java.awt.Frame p;
+private int x,y;
     /**
      * Creates new form Add3
      * @param parent
@@ -67,7 +68,7 @@ private java.awt.Frame p;
             }
         });
 
-        items.setLayout(new javax.swing.BoxLayout(items, javax.swing.BoxLayout.PAGE_AXIS));
+        items.setLayout(new java.awt.GridBagLayout());
         jScrollPane1.setViewportView(items);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -101,19 +102,15 @@ private java.awt.Frame p;
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        x=0;
+        y=0;
         k.getAlamat().forEach((s)->{
-            Alamate a=new Alamate();
-            a.setData(s);
-            items.add(a);
-            a.setVisible(true);
+            addData(s);
         });
     }//GEN-LAST:event_formWindowOpened
 
     private void tbhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbhActionPerformed
-        Alamate a=new Alamate();
-        a.setData("");
-        a.setVisible(true);
-        items.add(a);
+        addData("");
     }//GEN-LAST:event_tbhActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -156,5 +153,17 @@ private java.awt.Frame p;
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
     }
+    }
+
+    private void addData(String s) {
+        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
+        if(y>0){
+            gbc.gridx=x;
+            gbc.gridy=y;
+        }Alamate a=new Alamate();
+        a.setData(s);
+        y++;
+        a.setVisible(true);
+        items.add(a, gbc);
     }
 }
