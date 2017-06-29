@@ -138,6 +138,7 @@ public class Login extends javax.swing.JFrame {
                 achmad.rifai.erp1.util.Db.hindar(e);
             }
         }).start();
+        new Thread(this::initDatabase).start();
     }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -222,5 +223,15 @@ public class Login extends javax.swing.JFrame {
         achmad.rifai.erp1.util.Work.saveSession(id);
         new Dash(id).setVisible(true);
         this.setVisible(false);
+    }
+
+    private void initDatabase() {
+        try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.util.Work.initDb(d.getHost(), d.getName());
+            d.close();
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
     }
 }

@@ -59,7 +59,7 @@ public class Work {
         };tblData.setModel(m);
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         achmad.rifai.erp1.entity.dao.DAOJabatan dao=new achmad.rifai.erp1.entity.dao.DAOJabatan(d);
-        for(achmad.rifai.erp1.entity.Jabatan j:dao.all())m.addRow(new Object[]{j.getNama(),j.getGaji(),j.getKapasitas()});
+        for(achmad.rifai.erp1.entity.Jabatan j:dao.all())m.addRow(new Object[]{j.getNama(),j.getGaji(),j.getKapasitas()-j.getIsi()});
         d.close();
     }
 
@@ -270,14 +270,12 @@ public class Work {
     public static void hapusKaryawan(Karyawan k) {
         try {
             Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.entity.dao.DAOPesan dao=new achmad.rifai.erp1.entity.dao.DAOPesan(d);
-            for(achmad.rifai.erp1.entity.Pesan p:dao.all()){
-                for(achmad.rifai.erp1.entity.Penerima pe:p.getKe())
-                    if(pe.getAkun() == null ? k.getId() == null : pe.getAkun().equals(k.getId())){
-                    dao.delete(p);
-                    break;
-                }
-            }d.close();
+            achmad.rifai.erp1.entity.dao.DAOJabatan dao=new achmad.rifai.erp1.entity.dao.DAOJabatan(d);
+            achmad.rifai.erp1.entity.Jabatan a=achmad.rifai.erp1.entity.Jabatan.of(d, k.getJabatan()),
+                    b=achmad.rifai.erp1.entity.Jabatan.of(d, k.getJabatan());
+            b.setIsi(b.getIsi()-1);
+            dao.update(a, b);
+            d.close();
         } catch (Exception ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
         }

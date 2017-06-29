@@ -147,8 +147,10 @@ private int x,y;
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         achmad.rifai.erp1.entity.Karyawan a=achmad.rifai.erp1.entity.Karyawan.of(d, b.getId());
         achmad.rifai.erp1.entity.dao.DAOKaryawan dao=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d);
-        if(a!=null)dao.update(a, b);
-        else dao.insert(b);
+        if(a==null){
+            jabatanAdd();
+            dao.insert(a);
+        }else dao.update(a, b);
         d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
@@ -165,5 +167,15 @@ private int x,y;
         y++;
         a.setVisible(true);
         items.add(a, gbc);
+    }
+
+    private void jabatanAdd() throws Exception {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.dao.DAOJabatan dao=new achmad.rifai.erp1.entity.dao.DAOJabatan(d);
+        achmad.rifai.erp1.entity.Jabatan a=achmad.rifai.erp1.entity.Jabatan.of(d, k.getJabatan()),
+                b=achmad.rifai.erp1.entity.Jabatan.of(d, k.getJabatan());
+        b.setIsi(b.getIsi()+1);
+        dao.update(a, b);
+        d.close();
     }
 }

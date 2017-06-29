@@ -30,10 +30,7 @@ public class Work {
     }
 
     public static void styling() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        String o=System.getProperty("os.name");
-        if(o.contains("Linux"))style("GTK+");
-        else if(o.contains("Windows"))style("Windows");
-        else style("Nimbus");
+        javax.swing.UIManager.setLookAndFeel(new com.seaglasslookandfeel.SeaGlassLookAndFeel());
     }
 
     public static String MD5(String toString) throws GeneralSecurityException{
@@ -79,15 +76,6 @@ public class Work {
         while(!f1.exists()||!f2.exists()){}
         createData(d);
         d.close();
-    }
-
-    private static void style(String s) throws ClassNotFoundException, InstantiationException, IllegalAccessException, 
-            UnsupportedLookAndFeelException {
-        for(javax.swing.UIManager.LookAndFeelInfo l:javax.swing.UIManager.getInstalledLookAndFeels())
-            if(s == null ? l.getName() == null : s.equals(l.getName())){
-            javax.swing.UIManager.setLookAndFeel(l.getClassName());
-            break;
-        }
     }
 
     private static void createData(Db d) throws Exception {
