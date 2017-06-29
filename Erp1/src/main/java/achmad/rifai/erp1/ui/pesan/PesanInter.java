@@ -230,7 +230,7 @@ private Thread t;
         } catch (Exception ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
         }
-        }).start();
+        }).start();new Tulis(new java.awt.Frame(rootPane.getGraphicsConfiguration()), true, k).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void bInboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bInboxActionPerformed
@@ -240,6 +240,7 @@ private Thread t;
         } catch (Exception ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
         }}).start();
+        new Baca(new java.awt.Frame(rootPane.getGraphicsConfiguration()), true, k, p).setVisible(true);
     }//GEN-LAST:event_bInboxActionPerformed
 
     private void bptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bptActionPerformed
@@ -247,8 +248,8 @@ private Thread t;
             menilikPesan();
         } catch (Exception ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
-        }
-        }).start();
+        }}).start();
+        new Terkirim(new java.awt.Frame(rootPane.getGraphicsConfiguration()), true, k, sInbox).setVisible(true);
     }//GEN-LAST:event_bptActionPerformed
 
 @SuppressWarnings("CallToThreadStopSuspendOrResumeManager")

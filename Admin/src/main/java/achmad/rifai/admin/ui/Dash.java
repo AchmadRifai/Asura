@@ -1722,8 +1722,10 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
             if(f.exists())f.delete();
             this.setVisible(false);
         }d.close();
-        if(achmad.rifai.erp1.ui.pesan.Pesan.isDapet(k))psnMenu.setText("Pesan Masuk");
-        else psnMenu.setText("Pesan");
+        if(achmad.rifai.erp1.ui.pesan.Pesan.isDapet(k)){
+            java.awt.Toolkit.getDefaultToolkit().beep();
+            psnMenu.setText("Pesan Masuk");
+        }else psnMenu.setText("Pesan");
         if(this.getCursor().getType()==java.awt.Cursor.DEFAULT_CURSOR)refreshData();
         Thread.sleep(5000);
     } catch (Exception ex) {
