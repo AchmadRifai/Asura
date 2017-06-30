@@ -11,10 +11,11 @@ import achmad.rifai.erp1.entity.Pesan;
  *
  * @author janoko
  */
-public class PesanInter extends javax.swing.JInternalFrame {
+public abstract class PesanInter extends javax.swing.JInternalFrame {
 private achmad.rifai.erp1.entity.Karyawan k;
 private Pesan sInbox,sDraft;
 private Thread t;
+public abstract void entek();
     /**
      * Creates new form PesanInter
      */
@@ -189,12 +190,8 @@ private Thread t;
     }// </editor-fold>//GEN-END:initComponents
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        t=new Thread(()->{while(isVisible())try {
-            reload();
-            } catch (Exception ex) {
-                achmad.rifai.erp1.util.Db.hindar(ex);
-            }});
-        t.start();
+        go();
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         this.setTitle("Kotak masuk "+k.getId());
     }//GEN-LAST:event_formInternalFrameOpened
 
@@ -256,15 +253,8 @@ private Thread t;
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
         new Thread(this::meninggalKanJejak).start();
         t.stop();
+        entek();
     }//GEN-LAST:event_formInternalFrameClosing
-
-    private void reload() throws Exception {
-        loadInbox();
-        loadOnline();
-        loadKirim();
-        Thread.sleep(5000);
-    }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bInbox;
@@ -375,5 +365,18 @@ private Thread t;
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
     }
+    }
+
+    private void go() {
+        t=new Thread(()->{while(isVisible())try {
+            loadInbox();
+            loadOnline();
+            loadKirim();
+            setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            Thread.sleep(5000);
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }});t.setPriority(Thread.MAX_PRIORITY);
+        t.start();
     }
 }

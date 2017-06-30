@@ -25,7 +25,7 @@ public class Pesan extends javax.swing.JDialog {
     private static boolean isIntuk(achmad.rifai.erp1.entity.Pesan p, Karyawan k) {
         boolean b=false;
         for(achmad.rifai.erp1.entity.Penerima pe:p.getKe())if(k.getId() == null ? pe.getAkun() == null : k.getId().equals(pe.getAkun())){
-            b=true;
+            b=!pe.isTerbaca();
             break;
         }return b;
     }

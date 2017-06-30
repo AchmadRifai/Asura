@@ -149,7 +149,7 @@ private int x,y;
         achmad.rifai.erp1.entity.dao.DAOKaryawan dao=new achmad.rifai.erp1.entity.dao.DAOKaryawan(d);
         if(a==null){
             jabatanAdd();
-            dao.insert(a);
+            dao.insert(b);
         }else dao.update(a, b);
         d.close();
     } catch (Exception ex) {

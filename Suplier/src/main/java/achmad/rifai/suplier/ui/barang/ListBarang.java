@@ -19,6 +19,7 @@ public abstract void entek();
 private achmad.rifai.erp1.entity.Barang sBarang;
 private String id;
 private javax.swing.JDesktopPane desk;
+Thread t;
     /**
      * Creates new form ListBarang
      */
@@ -26,6 +27,7 @@ private javax.swing.JDesktopPane desk;
         id=i;
         desk=jd;
         initComponents();
+        t=new Thread(()->{while(isVisible())reload();});
     }
 
     /**
@@ -146,6 +148,7 @@ private javax.swing.JDesktopPane desk;
     }//GEN-LAST:event_dataMouseEntered
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        if(t.isAlive())t.stop();
         entek();
     }//GEN-LAST:event_formInternalFrameClosing
 
@@ -209,7 +212,7 @@ private javax.swing.JDesktopPane desk;
     }//GEN-LAST:event_editActionPerformed
 
     private void refresh() {
-        new Thread(()->{while(isVisible())reload();}).start();
+        t.start();
     }
 
     private void reload() {
@@ -261,6 +264,6 @@ private javax.swing.JDesktopPane desk;
 
     private void next2(Barang ba, Db d) throws Exception {
         boolean oleh=achmad.rifai.suplier.util.Work.isSupportedMarket(ba,d);
-        if(oleh)JOptionPane.showMessageDialog(rootPane, "Barang "+ba.getNama()+" tinggal sedikit");
+        if(oleh||true)JOptionPane.showMessageDialog(rootPane, "Barang "+ba.getNama()+" tinggal sedikit");
     }
 }

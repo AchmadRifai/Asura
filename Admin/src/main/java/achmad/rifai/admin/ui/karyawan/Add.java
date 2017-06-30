@@ -298,7 +298,7 @@ java.awt.Frame p;
     }//GEN-LAST:event_nActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghilangkan perubahan data?", "HILANG?", JOptionPane.YES_NO_CANCEL_OPTION);
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menyimpan perubahan data?", "HILANG?", JOptionPane.YES_NO_CANCEL_OPTION);
         if(x!=JOptionPane.CANCEL_OPTION&&x!=JOptionPane.CLOSED_OPTION){
             if(x==JOptionPane.YES_OPTION)simpan();
         }else if(x==JOptionPane.CANCEL_OPTION){
@@ -357,11 +357,10 @@ java.awt.Frame p;
             bersih();
             return;
         }if(k.getJabatan()!=null){
-            for(int x=0;x<jabatan.getItemCount();x++){
+            for(int x=0;x<jabatan.getItemCount();x++)
                 if(k.getJabatan() == null ? jabatan.getItemAt(x) == null : k.getJabatan().equals(jabatan.getItemAt(x))){
                     jabatan.setSelectedIndex(x);
                     break;
-                }
             }
         }else{
             bersih();
@@ -373,6 +372,7 @@ java.awt.Frame p;
         }masuk.setSelected(k.isMasuk());
         if(null!=k.getHiredate())tgl.setText(""+k.getHiredate());
         else tgl.setText("");
+        n.setEnabled(true);
     }
 
     private void refresh() {
@@ -380,7 +380,6 @@ java.awt.Frame p;
         !nama.getText().isEmpty()&&achmad.rifai.admin.util.TglModel.isValidDate(tgl.getText()));
     }
 
-@SuppressWarnings("null")
     private void simpan() {
     try {
         achmad.rifai.admin.util.Work.jejak(kode, "menyimpan perubahan data karyawan "+k.getId());

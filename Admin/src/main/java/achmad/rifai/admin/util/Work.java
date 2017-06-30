@@ -256,17 +256,6 @@ public class Work {
             dao.delete(k);
     }
 
-    private static void penjualan(Barang b, Db d) throws Exception {
-        achmad.rifai.erp1.entity.dao.DAOPenjualan dao=new achmad.rifai.erp1.entity.dao.DAOPenjualan(d);
-        for(achmad.rifai.erp1.entity.Penjualan p:dao.all()){
-            for(achmad.rifai.erp1.entity.ItemJual i:p.getItems())
-                if(b.getKode() == null ? i.getBarang() == null : b.getKode().equals(i.getBarang())){
-                dao.delete(p);
-                break;
-            }
-        }
-    }
-
     public static void hapusKaryawan(Karyawan k) {
         try {
             Db d=achmad.rifai.erp1.util.Work.loadDB();
@@ -275,23 +264,6 @@ public class Work {
                     b=achmad.rifai.erp1.entity.Jabatan.of(d, k.getJabatan());
             b.setIsi(b.getIsi()-1);
             dao.update(a, b);
-            d.close();
-        } catch (Exception ex) {
-            achmad.rifai.erp1.util.Db.hindar(ex);
-        }
-    }
-
-    public static void hapusBarange(Barang b) {
-        try {
-            Db d=achmad.rifai.erp1.util.Work.loadDB();
-            achmad.rifai.erp1.entity.dao.DAOPembelian dao=new achmad.rifai.erp1.entity.dao.DAOPembelian(d);
-            for(achmad.rifai.erp1.entity.Pembelian p:dao.all()){
-                for(achmad.rifai.erp1.entity.ItemBeli i:p.getItems())
-                    if(i.getBarang() == null ? b.getKode() == null : i.getBarang().equals(b.getKode())){
-                    dao.delete(p);
-                    break;
-                }
-            }penjualan(b,d);
             d.close();
         } catch (Exception ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);

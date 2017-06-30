@@ -1180,7 +1180,6 @@ private achmad.rifai.erp1.entity.BukuAbsen sBukuAbsen;
                 achmad.rifai.admin.util.Work.jejak(id, "Menghapus barang "+b.getKode());
                 achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
                 achmad.rifai.erp1.entity.dao.DAOBarang dao=new achmad.rifai.erp1.entity.dao.DAOBarang(d);
-                new Thread(()->{achmad.rifai.admin.util.Work.hapusBarange(b);}).start();
                 dao.delete(b);
                 d.close();
             } catch (Exception ex) {

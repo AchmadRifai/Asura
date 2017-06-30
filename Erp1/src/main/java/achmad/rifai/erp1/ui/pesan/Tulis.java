@@ -38,6 +38,7 @@ private achmad.rifai.erp1.entity.Karyawan k,balas;
         jScrollPane2 = new javax.swing.JScrollPane();
         isi = new javax.swing.JTextArea();
         s = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Menulis Pesan");
@@ -67,6 +68,8 @@ private achmad.rifai.erp1.entity.Karyawan k,balas;
             }
         });
 
+        jButton1.setText("jButton1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -76,7 +79,10 @@ private achmad.rifai.erp1.entity.Karyawan k,balas;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -85,10 +91,12 @@ private achmad.rifai.erp1.entity.Karyawan k,balas;
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(s)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -137,6 +145,7 @@ private achmad.rifai.erp1.entity.Karyawan k,balas;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea isi;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel perima;
@@ -150,6 +159,7 @@ private achmad.rifai.erp1.entity.Karyawan k,balas;
             if(k.getId() == null ? ka.getId() == null : k.getId().equals(ka.getId()))continue;
             java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
             javax.swing.JCheckBox c=new javax.swing.JCheckBox(ka.getId());
+            c.setVisible(true);
             if(y>0){
                 gbc.gridx=x;
                 gbc.gridy=y;

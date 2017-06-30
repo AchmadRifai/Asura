@@ -37,11 +37,15 @@ private String id;
         };
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
+        mPesan = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         ldb = new javax.swing.JMenuItem();
         tb = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        lihatSup = new javax.swing.JMenuItem();
+        addSup = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -66,6 +70,14 @@ private String id;
         getContentPane().add(desk);
 
         jMenu2.setText("File");
+
+        mPesan.setText("Pesan");
+        mPesan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mPesanActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mPesan);
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem2.setText("Log Out");
@@ -106,6 +118,26 @@ private String id;
         jMenu1.add(tb);
 
         jMenuBar2.add(jMenu1);
+
+        jMenu3.setText("Pemasok");
+
+        lihatSup.setText("Lihat Data");
+        lihatSup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lihatSupActionPerformed(evt);
+            }
+        });
+        jMenu3.add(lihatSup);
+
+        addSup.setText("Tambah Pemasok");
+        addSup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addSupActionPerformed(evt);
+            }
+        });
+        jMenu3.add(addSup);
+
+        jMenuBar2.add(jMenu3);
 
         setJMenuBar(jMenuBar2);
 
@@ -173,14 +205,74 @@ private String id;
         a.setVisible(true);
     }//GEN-LAST:event_tbActionPerformed
 
+    private void mPesanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPesanActionPerformed
+        new Thread(()->{try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.suplier.util.Work.jejak(id, "Melihat pesan", d);
+            d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }}).start();achmad.rifai.erp1.entity.Karyawan k=null;try {
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                k=achmad.rifai.erp1.entity.Karyawan.of(d, id);
+                d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }mPesan.setEnabled(false);achmad.rifai.erp1.ui.pesan.PesanInter p=new achmad.rifai.erp1.ui.pesan.PesanInter(k) {
+            @Override
+            public void entek() {
+                mPesan.setEnabled(true);
+                dispose();
+            }
+        };desk.add(p);if(k!=null)p.setVisible(true);
+    }//GEN-LAST:event_mPesanActionPerformed
+
+    private void lihatSupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatSupActionPerformed
+        new Thread(()->{try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.suplier.util.Work.jejak(id, "Melihat daftar pemasok barang", d);
+            d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }}).start();lihatSup.setEnabled(false);
+        achmad.rifai.suplier.ui.suplier.ListSuplier l=new achmad.rifai.suplier.ui.suplier.ListSuplier(id) {
+            @Override
+            public void entek() {
+                lihatSup.setEnabled(true);
+                this.dispose();
+            }};desk.add(l);
+        l.setVisible(true);
+    }//GEN-LAST:event_lihatSupActionPerformed
+
+    private void addSupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupActionPerformed
+        new Thread(()->{try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.suplier.util.Work.jejak(id, "Akan menambah pemasok baru", d);
+            d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }}).start();addSup.setEnabled(false);
+        achmad.rifai.suplier.ui.suplier.Add a=new achmad.rifai.suplier.ui.suplier.Add(id) {
+            @Override
+            public void entek() {
+                addSup.setEnabled(true);
+                this.dispose();
+            }};desk.add(a);
+        a.setVisible(true);
+    }//GEN-LAST:event_addSupActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addSup;
     private javax.swing.JDesktopPane desk;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem ldb;
+    private javax.swing.JMenuItem lihatSup;
+    private javax.swing.JMenuItem mPesan;
     private javax.swing.JMenuItem tb;
     // End of variables declaration//GEN-END:variables
 
@@ -197,6 +289,7 @@ private String id;
                     dao.update(k, b);
                 }usir();
             }d.close();
+            pesan();
             Thread.sleep(5000);
             } catch (Exception ex) {
                 achmad.rifai.erp1.util.Db.hindar(ex);
@@ -209,5 +302,15 @@ private String id;
         new Login().setVisible(true);
         this.setVisible(false);
         this.dispose();
+    }
+
+    private void pesan() throws Exception {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.erp1.entity.Karyawan k=achmad.rifai.erp1.entity.Karyawan.of(d, id);
+        d.close();
+        if(achmad.rifai.erp1.ui.pesan.Pesan.isDapet(k)){
+            java.awt.Toolkit.getDefaultToolkit().beep();
+            mPesan.setText("Pesan Masuk");
+        }else mPesan.setText("Pesan");
     }
 }
