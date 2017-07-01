@@ -5,6 +5,8 @@
  */
 package achmad.rifai.suplier.ui.suplier;
 
+import java.awt.Color;
+
 /**
  *
  * @author janoko
@@ -12,11 +14,15 @@ package achmad.rifai.suplier.ui.suplier;
 public abstract class Add extends javax.swing.JInternalFrame {
 public abstract void entek();
 private String id;
+private javax.swing.JDesktopPane atas;
+private int x1,x2,y1,y2;
+private achmad.rifai.erp1.entity.Suplier sup;
     /**
      * Creates new form Add
      */
-    public Add(String i) {
+    public Add(String i,javax.swing.JDesktopPane desk) {
         id=i;
+        atas=desk;
         initComponents();
     }
 
@@ -28,6 +34,20 @@ private String id;
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        kode = new javax.swing.JTextField();
+        nama = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        alamat = new javax.swing.JLayeredPane();
+        jButton1 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        telp = new javax.swing.JLayeredPane();
+        jButton2 = new javax.swing.JButton();
+        s = new javax.swing.JButton();
 
         setClosable(true);
         setResizable(true);
@@ -47,6 +67,55 @@ private String id;
             public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
+            }
+        });
+
+        jLabel1.setText("Kode");
+
+        jLabel2.setText("Nama");
+
+        kode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                kodeKeyReleased(evt);
+            }
+        });
+
+        nama.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                namaKeyReleased(evt);
+            }
+        });
+
+        jLabel3.setText("Alamat");
+
+        alamat.setLayout(new java.awt.GridBagLayout());
+        jScrollPane1.setViewportView(alamat);
+
+        jButton1.setText("+");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Telepon");
+
+        telp.setLayout(new java.awt.GridBagLayout());
+        jScrollPane2.setViewportView(telp);
+
+        jButton2.setText("+");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        s.setText("Simpan");
+        s.setEnabled(false);
+        s.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sActionPerformed(evt);
             }
         });
 
@@ -54,11 +123,62 @@ private String id;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(jButton1))
+                                    .addComponent(jLabel5)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jButton2)))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nama, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                            .addComponent(kode)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(kode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(nama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(s)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -68,7 +188,150 @@ private String id;
         entek();
     }//GEN-LAST:event_formInternalFrameClosing
 
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        x1=0;
+        x2=0;
+        y1=0;
+        y2=0;
+    }//GEN-LAST:event_formInternalFrameOpened
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
+        if(y1>0){
+            gbc.gridx=x1;
+            gbc.gridy=y1;
+        }Alamat a=new Alamat();
+        alamat.add(a, gbc);
+        x1++;
+        if(x1==2){
+            y1++;
+            x1=0;
+        }a.setVisible(true);
+        refresh();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
+        if(y2>0){
+            gbc.gridx=x2;
+            gbc.gridy=y2;
+        }Telepon t=new Telepon();
+        telp.add(t, gbc);
+        x2++;
+        if(x2==5){
+            y2++;
+            x2=0;
+        }t.setVisible(true);
+        refresh();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void sActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sActionPerformed
+        new Thread(this::laksana).start();
+        s.setEnabled(false);
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        kode.setEnabled(false);
+        nama.setEnabled(false);
+        alamat.setEnabled(false);
+        telp.setEnabled(false);
+        jButton1.setEnabled(false);
+        jButton2.setEnabled(false);
+    }//GEN-LAST:event_sActionPerformed
+
+    private void namaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_namaKeyReleased
+        refresh();
+    }//GEN-LAST:event_namaKeyReleased
+
+    private void kodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_kodeKeyReleased
+        if(!kode.getText().isEmpty())try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.erp1.entity.Suplier su=achmad.rifai.erp1.entity.Suplier.of(d, kode.getText());
+            if(su!=null)kode.setForeground(Color.red);
+            else kode.setForeground(Color.BLACK);
+            d.close();
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }refresh();
+    }//GEN-LAST:event_kodeKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLayeredPane alamat;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField kode;
+    private javax.swing.JTextField nama;
+    private javax.swing.JButton s;
+    private javax.swing.JLayeredPane telp;
     // End of variables declaration//GEN-END:variables
+
+    private void laksana() {
+    new Thread(this::jejak).start();try {
+        simpan();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        new achmad.rifai.erp1.entity.dao.DAOSuplier(d).insert(sup);
+        d.close();
+        this.setVisible(false);
+        this.formInternalFrameClosing(null);
+    } catch (Exception ex) {
+        aktifkan();
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
+    }
+
+    private void refresh() {
+        s.setEnabled(!kode.getText().isEmpty()&&Color.BLACK==kode.getForeground()&&!nama.getText().isEmpty()
+                &&alamat.getComponentCount()>0&&0<telp.getComponentCount());
+    }
+
+    private void aktifkan() {
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        kode.setEnabled(true);
+        nama.setEnabled(true);
+        jButton1.setEnabled(true);
+        jButton2.setEnabled(true);
+        alamat.setEnabled(true);
+        telp.setEnabled(true);
+    }
+
+    private void simpan() {
+        sup=new achmad.rifai.erp1.entity.Suplier();
+        sup.setDeleted(false);
+        sup.setKode(kode.getText());
+        sup.setNama(nama.getText());
+        simpanAlamat();
+        simpanTelp();
+    }
+
+    private void simpanAlamat() {
+        java.util.List<String>l=new java.util.LinkedList<>();
+        for(java.awt.Component c:alamat.getComponents()){
+            Alamat a=(Alamat) c;
+            l.add(a.getData());
+        }sup.setAlamat(l);
+    }
+
+    private void simpanTelp() {
+        java.util.List<String>l=new java.util.LinkedList<>();
+        for(java.awt.Component c:telp.getComponents()){
+            Telepon t=(Telepon) c;
+            l.add(t.getData());
+        }sup.setTelp(l);
+    }
+
+    private void jejak() {
+    try {
+        String i=id,k=kode.getText();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.suplier.util.Work.jejak(i, "menulis suplier baru dengan kode "+k, d);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
+    }
 }

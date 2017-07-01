@@ -235,7 +235,7 @@ private String id;
             } catch (Exception ex) {
                 achmad.rifai.erp1.util.Db.hindar(ex);
             }}).start();lihatSup.setEnabled(false);
-        achmad.rifai.suplier.ui.suplier.ListSuplier l=new achmad.rifai.suplier.ui.suplier.ListSuplier(id) {
+        achmad.rifai.suplier.ui.suplier.ListSuplier l=new achmad.rifai.suplier.ui.suplier.ListSuplier(id,desk) {
             @Override
             public void entek() {
                 lihatSup.setEnabled(true);
@@ -252,7 +252,7 @@ private String id;
             } catch (Exception ex) {
                 achmad.rifai.erp1.util.Db.hindar(ex);
             }}).start();addSup.setEnabled(false);
-        achmad.rifai.suplier.ui.suplier.Add a=new achmad.rifai.suplier.ui.suplier.Add(id) {
+        achmad.rifai.suplier.ui.suplier.Add a=new achmad.rifai.suplier.ui.suplier.Add(id,desk) {
             @Override
             public void entek() {
                 addSup.setEnabled(true);

@@ -5,7 +5,13 @@
  */
 package achmad.rifai.suplier.ui.suplier;
 
+import achmad.rifai.erp1.entity.Barang;
+import achmad.rifai.erp1.entity.ItemBeli;
+import achmad.rifai.erp1.entity.Pembelian;
 import achmad.rifai.erp1.entity.Suplier;
+import achmad.rifai.erp1.util.Db;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,18 +20,22 @@ import achmad.rifai.erp1.entity.Suplier;
 public abstract class ListSuplier extends javax.swing.JInternalFrame {
 private String id;
 public abstract void entek();
-private Thread t;
+private Thread t,t2;
+private achmad.rifai.erp1.entity.Suplier sup;
+private javax.swing.JDesktopPane desk;
     /**
      * Creates new form ListSuplier
      */
-    public ListSuplier(String i) {
+    public ListSuplier(String i,javax.swing.JDesktopPane de) {
         id=i;
+        desk=de;
         initComponents();
         t=new Thread(()->{while(isVisible())try {
             reload();
             } catch (Exception ex) {
                 achmad.rifai.erp1.util.Db.hindar(ex);
             }});t.setPriority(Thread.MAX_PRIORITY);
+        t2=new Thread(this::analisa);
     }
 
     /**
@@ -39,6 +49,9 @@ private Thread t;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         konten = new javax.swing.JTable();
+        hpsSup = new javax.swing.JButton();
+        editSup = new javax.swing.JButton();
+        status = new javax.swing.JLabel();
 
         setClosable(true);
         setResizable(true);
@@ -73,7 +86,33 @@ private Thread t;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        konten.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                kontenMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                kontenMouseEntered(evt);
+            }
+        });
         jScrollPane1.setViewportView(konten);
+
+        hpsSup.setText("Hapus");
+        hpsSup.setEnabled(false);
+        hpsSup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hpsSupActionPerformed(evt);
+            }
+        });
+
+        editSup.setText("Edit");
+        editSup.setEnabled(false);
+        editSup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editSupActionPerformed(evt);
+            }
+        });
+
+        status.setText("???");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,21 +120,43 @@ private Thread t;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 745, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(hpsSup)
+                        .addGap(70, 70, 70)
+                        .addComponent(editSup)
+                        .addGap(234, 234, 234)
+                        .addComponent(status)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(hpsSup)
+                    .addComponent(editSup)
+                    .addComponent(status))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        new Thread(()->{
+            try {
+                String i=id;
+                achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+                achmad.rifai.suplier.util.Work.jejak(i, "Menutup jendela daftar pemasok", d);
+                d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }}).start();
         t.stop();
         entek();
     }//GEN-LAST:event_formInternalFrameClosing
@@ -103,18 +164,64 @@ private Thread t;
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         t.start();
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        status.setText("Memuat Data");
     }//GEN-LAST:event_formInternalFrameOpened
+
+    private void kontenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kontenMouseClicked
+        int x=konten.getSelectedRow();
+        boolean b=konten.isRowSelected(x);
+        if(b)try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            sup=achmad.rifai.erp1.entity.Suplier.of(d, ""+konten.getValueAt(x, 0));
+            d.close();
+            hpsSup.setEnabled(b);
+            editSup.setEnabled(b);
+        } catch (Exception ex) {
+            achmad.rifai.erp1.util.Db.hindar(ex);
+        }
+    }//GEN-LAST:event_kontenMouseClicked
+
+    private void hpsSupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hpsSupActionPerformed
+        final achmad.rifai.erp1.entity.Suplier s=sup;
+        int x=JOptionPane.showConfirmDialog(rootPane, "Apa anda ingin menghapus pemasok "+s.getKode()+"?", "Hapus?", JOptionPane.YES_NO_OPTION);
+        if(x==JOptionPane.YES_OPTION)new Thread(this::hapus1Suplier).start();
+        hpsSup.setEnabled(false);
+        editSup.setEnabled(false);
+    }//GEN-LAST:event_hpsSupActionPerformed
+
+    private void kontenMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kontenMouseEntered
+        if(!"Menganalisa".equals(status.getText()))t2.start();
+        status.setText("Menganalisa");
+    }//GEN-LAST:event_kontenMouseEntered
+
+    private void editSupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editSupActionPerformed
+        new Thread(()->{try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.suplier.util.Work.jejak(id, "Akan mengubah data suplier "+sup.getKode(), d);
+            d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }}).start();Edit e=new achmad.rifai.suplier.ui.suplier.Edit(id, sup);
+        desk.add(e);
+        e.setVisible(true);
+        hpsSup.setEnabled(false);
+        editSup.setEnabled(false);
+    }//GEN-LAST:event_editSupActionPerformed
 
     private void reload() throws Exception {
         loadData();
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        if("Memuat Data".equals(status.getText()))status.setText("Sehat");
         Thread.sleep(5000);
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton editSup;
+    private javax.swing.JButton hpsSup;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable konten;
+    private javax.swing.JLabel status;
     // End of variables declaration//GEN-END:variables
 
     private void loadData() throws Exception {
@@ -127,9 +234,63 @@ private Thread t;
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         new achmad.rifai.erp1.entity.dao.DAOSuplier(d).all().forEach((Suplier s)->{
             String a="",tel="";
-            a = s.getAlamat().stream().map((st) -> "["+st+"],").reduce(a, String::concat);
-            tel = s.getTelp().stream().map((st) -> "["+st+"],").reduce(tel, String::concat);
+            a = s.getAlamat().stream().map((st) -> "["+st+"],\n").reduce(a, String::concat);
+            tel = s.getTelp().stream().map((st) -> ""+st+",\n").reduce(tel, String::concat);
             m.addRow(new Object[]{s.getKode(),s.getNama(),a,tel});
         });d.close();
+    }
+
+    private void hapus1Suplier() {
+    setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.suplier.util.Work.jejak(id, "Menghapus pemasok "+sup.getKode()+" dari daftar", d);
+        new achmad.rifai.erp1.entity.dao.DAOSuplier(d).delete(sup);
+        d.close();
+        hpsSup.setEnabled(false);
+        editSup.setEnabled(false);
+        loadData();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }
+
+    private void analisa() {
+    try {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        for(achmad.rifai.erp1.entity.Barang b:new achmad.rifai.erp1.entity.dao.DAOBarang(d).all())pasokBarang(b,d);
+        d.close();
+    } catch (Exception ex) {
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }status.setText("Sehat");
+    }
+
+    private void pasokBarang(Barang b, Db d) throws Exception {
+        java.sql.Date d1=java.sql.Date.valueOf(LocalDate.now()),d2=java.sql.Date.valueOf(d1.toLocalDate().minusMonths(1));
+        achmad.rifai.erp1.entity.Pembelian sp=null;
+        for(achmad.rifai.erp1.entity.Pembelian p:new achmad.rifai.erp1.entity.dao.DAOPembelian(d).all()){
+            if(!d1.after(p.getTgl())&&!d2.before(p.getTgl())&&!raOnoNangNjero(p,b))continue;
+            if(sp!=null){
+                achmad.rifai.erp1.entity.ItemBeli i1=genIteme(sp,b),i2=genIteme(p,b);
+                if(i1.getHarga().isGreaterThan(i2.getHarga()))sp=p;
+            }else sp=p;
+        }if(sp!=null)
+            JOptionPane.showMessageDialog(rootPane, "Suplier "+sp.getSuplier()+" untuk barang "+b.getNama()+" bulan ini sangat murah");
+    }
+
+    private boolean raOnoNangNjero(Pembelian p, Barang b) {
+        boolean bo=false;
+        for(achmad.rifai.erp1.entity.ItemBeli i:p.getItems())
+            if(b.getKode() == null ? i.getBarang() == null : b.getKode().equals(i.getBarang())){
+            bo=true;
+            break;
+        }return bo;
+    }
+
+    private ItemBeli genIteme(Pembelian p, Barang b) {
+        ItemBeli i=null;
+        for(ItemBeli a:p.getItems())if(b.getKode() == null ? a.getBarang() == null : b.getKode().equals(a.getBarang())){
+            i=a;
+            break;
+        }return i;
     }
 }
