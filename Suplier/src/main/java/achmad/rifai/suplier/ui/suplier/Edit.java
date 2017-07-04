@@ -12,6 +12,7 @@ package achmad.rifai.suplier.ui.suplier;
 public class Edit extends javax.swing.JInternalFrame {
 private String id;
 private achmad.rifai.erp1.entity.Suplier sup;
+private int x1,x2,y1,y2;
     /**
      * Creates new form Edit
      */
@@ -30,7 +31,20 @@ private achmad.rifai.erp1.entity.Suplier sup;
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        nama = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        alamat = new javax.swing.JLayeredPane();
+        jButton1 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        telp = new javax.swing.JLayeredPane();
+        jButton2 = new javax.swing.JButton();
+        s = new javax.swing.JButton();
+
         setClosable(true);
+        setResizable(true);
         setTitle("Edit");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
@@ -51,22 +65,107 @@ private achmad.rifai.erp1.entity.Suplier sup;
             }
         });
 
+        jLabel1.setText("Nama");
+
+        jLabel2.setText("Alamat");
+
+        nama.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                namaKeyReleased(evt);
+            }
+        });
+
+        alamat.setLayout(new java.awt.GridBagLayout());
+        jScrollPane1.setViewportView(alamat);
+
+        jButton1.setText("+");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Telepon");
+
+        telp.setLayout(new java.awt.GridBagLayout());
+        jScrollPane2.setViewportView(telp);
+
+        jButton2.setText("+");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        s.setText("Simpan");
+        s.setEnabled(false);
+        s.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(s, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jButton1)
+                            .addComponent(jLabel4)
+                            .addComponent(jButton2))
+                        .addGap(36, 36, 36)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nama, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(nama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addGap(0, 133, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(35, 35, 35)
+                        .addComponent(jButton2))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(s)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        x1=0;
+        x2=0;
+        y1=0;
+        y2=0;
         this.setTitle("Edit Pemasok "+sup.getKode());
+        nama.setText(sup.getNama());
+        sup.getAlamat().forEach((sa)->{addAlamat(sa);});
+        sup.getTelp().forEach((sa)->{addTelp(sa);});
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
@@ -79,7 +178,118 @@ private achmad.rifai.erp1.entity.Suplier sup;
     }
     }//GEN-LAST:event_formInternalFrameClosing
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        addAlamat("");
+        refresh();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        addTelp("");
+        refresh();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void namaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_namaKeyReleased
+        refresh();
+    }//GEN-LAST:event_namaKeyReleased
+
+    private void sActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sActionPerformed
+        new Thread(this::jalan).start();
+        s.setEnabled(false);
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        nama.setEnabled(false);
+        alamat.setEnabled(false);
+        telp.setEnabled(false);
+        jButton1.setEnabled(false);
+        jButton2.setEnabled(false);
+    }//GEN-LAST:event_sActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLayeredPane alamat;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField nama;
+    private javax.swing.JButton s;
+    private javax.swing.JLayeredPane telp;
     // End of variables declaration//GEN-END:variables
+
+    private void addAlamat(String s) {
+        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
+        if(y1>0){
+            gbc.gridx=x1;
+            gbc.gridy=y1;
+        }Alamat a=new Alamat();
+        a.setData(s);
+        alamat.add(a, gbc);
+        y1++;
+        a.setVisible(true);
+    }
+
+    private void addTelp(String s) {
+        java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
+        if(y2>0){
+            gbc.gridx=x2;
+            gbc.gridy=y2;
+        }Telepon t=new Telepon();
+        t.setData(s);
+        telp.add(t, gbc);
+        y2++;
+        t.setVisible(true);
+    }
+
+    private void refresh() {
+        s.setEnabled(!nama.getText().isEmpty()&&0<alamat.getComponentCount()&&0<telp.getComponentCount());
+    }
+
+    private void jalan() {
+    try {
+        saving();
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+        achmad.rifai.suplier.util.Work.jejak(id, "menyimpan perubahan data suplier "+sup.getKode(), d);
+        achmad.rifai.erp1.entity.Suplier a=achmad.rifai.erp1.entity.Suplier.of(d, sup.getKode());
+        new achmad.rifai.erp1.entity.dao.DAOSuplier(d).update(a, sup);
+        d.close();
+        this.setVisible(false);
+        this.dispose();
+    } catch (Exception ex) {
+        enableAll();
+        achmad.rifai.erp1.util.Db.hindar(ex);
+    }
+    }
+
+    private void enableAll() {
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        nama.setEnabled(true);
+        alamat.setEnabled(true);
+        telp.setEnabled(true);
+        jButton1.setEnabled(true);
+        jButton2.setEnabled(true);
+    }
+
+    private void saving() {
+        sup.setNama(nama.getText());
+        alamate();
+        telpe();
+    }
+
+    private void alamate() {
+        java.util.List<String>l=new java.util.LinkedList<>();
+        for(java.awt.Component c:alamat.getComponents()){
+            Alamat a=(Alamat) c;
+            l.add(a.getData());
+        }sup.setAlamat(l);
+    }
+
+    private void telpe() {
+        java.util.List<String>l=new java.util.LinkedList<>();
+        for(java.awt.Component c:telp.getComponents()){
+            Telepon t=(Telepon) c;
+            l.add(t.getData());
+        }sup.setTelp(l);
+    }
 }

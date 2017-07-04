@@ -9,7 +9,6 @@ import achmad.rifai.erp1.entity.Barang;
 import achmad.rifai.erp1.entity.ItemBeli;
 import achmad.rifai.erp1.entity.Pembelian;
 import achmad.rifai.erp1.entity.Suplier;
-import achmad.rifai.erp1.util.Db;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
@@ -255,35 +254,36 @@ private javax.swing.JDesktopPane desk;
     }
 
     private void analisa() {
-    try {
+    java.util.concurrent.ScheduledThreadPoolExecutor e=new java.util.concurrent.ScheduledThreadPoolExecutor(20);try {
         achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
-        for(achmad.rifai.erp1.entity.Barang b:new achmad.rifai.erp1.entity.dao.DAOBarang(d).all())pasokBarang(b,d);
-        d.close();
+        for(achmad.rifai.erp1.entity.Barang b:new achmad.rifai.erp1.entity.dao.DAOBarang(d).all()){
+            e.execute(()->{try {
+                pasokBarang(b);
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }});while(15<e.getActiveCount()){}
+        }d.close();
     } catch (Exception ex) {
         achmad.rifai.erp1.util.Db.hindar(ex);
-    }status.setText("Sehat");
+    }while(0<e.getActiveCount()){}status.setText("Sehat");
     }
 
-    private void pasokBarang(Barang b, Db d) throws Exception {
+    private void pasokBarang(Barang b) throws Exception {
+        achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
         java.sql.Date d1=java.sql.Date.valueOf(LocalDate.now()),d2=java.sql.Date.valueOf(d1.toLocalDate().minusMonths(1));
         achmad.rifai.erp1.entity.Pembelian sp=null;
         for(achmad.rifai.erp1.entity.Pembelian p:new achmad.rifai.erp1.entity.dao.DAOPembelian(d).all()){
-            if(!d1.after(p.getTgl())&&!d2.before(p.getTgl())&&!raOnoNangNjero(p,b))continue;
+            if(d2.after(p.getTgl()))break;
+            achmad.rifai.erp1.entity.ItemBeli i1=genIteme(sp,b),i2=genIteme(p,b);
+            if(i2==null)continue;
             if(sp!=null){
-                achmad.rifai.erp1.entity.ItemBeli i1=genIteme(sp,b),i2=genIteme(p,b);
-                if(i1.getHarga().isGreaterThan(i2.getHarga()))sp=p;
+                org.joda.money.Money m1=i1.getHarga().dividedBy(i1.getJumlah(), java.math.RoundingMode.DOWN),m2=i2.getHarga()
+                        .dividedBy(i2.getJumlah(), java.math.RoundingMode.DOWN);
+                if(m1.isGreaterThan(m2))sp=p;
             }else sp=p;
-        }if(sp!=null)
+        }d.close();
+        if(sp!=null)
             JOptionPane.showMessageDialog(rootPane, "Suplier "+sp.getSuplier()+" untuk barang "+b.getNama()+" bulan ini sangat murah");
-    }
-
-    private boolean raOnoNangNjero(Pembelian p, Barang b) {
-        boolean bo=false;
-        for(achmad.rifai.erp1.entity.ItemBeli i:p.getItems())
-            if(b.getKode() == null ? i.getBarang() == null : b.getKode().equals(i.getBarang())){
-            bo=true;
-            break;
-        }return bo;
     }
 
     private ItemBeli genIteme(Pembelian p, Barang b) {

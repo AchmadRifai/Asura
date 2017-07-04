@@ -32,7 +32,7 @@ public class Pembelian {
         }return v;
     }
 
-    private String struk,suplier;
+    private String struk,suplier,tanggung;
     private org.joda.money.Money harga;
     private java.sql.Date tgl;
     private java.util.List<ItemBeli>items;
@@ -48,6 +48,7 @@ public class Pembelian {
         o.put("suplier", suplier);
         o.put("harga", ""+harga);
         o.put("tgl", ""+tgl);
+        o.put("tanggung", tanggung);
         o.put("deleted", ""+deleted);
         org.json.simple.JSONArray a=new org.json.simple.JSONArray();
         items.stream().map((i) -> {
@@ -73,6 +74,7 @@ public class Pembelian {
         items=new java.util.LinkedList<>();
         org.json.simple.JSONArray a=(org.json.simple.JSONArray) o.get("items");
         deleted=Boolean.parseBoolean(""+o.get("deleted"));
+        tanggung=""+o.get("tanggung");
         for(int x=0;x<a.size();x++){
             org.json.simple.JSONObject o1=(org.json.simple.JSONObject) a.get(x);
             ItemBeli i=new ItemBeli();
@@ -132,5 +134,13 @@ public class Pembelian {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getTanggung() {
+        return tanggung;
+    }
+
+    public void setTanggung(String tanggung) {
+        this.tanggung = tanggung;
     }
 }

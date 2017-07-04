@@ -17,6 +17,6 @@ public class Main {
             achmad.rifai.erp1.util.Work.styling();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             achmad.rifai.erp1.util.Db.hindar(ex);
-        }
+        }System.out.println("Hello world");
     }
 }

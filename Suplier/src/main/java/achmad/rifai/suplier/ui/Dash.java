@@ -46,6 +46,8 @@ private String id;
         jMenu3 = new javax.swing.JMenu();
         lihatSup = new javax.swing.JMenuItem();
         addSup = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        tlsBeli = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -138,6 +140,18 @@ private String id;
         jMenu3.add(addSup);
 
         jMenuBar2.add(jMenu3);
+
+        jMenu4.setText("Operasi");
+
+        tlsBeli.setText("Tulis Pembelian");
+        tlsBeli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tlsBeliActionPerformed(evt);
+            }
+        });
+        jMenu4.add(tlsBeli);
+
+        jMenuBar2.add(jMenu4);
 
         setJMenuBar(jMenuBar2);
 
@@ -261,12 +275,30 @@ private String id;
         a.setVisible(true);
     }//GEN-LAST:event_addSupActionPerformed
 
+    private void tlsBeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tlsBeliActionPerformed
+        new Thread(()->{try {
+            achmad.rifai.erp1.util.Db d=achmad.rifai.erp1.util.Work.loadDB();
+            achmad.rifai.suplier.util.Work.jejak(id, "Akan mencatat pembelian baru", d);
+            d.close();
+            } catch (Exception ex) {
+                achmad.rifai.erp1.util.Db.hindar(ex);
+            }}).start();tlsBeli.setEnabled(false);
+        achmad.rifai.suplier.ui.beli.Add a=new achmad.rifai.suplier.ui.beli.Add(id) {
+            @Override
+            public void entek() {
+                tlsBeli.setEnabled(true);
+                dispose();
+            }};desk.add(a);
+        a.setVisible(true);
+    }//GEN-LAST:event_tlsBeliActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addSup;
     private javax.swing.JDesktopPane desk;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -274,6 +306,7 @@ private String id;
     private javax.swing.JMenuItem lihatSup;
     private javax.swing.JMenuItem mPesan;
     private javax.swing.JMenuItem tb;
+    private javax.swing.JMenuItem tlsBeli;
     // End of variables declaration//GEN-END:variables
 
     private void validasi() {
